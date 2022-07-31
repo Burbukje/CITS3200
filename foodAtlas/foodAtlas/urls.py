@@ -19,5 +19,5 @@ from myapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", views.hello_render, name="hello")
+    path("", views.index, name="Home Page")
 ]
