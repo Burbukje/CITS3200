@@ -19,8 +19,6 @@ $ python3 -m venv venv
 
 2. Activate the environment.
 
-TODO
-
 ```python
 # activate environment for unix machines
 $ source venv/bin/activate
@@ -44,6 +42,15 @@ $ deactivate
 #
 
 ## Running the app
+
+1. Ensure you are in the directory with the manage.py file
+```python
+python manage.py runserver
+
+# if python doesnt work try
+python3 manage.py runserver
+```
+2. Open local host (usually 127.0.0.1:8000)in web browser of your choice.
 
 
 ## Deployment
