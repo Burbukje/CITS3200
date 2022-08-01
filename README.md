@@ -83,7 +83,7 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 * Wei Hong Tan
 
 ## License
-THC
+TBC
 
 ## Acknowledgments
 
