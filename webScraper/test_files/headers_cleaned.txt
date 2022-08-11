@@ -33,11 +33,11 @@ tues_open
 tues_close
 tues_total_hrs
 weds_open
-wed_close
-wed_total_hrs
+weds_close
+weds_total_hrs
 thurs_open
-thur_close
-thur_total_hrs
+thurs_close
+thurs_total_hrs
 fri_open
 fri_close
 fri_total_hrs
