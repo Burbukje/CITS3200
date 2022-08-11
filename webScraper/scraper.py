@@ -6,10 +6,68 @@ import requests
 from datetime import date
 import csv
 
-API_KEY = os.environ["PLACES_API"]
 
+# A SAFE GUARD TO PREVENT INIFINITE CALLS TO API
+API_LIMIT = 5
+
+API_KEY = os.environ["PLACES_API"]
 DATA_FILE = "test_files/Food Business Listing 2021.22 - CoA Summary.xls"
 
+# TODO: Read in json file of headers instead of hard coding it?
+HEADERS = {
+    "local_government_area":    0,
+    "redcap_id":                1,
+    "business_id":              2,
+    "collection_year":          3,
+    "business_name":            4,
+    "classification_name":      5,
+    "category_1":               6,
+    "sub_category_1":           7,
+    "category_2":               8,
+    "sub_category_2":           9,
+    "category_3":               10,
+    "sub_category_3":           11,
+    "y_latitude":               12,
+    "x_longitude":              13,
+    "original_lga_provided_address": 14,
+    "new_unit_shop_number":     15,
+    "new_street_number":        16,
+    "new_street_name":          17,
+    "new_street_type":          18,
+    "new_street_suffix":        19,
+    "new_suburb":               20,
+    "new_postcode":             21,
+    "contact_1":                22,
+    "contact_2":                23,
+    "email":                    24,
+    "website":                  25,
+    "menu_(yes,_provided_on_website/no)": 26,
+    "children's_menu_provided_(yes/no)": 27,
+    "mon_open":                 28,
+    "mon_close":                29,
+    "mon_total_hrs":            30,
+    "tues_open":                31,
+    "tues_close":               32,
+    "tues_total_hrs":           33,
+    "weds_open":                34,
+    "wed_close":                35,
+    "wed_total_hrs":            36,
+    "thurs_open":               37,
+    "thur_close":               38,
+    "thur_total_hrs":           39,
+    "fri_open":                 40,
+    "fri_close":                41,
+    "fri_total_hrs":            42,
+    "sat_open":                 43,
+    "sat_close":                44,
+    "sat_total_hrs":            45,
+    "sun_open":                 46,
+    "sun_close":                47,
+    "sun_total_hrs":            48,
+    "total_weekdays_hrs":       49,
+    "total_weekend_hrs":        50,
+    "notes":                    51
+}
 
 def get_business_name_add(file: str) -> dict:
     '''
@@ -70,6 +128,91 @@ def read_file(file: str) -> pd.DataFrame:
     data = data[1:]
 
     return data
+
+
+def request_contact_info(place_id):
+    format = 'json'
+    base_endpoints_place = f'https://maps.googleapis.com/maps/api/place/details/{format}'
+    params = {
+        "key" : API_KEY,
+        "place_id" : place_id,
+        "fields" : "formatted_phone_number,opening_hours,website"
+    }
+
+    params_encoded = urlencode(params)
+
+    places_endpoint = f'{base_endpoints_place}?{params_encoded}'
+    
+    # send the request
+    r = requests.get(places_endpoint)
+
+    if r.status_code != 200:
+        print(f"Error retrieving contact details: with error code {r.status_code}")
+        return {}
+
+    return r.json()
+
+def request_basic_info(name, addr):
+    # This is used as a radius of our search
+    perth =[-31.95256861099548, 115.86077042146033]
+    # The file format we want back from the api
+    format = 'json'
+    # end points of the api
+    base_endpoints_place = f'https://maps.googleapis.com/maps/api/place/findplacefromtext/{format}'
+
+    search_str = f"{name} {addr}"
+
+    params = {
+        "key" : API_KEY,
+        "input" : search_str,
+        "inputtype": "textquery",
+        "fields" : "formatted_address,geometry,name,place_id,type"
+    }
+
+    location_bias = f'point:{perth[0]},{perth[1]}'
+
+    # Adds radius to search
+    use_circular = True
+    if use_circular:
+        radius = 60000
+        location_bias = f'point:{radius}@{perth[0]},{perth[1]}'
+
+
+    params['locationbias'] = location_bias
+    params_encoded = urlencode(params)
+    places_endpoint = f'{base_endpoints_place}?{params_encoded}'
+
+    # send the request
+    r = requests.get(places_endpoint)
+
+    if r.status_code != 200:
+        print(f"Error retrieving basic data: with error code {r.status_code}")
+        return {}
+
+    return r.json()
+
+
+def req_place_details(name, addr):
+    place_details = list()
+
+    # call google api for buiness info
+    basic_details = request_basic_info()
+
+    # Store the object in place_details variable
+    place_details.append(basic_details)
+
+    # Extract the place id, we will need it to request
+    # contact details
+    place_id = basic_details['candidates'][0]['place_id']
+
+    # Call google api for contact info
+    contact_details = request_contact_info(place_id)
+
+    # append the result to places_details variable
+    place_details.append(contact_details)
+
+    return place_details
+
 
 
 #get_business_name_add(DATA_FILE)
