@@ -120,12 +120,13 @@ class TestScraper(unittest.TestCase):
         return
         
 
+    #TODO
     def test_fill_empty(self):
         test_10 = scraper.fill_empty(10)
 
         self.assertTrue(len(test_10) == 10, msg=f"Expected: 10 Got: {len(test_10)}")
 
-
+    #TODO
     def test_get_formatted_addr(self):
         basic_data =\
             [{
