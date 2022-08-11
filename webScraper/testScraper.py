@@ -9,6 +9,9 @@ class TestScraper(unittest.TestCase):
 
     DATA_FILE = "./test_files/Food Business Listing 2021.22 - CoA Summary.xls"
 
+    cider_house_test = ("The Naked Apple Cider House (formerly Hopsscotch Restaurant)", "1088 Brookton Highway KARRAGULLEN WA 6111")
+
+
     def setUp(self):
         self.name_addr = scraper.get_business_name_add(self.DATA_FILE)
         self.df =scraper.read_file(self.DATA_FILE)
@@ -59,6 +62,45 @@ class TestScraper(unittest.TestCase):
 
         for index, head in enumerate(expected_headers):
             self.assertTrue(headers[head] == index, msg=f'Failed at {head}')
+
+
+    def test_request_basic_info():
+        cider_house_expected_basic = {
+            {'candidates': [{   'formatted_address': '1088 Brookton Hwy, Karragullen WA 6111, Australia', 
+                                'geometry': {   'location': {   'lat': -32.096721, 'lng': 116.1041666}, 
+                                                'viewport': {   'northeast': {'lat': -32.09529222010727, 'lng': 116.1054979798927}, 
+                                                                'southwest': {'lat': -32.09799187989271, 'lng': 116.1027983201073}}
+                                            },
+                                'name': 'Naked Apple Cider House', 
+                                'place_id': 'ChIJ32AGNJHrMioR_PeUI_UpN6A', 
+                                'types': ['restaurant', 'food', 'point_of_interest', 'establishment']
+                            }], 
+            'status': 'OK'
+            }
+        }
+
+        return
+
+    
+    def test_request_contact_info():
+        cider_house_expected_contact = {
+            {   'html_attributions': [], 
+                'result': { 'formatted_phone_number': '(08) 9496 1138', 
+                            'opening_hours': {'open_now': True, 
+                                              'periods': [  {'close': {'day': 0, 'time': '1900'}, 'open': {'day': 0, 'time': '1100'}}, 
+                                                            {'close': {'day': 3, 'time': '1530'}, 'open': {'day': 3, 'time': '1130'}}, 
+                                                            {'close': {'day': 4, 'time': '2100'}, 'open': {'day': 4, 'time': '1130'}}, 
+                                                            {'close': {'day': 5, 'time': '2200'}, 'open': {'day': 5, 'time': '1130'}}, 
+                                                            {'close': {'day': 6, 'time': '2200'}, 'open': {'day': 6, 'time': '1100'}}], 
+                                                'weekday_text': ['Monday: Closed', 'Tuesday: Closed', 'Wednesday: 11:30 AM – 3:30 PM', 'Thursday: 11:30 AM – 9:00 PM', 'Friday: 11:30 AM – 10:00 PM', 'Saturday: 11:00 AM – 10:00 PM', 'Sunday: 11:00 AM – 7:00 PM']}, 
+                            'website': 'http://www.nakedapple.com.au/'}, 
+                'status': 'OK'}
+        }
+        return
+
+    def test_req_place_details():
+        return
+        
 
 
 if __name__ == '__main__':
