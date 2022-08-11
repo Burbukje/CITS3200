@@ -4,6 +4,7 @@ import os
 from urllib.parse import urlencode
 import requests
 from datetime import date
+import time
 import csv
 
 
@@ -114,7 +115,7 @@ def read_file(file: str) -> pd.DataFrame:
     # Replace nan with an empty string
     data = data.fillna("")
 
-    # If the we dont have headers. We allocate it.
+    # If we dont have headers. We allocate it.
     if True in data.columns.str.contains("^Unnamed"):
         # Define the headers
         data.columns = data.iloc[0]
@@ -352,6 +353,9 @@ def write_to_csv(data, filename):
 #---------------------------MAIN------------------------------------
 
 def main(file: str, lga: str):
+    # Elapsed time start
+    start = time.time()
+
     cleaned_data = list()
     df = read_file(file)
     cleaned_data.append(list(HEADERS.keys()))
@@ -359,7 +363,12 @@ def main(file: str, lga: str):
     num_business = df.shape[0]
     num_headers = len(list(HEADERS.keys()))
 
+    num_calls = 0
     for i in range(num_business):
+
+        if num_calls == API_LIMIT:
+            break
+
         # Create a list with x empty elements
         new_row = fill_empty(num_headers)
         curr_business = df.iloc[i, :]
@@ -393,7 +402,12 @@ def main(file: str, lga: str):
         # Add the row to the cleaned data list
         cleaned_data.append(new_row)
 
-    #print(cleaned_data)
+        num_calls += 1
+
+    # Elapsed time end
+    end = time.time()
+    print("Finised in {:.3g} seconds".format(end-start))
+
     return cleaned_data
 
 
