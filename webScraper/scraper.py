@@ -277,7 +277,7 @@ def get_website(contact):
     else:
         return " "
 
-def fill_empty(length, fill=" "):
+def fill_empty(length, fill=""):
     return [fill for x in range(length)]
 
 
