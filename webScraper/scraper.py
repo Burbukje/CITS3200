@@ -216,7 +216,7 @@ def request_basic_info(name: str, addr: str) -> dict:
 
 def req_place_details(name: str, addr: str) -> tuple:
     '''
-    Requests business details and contact information
+    Helper function requests both business details and contact information
 
     Param:
         name: string business name
