@@ -237,32 +237,39 @@ def req_place_details(name: str, addr: str) -> tuple:
 
     return (basic_details, contact_details)
 
+
 #----------------------------HELPERS-----------------------------------
 # These are some functions to extract details from the basic details and contact detail objects
 
-def get_formatted_addr(resp):
-    return resp[0]["candidates"][0]["formatted_address"]
 
-def get_lat_long(resp):
-    lat = resp[0]["candidates"][0]["geometry"]["location"]["lat"]
-    lng = resp[0]["candidates"][0]["geometry"]["location"]["lng"]
+def get_formatted_addr(basic):
+    return basic[0]["candidates"][0]["formatted_address"]
+
+
+def get_lat_long(basic):
+    lat = basic[0]["candidates"][0]["geometry"]["location"]["lat"]
+    lng = basic[0]["candidates"][0]["geometry"]["location"]["lng"]
     return (lat, lng)
 
-def get_business_types(resp):
-    return resp[0]["candidates"][0]["types"]
 
-def get_phone_no(resp):
-    return resp[1]["result"]["formatted_phone_number"]
+def get_business_types(basic):
+    return basic[0]["candidates"][0]["types"]
+
+
+def get_phone_no(contact):
+    return contact[1]["result"]["formatted_phone_number"]
+
 
 #TODO: add peroid option
-def get_opening(resp, format="text"):
-    if format == "text":
-        return resp[1]["result"]["opening_hours"]["weekday_text"]
+def get_opening(contact, format="periods"):
+    if format == "periods":
+        return contact[1]["result"]["opening_hours"]["periods"]
     else:
-        return resp[1]["result"]["opening_hours"]["periods"]
+        return contact[1]["result"]["opening_hours"]["weekday_text"]
 
-def get_website(resp):
-    return resp[1]["result"]["website"]
+
+def get_website(contact):
+    return contact[1]["result"]["website"]
 
 
 #get_business_name_add(DATA_FILE)
