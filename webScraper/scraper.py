@@ -270,8 +270,23 @@ def get_opening(contact, format="periods"):
 
 def get_website(contact):
     return contact[1]["result"]["website"]
+    
 
 
+
+#---------------------------MAIN------------------------------------
+
+def main(file: str):
+    cleaned_data = list()
+    #df = read_file(file)
+    cleaned_data.append(list(HEADERS.keys()))
+
+    print(cleaned_data)
+
+    return
+
+
+main(DATA_FILE)
 #get_business_name_add(DATA_FILE)
 
 # df = read_file(DATA_FILE)
