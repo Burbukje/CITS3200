@@ -292,6 +292,27 @@ def add_year(lst: list, headers: list):
     index = headers.index("collection_year")
     lst.insert(index, year)
 
+
+def add_lat_long(lst: list, headers: list, data: tuple):
+    coordinates = get_lat_long(data[0])
+    lat_index = headers.index("y_latitude")
+    long_index = headers.index("x_longitude")
+    lst.insert(lat_index, coordinates[0])
+    lst.insert(long_index, coordinates[1])
+
+
+def add_phone(lst: list, headers: list, data: tuple):
+    phone_no = get_phone_no(data[1])
+    index = headers.index("contact_1")
+    lst.insert(index, phone_no)
+
+
+def add_website(lst: list, headers: list, data: tuple):
+    website = get_website(data[1])
+    index = headers.index("website")
+    lst.insert(index, website)
+
+
 #---------------------------MAIN------------------------------------
 
 def main(file: str, lga: str):
@@ -308,6 +329,38 @@ def main(file: str, lga: str):
         currBusiness = df.iloc[i, :]
         scraped_data = req_place_details(currBusiness)
 
+        # Adds the lga name
+        add_lga(new_row, HEADERS, lga)
+        # Adds the collection year
+        add_year(new_row, HEADERS)
+        # Adds the name of the business
+        add_name(new_row, HEADERS, currBusiness)
+        # Adds latitude and longitude
+        add_lat_long(new_row, HEADERS, scraped_data)
+        # Add phone number
+        add_phone(new_row, HEADERS, scraped_data)
+        # Add website
+        add_website(new_row, HEADERS, scraped_data)
+
+
+        #TODO add classification
+        #TODO add Categories
+
+        #TODO add original_lga_provided_address
+        #TODO add new_unit_shop_number
+        #TODO add new_street_number
+        #TODO add new_street_name
+        #TODO add new_street_type
+        #TODO add new_street_suffix
+        #TODO add new_suburb
+        #TODO add new_postcode
+
+        #TODO add email
+
+        #TODO add menu
+        #TODO add childrens menu
+
+        #TODO add opening hours
 
     #print(cleaned_data)
     return df
