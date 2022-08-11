@@ -237,6 +237,33 @@ def req_place_details(name: str, addr: str) -> tuple:
 
     return (basic_details, contact_details)
 
+#----------------------------HELPERS-----------------------------------
+# These are some functions to extract details from the basic details and contact detail objects
+
+def get_formatted_addr(resp):
+    return resp[0]["candidates"][0]["formatted_address"]
+
+def get_lat_long(resp):
+    lat = resp[0]["candidates"][0]["geometry"]["location"]["lat"]
+    lng = resp[0]["candidates"][0]["geometry"]["location"]["lng"]
+    return (lat, lng)
+
+def get_business_types(resp):
+    return resp[0]["candidates"][0]["types"]
+
+def get_phone_no(resp):
+    return resp[1]["result"]["formatted_phone_number"]
+
+#TODO: add peroid option
+def get_opening(resp, format="text"):
+    if format == "text":
+        return resp[1]["result"]["opening_hours"]["weekday_text"]
+    else:
+        return resp[1]["result"]["opening_hours"]["periods"]
+
+def get_website(resp):
+    return resp[1]["result"]["website"]
+
 
 #get_business_name_add(DATA_FILE)
 
