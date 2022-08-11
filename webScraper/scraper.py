@@ -12,6 +12,16 @@ DATA_FILE = "test_files/Food Business Listing 2021.22 - CoA Summary.xls"
 
 
 def get_business_name_add(file: str) -> dict:
+    '''
+    Extracts business name and address from a pandas DataFrame
+
+    Params:
+        file: str representation of the file path
+
+    Return:
+        Dictionary: key(str) = name of business
+                    value(str) = address of business
+    '''
     df = read_file(file)
     name_addr = dict()
 
@@ -32,6 +42,8 @@ def get_business_name_add(file: str) -> dict:
 def read_file(file: str) -> pd.DataFrame:
     '''
     Reads a xls or xlsx file
+    Params:
+        file: str representation of the file path
 
     Return:
         Pandas DataFrame
@@ -60,4 +72,10 @@ def read_file(file: str) -> pd.DataFrame:
     return data
 
 
-get_business_name_add(DATA_FILE)
+#get_business_name_add(DATA_FILE)
+
+# df = read_file(DATA_FILE)
+
+# print(type(df.keys()))
+
+# print(isinstance(df, pd.DataFrame))
