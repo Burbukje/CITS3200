@@ -338,7 +338,7 @@ def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame):
     # Street Type
     lst[type_index] = address[2]
     # Suburb
-    lst[suburb_index] = address[4]
+    lst[suburb_index] = address[3]
     # Postcode
     lst[postcode_index] = address[5]
     # Original lga provided address
