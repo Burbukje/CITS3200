@@ -4,6 +4,7 @@ import os
 from urllib.parse import urlencode
 import requests
 from datetime import date
+from datetime import datetime
 import time
 import csv
 
@@ -50,11 +51,11 @@ HEADERS = {
     "tues_close":               32,
     "tues_total_hrs":           33,
     "weds_open":                34,
-    "wed_close":                35,
-    "wed_total_hrs":            36,
+    "weds_close":                35,
+    "weds_total_hrs":            36,
     "thurs_open":               37,
-    "thur_close":               38,
-    "thur_total_hrs":           39,
+    "thurs_close":               38,
+    "thurs_total_hrs":           39,
     "fri_open":                 40,
     "fri_close":                41,
     "fri_total_hrs":            42,
@@ -318,6 +319,7 @@ def add_website(lst: list, headers: dict, data: tuple):
     lst[index] = website
 
 
+# TODO: add conditions on shop address that are inside a shopping centre
 def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame):
     address = get_formatted_addr(data).split()
     address = [x.replace(",", "") for x in address]
@@ -345,12 +347,70 @@ def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame):
     lst[orig_index] = orig_addr
     
 
+# TODO: add the sums of the weekends and weekdays
+def add_opening_times(lst: list, headers: dict, data: dict):
+    FMT = '%H%M'
+    DAYS = 7
+
+    days_index = {
+        0: "sun_",
+        1: "mon_",
+        2: "tues_",
+        3: "weds_",
+        4: "thurs_",
+        5: "fri_",
+        6: "sat_"
+    }
+
+    is_open = [False for x in range(DAYS)]
+    opening = get_opening(data)
+
+    for period in opening:
+        total_hrs = 0
+        day = period["close"]["day"]
+        current_day = days_index[day]
+        is_open[day] = True
+
+        o_time = -1
+        c_time = period["close"]["time"]
+
+        if period["open"]["day"] == day:
+            o_time = period["open"]["time"]
+        else:
+            print("Days do not match")
+            break
+        
+        total_hrs = datetime.strptime(c_time, FMT) - datetime.strptime(o_time, FMT)
+        total_hrs = total_hrs.total_seconds() / 60 / 60
+
+        open_index = headers[current_day+"open"]
+        close_index = headers[current_day+"close"]
+        hrs_index = headers[current_day+"total_hrs"]
+
+        lst[open_index] = o_time
+        lst[close_index] = c_time
+        lst[hrs_index] = total_hrs
+
+    for closed, day in enumerate(is_open):
+        if closed:
+            current_day = days_index[day]
+            open_index = headers[current_day+"open"]
+            close_index = headers[current_day+"close"]
+            hrs_index = headers[current_day+"total_hrs"]
+
+            lst[open_index] = "closed"
+            lst[close_index] = "closed"
+            lst[hrs_index] = "closed"
+
+
 def write_to_csv(data, filename):
     with open(filename, "w") as f:
         write = csv.writer(f)
         write.writerows(data)
 
+
 #---------------------------MAIN------------------------------------
+
 
 def main(file: str, lga: str):
     # Elapsed time start
@@ -388,6 +448,9 @@ def main(file: str, lga: str):
         add_website(new_row, HEADERS, scraped_data)
         # Fills address fields
         add_address(new_row, HEADERS, scraped_data, curr_business)
+        # Filles the opening times fields
+        add_opening_times(new_row, HEADERS, scraped_data)
+
 
         #TODO add classification
         #TODO add Categories
@@ -396,8 +459,6 @@ def main(file: str, lga: str):
 
         #TODO add menu
         #TODO add childrens menu
-
-        #TODO add opening hours
 
         # Add the row to the cleaned data list
         cleaned_data.append(new_row)
@@ -419,9 +480,9 @@ JINGS = "./test_files/Jing's Noodle Bar Kelmscott.xls"
 SANDC = "./test_files/S and C Fiolo.xls"
 LGA = "Armadale, City of"
 
-sample_cleaned_csv = main(SANDC, LGA)
+sample_cleaned_csv = main(JINGS, LGA)
 
-write_to_csv(sample_cleaned_csv, "SANDC_SAMPLE.csv")
+write_to_csv(sample_cleaned_csv, "JINGS_SAMPLE.csv")
 
 
 # print(main(CAKEAWAY))
