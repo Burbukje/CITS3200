@@ -49,5 +49,17 @@ class TestScraper(unittest.TestCase):
                 expected_in_keys = False
             self.assertFalse(expected_in_keys, msg=f"{key} is in empty list")
 
+
+    def test_cleaned_headers(self):
+        headers = scraper.HEADERS
+        expected_headers = list()
+        with open("./test_files/headers_cleaned.txt", "r") as f:
+            for line in f:
+                expected_headers.append(line.strip())
+
+        for index, head in enumerate(expected_headers):
+            self.assertTrue(headers[head] == index, msg=f'Failed at {head}')
+
+
 if __name__ == '__main__':
     unittest.main()
