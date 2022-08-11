@@ -130,7 +130,17 @@ def read_file(file: str) -> pd.DataFrame:
     return data
 
 
-def request_contact_info(place_id):
+def request_contact_info(place_id: str) -> dict:
+    '''
+    Calls Google Places API for contact information. phone number, opening hours, and website
+
+    Params:
+        name: string of the business name
+        addr: string of the business address
+
+    Return:
+        Dictionary containing contact details
+    '''
     format = 'json'
     base_endpoints_place = f'https://maps.googleapis.com/maps/api/place/details/{format}'
     params = {
@@ -152,7 +162,19 @@ def request_contact_info(place_id):
 
     return r.json()
 
-def request_basic_info(name, addr):
+def request_basic_info(name: str, addr: str) -> dict:
+    '''
+    Calls Google Places API for formatted address, geometry(lattitude, longitude), name of the business,
+    place identifier, and business type
+
+    Params:
+        name: string of the business name
+        addr: string of the business address
+
+    Return:
+        Dictionary containing place details
+    '''
+
     # This is used as a radius of our search
     perth =[-31.95256861099548, 115.86077042146033]
     # The file format we want back from the api
@@ -192,14 +214,19 @@ def request_basic_info(name, addr):
     return r.json()
 
 
-def req_place_details(name, addr):
-    place_details = list()
+def req_place_details(name: str, addr: str) -> tuple:
+    '''
+    Requests business details and contact information
 
+    Param:
+        name: string business name
+        addr: string business address
+
+    Return:
+        Tuple: dictionary of the details and a dictionary of the contact information.
+    '''
     # call google api for buiness info
     basic_details = request_basic_info()
-
-    # Store the object in place_details variable
-    place_details.append(basic_details)
 
     # Extract the place id, we will need it to request
     # contact details
@@ -208,11 +235,7 @@ def req_place_details(name, addr):
     # Call google api for contact info
     contact_details = request_contact_info(place_id)
 
-    # append the result to places_details variable
-    place_details.append(contact_details)
-
-    return place_details
-
+    return (basic_details, contact_details)
 
 
 #get_business_name_add(DATA_FILE)
@@ -222,3 +245,4 @@ def req_place_details(name, addr):
 # print(type(df.keys()))
 
 # print(isinstance(df, pd.DataFrame))
+
