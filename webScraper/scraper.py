@@ -11,7 +11,6 @@ import csv
 API_LIMIT = 5
 
 API_KEY = os.environ["PLACES_API"]
-DATA_FILE = "test_files/Food Business Listing 2021.22 - CoA Summary.xls"
 
 # TODO: Read in json file of headers instead of hard coding it?
 HEADERS = {
@@ -214,19 +213,22 @@ def request_basic_info(name: str, addr: str) -> dict:
     return r.json()
 
 
-def req_place_details(name: str, addr: str) -> tuple:
+def req_place_details(df: pd.DataFrame) -> tuple:
     '''
     Helper function requests both business details and contact information
 
     Param:
-        name: string business name
-        addr: string business address
+        df: DataFrame containing business name and parcel address
 
     Return:
         Tuple: dictionary of the details and a dictionary of the contact information.
     '''
+
+    name = df.loc["business_name"]
+    addr = df.loc["parcel_address"]
+
     # call google api for buiness info
-    basic_details = request_basic_info()
+    basic_details = request_basic_info(name, addr)
 
     # Extract the place id, we will need it to request
     # contact details
@@ -260,7 +262,6 @@ def get_phone_no(contact):
     return contact[1]["result"]["formatted_phone_number"]
 
 
-#TODO: add peroid option
 def get_opening(contact, format="periods"):
     if format == "periods":
         return contact[1]["result"]["opening_hours"]["periods"]
@@ -272,30 +273,61 @@ def get_website(contact):
     return contact[1]["result"]["website"]
     
 
+def fill_empty(length, fill=""):
+    return [fill for x in range(length)]
 
+
+def add_name(lst: list, headers: list, df: pd.DataFrame):
+    index = headers.index("business_name")
+    lst.insert(index, df.loc["business_name"])
+
+
+def add_lga(lst: list, headers: list, lga: str):
+    index = headers.index("local_government_area")
+    lst.insert(index, lga)
+
+
+def add_year(lst: list, headers: list):
+    year = date.today().year
+    index = headers.index("collection_year")
+    lst.insert(index, year)
 
 #---------------------------MAIN------------------------------------
 
-def main(file: str):
+def main(file: str, lga: str):
     cleaned_data = list()
     df = read_file(file)
     cleaned_data.append(list(HEADERS.keys()))
 
-    #print(cleaned_data)
+    numBusiness = df.shape[0]
+    numHeaders = len(HEADERS)
 
+    for i in range(numBusiness):
+        # Create a list with x empty elements
+        new_row = fill_empty(numHeaders)
+        currBusiness = df.iloc[i, :]
+        scraped_data = req_place_details(currBusiness)
+
+
+    #print(cleaned_data)
     return df
 
+
+
+DATA_FILE = "test_files/Food Business Listing 2021.22 - CoA Summary.xls"
 CAKEAWAY = "./test_files/CakeawaybySina.xlsx"
 CHANDAS = "./test_files/Chanda'sFamilyChildCare.xlsx"
 JINGS = "./test_files/Jing's Noodle Bar Kelmscott.xls"
 SANDC = "./test_files/S and C Fiolo.xls"
+LGA = "Armadale, City of"
 
+main(SANDC, LGA)
 
 
 # print(main(CAKEAWAY))
 # print(main(CHANDAS))
-print(main(JINGS))
-print(main(SANDC))
+# print(main(JINGS))
+# print(main(SANDC))
 #get_business_name_add(DATA_FILE)
 
 # df = read_file(DATA_FILE)
