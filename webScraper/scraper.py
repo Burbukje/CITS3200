@@ -270,58 +270,66 @@ def get_opening(contact, format="periods"):
 
 
 def get_website(contact):
-    return contact[1]["result"]["website"]
-    
 
-def fill_empty(length, fill=""):
+    # Business has a website return the website else send an emtpy string
+    if "website" in contact[1]["result"]:
+        return contact[1]["result"]["website"]
+    else:
+        return " "
+
+def fill_empty(length, fill=" "):
     return [fill for x in range(length)]
 
 
-def add_name(lst: list, headers: list, df: pd.DataFrame):
-    index = headers.index("business_name")
+def add_name(lst: list, headers: dict, df: pd.DataFrame):
+    index = headers["business_name"]
     lst.insert(index, df.loc["business_name"])
 
 
-def add_lga(lst: list, headers: list, lga: str):
-    index = headers.index("local_government_area")
+def add_lga(lst: list, headers: dict, lga: str):
+    index = headers["local_government_area"]
     lst.insert(index, lga)
 
 
-def add_year(lst: list, headers: list):
+def add_year(lst: list, headers: dict):
     year = date.today().year
-    index = headers.index("collection_year")
+    index = headers["collection_year"]
     lst.insert(index, year)
 
 
-def add_lat_long(lst: list, headers: list, data: tuple):
-    coordinates = get_lat_long(data[0])
-    lat_index = headers.index("y_latitude")
-    long_index = headers.index("x_longitude")
+def add_lat_long(lst: list, headers: dict, data: tuple):
+    coordinates = get_lat_long(data)
+    lat_index = headers["y_latitude"]
+    long_index = headers["x_longitude"]
     lst.insert(lat_index, coordinates[0])
     lst.insert(long_index, coordinates[1])
 
 
-def add_phone(lst: list, headers: list, data: tuple):
-    phone_no = get_phone_no(data[1])
-    index = headers.index("contact_1")
+def add_phone(lst: list, headers: dict, data: tuple):
+    phone_no = get_phone_no(data)
+    index = headers["contact_1"]
     lst.insert(index, phone_no)
 
 
-def add_website(lst: list, headers: list, data: tuple):
-    website = get_website(data[1])
-    index = headers.index("website")
+def add_website(lst: list, headers: dict, data: tuple):
+    website = get_website(data)
+    index = headers["website"]
     lst.insert(index, website)
 
 
-def add_address(lst: list, headers: list, data: dict, curr):
+# TODO: items being inserted in the wrong column
+def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame):
     address = get_formatted_addr(data).split()
-    
-    num_index = headers.index("new_street_number")
-    name_index = headers.index("new_street_name")
-    type_index = headers.index("new_street_type")
-    suffix_index = headers.index("new_street_suffix") # NOT USED
-    suburb_index = headers.index("new_suburb")
-    postcode_index = headers.index("new_postcode")
+    address = [x.replace(",", "") for x in address]
+    orig_addr = curr.loc["parcel_address"]
+
+    num_index = headers["new_street_number"]
+    name_index = headers["new_street_name"]
+    type_index = headers["new_street_type"]
+    suffix_index = headers["new_street_suffix"] # NOT USED
+    suburb_index = headers["new_suburb"]
+    postcode_index = headers["new_postcode"]
+    orig_index = headers["original_lga_provided_address"]
 
     # Street Number
     lst.insert(num_index, address[0])
@@ -333,7 +341,14 @@ def add_address(lst: list, headers: list, data: dict, curr):
     lst.insert(suburb_index, address[4])
     # Postcode
     lst.insert(postcode_index, address[5])
+    # Original lga provided address
+    lst.insert(orig_index, orig_addr)
     
+
+def write_to_csv(data, filename):
+    with open(filename, "w") as f:
+        write = csv.writer(f)
+        write.writerows(data)
 
 #---------------------------MAIN------------------------------------
 
@@ -345,37 +360,31 @@ def main(file: str, lga: str):
     num_business = df.shape[0]
     num_headers = len(HEADERS)
 
+    
+
     for i in range(num_business):
         # Create a list with x empty elements
         new_row = fill_empty(num_headers)
         curr_business = df.iloc[i, :]
         scraped_data = req_place_details(curr_business)
 
-        # Adds the lga name
+        # Fills the lga name field
         add_lga(new_row, HEADERS, lga)
-        # Adds the collection year
+        # Fills the collection year field
         add_year(new_row, HEADERS)
-        # Adds the name of the business
+        # Fills the name of the business field
         add_name(new_row, HEADERS, curr_business)
-        # Adds latitude and longitude
+        # Fills latitude and longitude field
         add_lat_long(new_row, HEADERS, scraped_data)
-        # Add phone number
+        # Fills phone number field
         add_phone(new_row, HEADERS, scraped_data)
-        # Add website
-        add_website(new_row, HEADERS, scraped_data, curr_business)
-
+        # Fills website field
+        add_website(new_row, HEADERS, scraped_data)
+        # Fills address fields
+        add_address(new_row, HEADERS, scraped_data, curr_business)
 
         #TODO add classification
         #TODO add Categories
-
-        #TODO add original_lga_provided_address
-        #TODO add new_unit_shop_number
-        #TODO add new_street_number
-        #TODO add new_street_name
-        #TODO add new_street_type
-        #TODO add new_street_suffix
-        #TODO add new_suburb
-        #TODO add new_postcode
 
         #TODO add email
 
@@ -384,8 +393,12 @@ def main(file: str, lga: str):
 
         #TODO add opening hours
 
+
+        # Add the row to the cleaned data list
+        cleaned_data.append(new_row)
+
     #print(cleaned_data)
-    return df
+    return cleaned_data
 
 
 
@@ -396,7 +409,9 @@ JINGS = "./test_files/Jing's Noodle Bar Kelmscott.xls"
 SANDC = "./test_files/S and C Fiolo.xls"
 LGA = "Armadale, City of"
 
-main(SANDC, LGA)
+sample_cleaned_csv = main(SANDC, LGA)
+
+write_to_csv(sample_cleaned_csv, "SANDC_SAMPLE.csv")
 
 
 # print(main(CAKEAWAY))
