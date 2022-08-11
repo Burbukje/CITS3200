@@ -313,6 +313,28 @@ def add_website(lst: list, headers: list, data: tuple):
     lst.insert(index, website)
 
 
+def add_address(lst: list, headers: list, data: dict, curr):
+    address = get_formatted_addr(data).split()
+    
+    num_index = headers.index("new_street_number")
+    name_index = headers.index("new_street_name")
+    type_index = headers.index("new_street_type")
+    suffix_index = headers.index("new_street_suffix") # NOT USED
+    suburb_index = headers.index("new_suburb")
+    postcode_index = headers.index("new_postcode")
+
+    # Street Number
+    lst.insert(num_index, address[0])
+    # Street name
+    lst.insert(name_index, address[1])
+    # Street Type
+    lst.insert(type_index, address[2])
+    # Suburb
+    lst.insert(suburb_index, address[4])
+    # Postcode
+    lst.insert(postcode_index, address[5])
+    
+
 #---------------------------MAIN------------------------------------
 
 def main(file: str, lga: str):
@@ -320,27 +342,27 @@ def main(file: str, lga: str):
     df = read_file(file)
     cleaned_data.append(list(HEADERS.keys()))
 
-    numBusiness = df.shape[0]
-    numHeaders = len(HEADERS)
+    num_business = df.shape[0]
+    num_headers = len(HEADERS)
 
-    for i in range(numBusiness):
+    for i in range(num_business):
         # Create a list with x empty elements
-        new_row = fill_empty(numHeaders)
-        currBusiness = df.iloc[i, :]
-        scraped_data = req_place_details(currBusiness)
+        new_row = fill_empty(num_headers)
+        curr_business = df.iloc[i, :]
+        scraped_data = req_place_details(curr_business)
 
         # Adds the lga name
         add_lga(new_row, HEADERS, lga)
         # Adds the collection year
         add_year(new_row, HEADERS)
         # Adds the name of the business
-        add_name(new_row, HEADERS, currBusiness)
+        add_name(new_row, HEADERS, curr_business)
         # Adds latitude and longitude
         add_lat_long(new_row, HEADERS, scraped_data)
         # Add phone number
         add_phone(new_row, HEADERS, scraped_data)
         # Add website
-        add_website(new_row, HEADERS, scraped_data)
+        add_website(new_row, HEADERS, scraped_data, curr_business)
 
 
         #TODO add classification
