@@ -1,15 +1,22 @@
 import scraper
 import unittest
 import pandas as pd
+import sys
 
 class TestScraper(unittest.TestCase):
     name_addr = dict()
     df = pd.DataFrame()
     headers = None
 
+    skip_api_test = False
+
+
     DATA_FILE = "./test_files/Food Business Listing 2021.22 - CoA Summary.xls"
 
-    cider_house_test = ("The Naked Apple Cider House (formerly Hopsscotch Restaurant)", "1088 Brookton Highway KARRAGULLEN WA 6111")
+    cider_house_test = {
+        "name":  "The Naked Apple Cider House (formerly Hopsscotch Restaurant)",
+        "addr":  "1088 Brookton Highway KARRAGULLEN WA 6111", 
+        "id":    'ChIJ32AGNJHrMioR_PeUI_UpN6A'}
 
 
     def setUp(self):
@@ -64,9 +71,11 @@ class TestScraper(unittest.TestCase):
             self.assertTrue(headers[head] == index, msg=f'Failed at {head}')
 
 
-    def test_request_basic_info():
+    #TODO: add more tests
+    @unittest.skipIf(skip_api_test, "API: basic info test not run")
+    def test_request_basic_info(self):
         cider_house_expected_basic = {
-            {'candidates': [{   'formatted_address': '1088 Brookton Hwy, Karragullen WA 6111, Australia', 
+            'candidates': [{   'formatted_address': '1088 Brookton Hwy, Karragullen WA 6111, Australia', 
                                 'geometry': {   'location': {   'lat': -32.096721, 'lng': 116.1041666}, 
                                                 'viewport': {   'northeast': {'lat': -32.09529222010727, 'lng': 116.1054979798927}, 
                                                                 'southwest': {'lat': -32.09799187989271, 'lng': 116.1027983201073}}
@@ -76,15 +85,18 @@ class TestScraper(unittest.TestCase):
                                 'types': ['restaurant', 'food', 'point_of_interest', 'establishment']
                             }], 
             'status': 'OK'
-            }
         }
 
-        return
+        response = scraper.request_basic_info(self.cider_house_test["name"], self.cider_house_test["addr"])
 
-    
-    def test_request_contact_info():
+        self.assertTrue(isinstance(response, type(dict())), msg=f"Expected a JSON or Dictionary object. got {type(response)}")
+        
+
+    # TODO: add more tests
+    @unittest.skipIf(skip_api_test, "API: contact info test not run")
+    def test_request_contact_info(self):
         cider_house_expected_contact = {
-            {   'html_attributions': [], 
+                'html_attributions': [], 
                 'result': { 'formatted_phone_number': '(08) 9496 1138', 
                             'opening_hours': {'open_now': True, 
                                               'periods': [  {'close': {'day': 0, 'time': '1900'}, 'open': {'day': 0, 'time': '1100'}}, 
@@ -94,14 +106,20 @@ class TestScraper(unittest.TestCase):
                                                             {'close': {'day': 6, 'time': '2200'}, 'open': {'day': 6, 'time': '1100'}}], 
                                                 'weekday_text': ['Monday: Closed', 'Tuesday: Closed', 'Wednesday: 11:30 AM – 3:30 PM', 'Thursday: 11:30 AM – 9:00 PM', 'Friday: 11:30 AM – 10:00 PM', 'Saturday: 11:00 AM – 10:00 PM', 'Sunday: 11:00 AM – 7:00 PM']}, 
                             'website': 'http://www.nakedapple.com.au/'}, 
-                'status': 'OK'}
+                'status': 'OK'
         }
-        return
 
-    def test_req_place_details():
+        response = scraper.request_contact_info(self.cider_house_test["id"])
+
+        self.assertTrue(isinstance(response, type(dict())), msg=f"Expected a JSON or Dictionary object. got {type(response)}")
+
+
+    # TODO: add more tests
+    @unittest.skipIf(skip_api_test, "API: place details test not run")
+    def test_req_place_details(self):
         return
         
 
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)
