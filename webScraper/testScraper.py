@@ -21,7 +21,6 @@ class TestScraper(unittest.TestCase):
 
 
     def test_headers(self):
-        
         expected = ['account', 'business_name', 'property_description', 'parcel_address',
                     'street_name', 'suburb', 'premises_type']
         
@@ -33,7 +32,7 @@ class TestScraper(unittest.TestCase):
 
 
     def test_fail_headers(self):
-        expected = ["", ""]
+        expected = ["Dont sue me", "Debug"]
         
         for key in self.headers:
             expected_in_keys = True
