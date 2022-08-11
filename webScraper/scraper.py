@@ -283,41 +283,40 @@ def fill_empty(length, fill=" "):
 
 def add_name(lst: list, headers: dict, df: pd.DataFrame):
     index = headers["business_name"]
-    lst.insert(index, df.loc["business_name"])
+    lst[index] = df.loc["business_name"]
 
 
 def add_lga(lst: list, headers: dict, lga: str):
     index = headers["local_government_area"]
-    lst.insert(index, lga)
+    lst[index] = lga
 
 
 def add_year(lst: list, headers: dict):
     year = date.today().year
     index = headers["collection_year"]
-    lst.insert(index, year)
+    lst[index] = year
 
 
 def add_lat_long(lst: list, headers: dict, data: tuple):
     coordinates = get_lat_long(data)
     lat_index = headers["y_latitude"]
     long_index = headers["x_longitude"]
-    lst.insert(lat_index, coordinates[0])
-    lst.insert(long_index, coordinates[1])
+    lst[lat_index] = coordinates[0]
+    lst[long_index] = coordinates[1]
 
 
 def add_phone(lst: list, headers: dict, data: tuple):
     phone_no = get_phone_no(data)
     index = headers["contact_1"]
-    lst.insert(index, phone_no)
+    lst[index] = phone_no
 
 
 def add_website(lst: list, headers: dict, data: tuple):
     website = get_website(data)
     index = headers["website"]
-    lst.insert(index, website)
+    lst[index] = website
 
 
-# TODO: items being inserted in the wrong column
 def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame):
     address = get_formatted_addr(data).split()
     address = [x.replace(",", "") for x in address]
@@ -332,17 +331,17 @@ def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame):
     orig_index = headers["original_lga_provided_address"]
 
     # Street Number
-    lst.insert(num_index, address[0])
+    lst[num_index] = address[0]
     # Street name
-    lst.insert(name_index, address[1])
+    lst[name_index] = address[1]
     # Street Type
-    lst.insert(type_index, address[2])
+    lst[type_index] = address[2]
     # Suburb
-    lst.insert(suburb_index, address[4])
+    lst[suburb_index] = address[4]
     # Postcode
-    lst.insert(postcode_index, address[5])
+    lst[postcode_index] = address[5]
     # Original lga provided address
-    lst.insert(orig_index, orig_addr)
+    lst[orig_index] = orig_addr
     
 
 def write_to_csv(data, filename):
@@ -358,9 +357,7 @@ def main(file: str, lga: str):
     cleaned_data.append(list(HEADERS.keys()))
 
     num_business = df.shape[0]
-    num_headers = len(HEADERS)
-
-    
+    num_headers = len(list(HEADERS.keys()))
 
     for i in range(num_business):
         # Create a list with x empty elements
@@ -392,7 +389,6 @@ def main(file: str, lga: str):
         #TODO add childrens menu
 
         #TODO add opening hours
-
 
         # Add the row to the cleaned data list
         cleaned_data.append(new_row)
