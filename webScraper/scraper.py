@@ -115,17 +115,17 @@ def read_file(file: str) -> pd.DataFrame:
     # Replace nan with an empty string
     data = data.fillna("")
 
-    # Define the headers
-    data.columns = data.iloc[0]
-
-    # Reset the index
-    data.iloc[1:].reset_index(drop=True)
+    # If the we dont have headers. We allocate it.
+    if True in data.columns.str.contains("^Unnamed"):
+        # Define the headers
+        data.columns = data.iloc[0]
+        # Reset the index
+        data.iloc[1:].reset_index(drop=True)
+        # skip the first row, which is a copy of our column reference.
+        data = data[1:]
 
     # Clean headers, strip leading and trailing spaces. convert lowercase and replace spaces seperating words with a underscore 
     data.columns = data.columns.str.strip().str.lower().str.replace(" ", "_")
-
-    # skip the first row, which is a copy of our column reference.
-    data = data[1:]
 
     return data
 
@@ -278,15 +278,24 @@ def get_website(contact):
 
 def main(file: str):
     cleaned_data = list()
-    #df = read_file(file)
+    df = read_file(file)
     cleaned_data.append(list(HEADERS.keys()))
 
-    print(cleaned_data)
+    #print(cleaned_data)
 
-    return
+    return df
+
+CAKEAWAY = "./test_files/CakeawaybySina.xlsx"
+CHANDAS = "./test_files/Chanda'sFamilyChildCare.xlsx"
+JINGS = "./test_files/Jing's Noodle Bar Kelmscott.xls"
+SANDC = "./test_files/S and C Fiolo.xls"
 
 
-main(DATA_FILE)
+
+# print(main(CAKEAWAY))
+# print(main(CHANDAS))
+print(main(JINGS))
+print(main(SANDC))
 #get_business_name_add(DATA_FILE)
 
 # df = read_file(DATA_FILE)
