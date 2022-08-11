@@ -2,7 +2,7 @@ import scraper
 import unittest
 import pandas as pd
 
-class TestGetBusinessNameAdder(unittest.TestCase):
+class TestScraper(unittest.TestCase):
     df = pd.DataFrame()
 
     def setUp(self):
