@@ -504,7 +504,7 @@ JINGS = "./test_files/inputs/Jing's Noodle Bar Kelmscott.xls"
 SANDC = "./test_files/inputs/S and C Fiolo.xls"
 LGA = "Armadale, City of"
 
-sample_cleaned_csv = main(CHANDAS, LGA)
+#sample_cleaned_csv = main(CHANDAS, LGA)
 
 #write_to_csv(sample_cleaned_csv, "JINGS_SAMPLE.csv")
 
