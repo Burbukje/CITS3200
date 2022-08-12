@@ -7,12 +7,14 @@ from datetime import date
 from datetime import datetime
 import time
 import csv
-
+import json
 
 # A SAFE GUARD TO PREVENT INIFINITE CALLS TO API
 API_LIMIT = 5
-
 API_KEY = os.environ["PLACES_API"]
+
+# Option to save responses from google api
+SAVE_API_DATA = False
 
 # TODO: Read in json file of headers instead of hard coding it?
 HEADERS = {
@@ -69,6 +71,7 @@ HEADERS = {
     "total_weekend_hrs":        50,
     "notes":                    51
 }
+
 
 def get_business_name_add(file: str) -> dict:
     '''
@@ -129,6 +132,9 @@ def read_file(file: str) -> pd.DataFrame:
     data.columns = data.columns.str.strip().str.lower().str.replace(" ", "_")
 
     return data
+
+
+#-----------------------CALLS TO API--------------------------------------------------------------
 
 
 def request_contact_info(place_id: str) -> dict:
@@ -238,6 +244,13 @@ def req_place_details(df: pd.DataFrame) -> tuple:
 
     # Call google api for contact info
     contact_details = request_contact_info(place_id)
+
+    if SAVE_API_DATA:
+        format_name = name.title().replace(" ", "")
+        location = f"./test_files/api_business_data/{format_name}.json"
+
+        with open(location, "w") as output:
+            json.dump([basic_details, contact_details], output)
 
     return (basic_details, contact_details)
 
@@ -417,7 +430,7 @@ def write_to_csv(data, filename):
 
 def main(file: str, lga: str):
     # Elapsed time start
-    start = time.time()
+    start = time.perf_counter()
 
     cleaned_data = list()
     df = read_file(file)
@@ -469,18 +482,21 @@ def main(file: str, lga: str):
         num_calls += 1
 
     # Elapsed time end
-    end = time.time()
+    end = time.perf_counter()
     print("Finised in {:.3g} seconds".format(end-start))
 
     return cleaned_data
 
 
 
-DATA_FILE = "test_files/Food Business Listing 2021.22 - CoA Summary.xls"
-CAKEAWAY = "./test_files/CakeawaybySina.xlsx"
-CHANDAS = "./test_files/Chanda'sFamilyChildCare.xlsx"
-JINGS = "./test_files/Jing's Noodle Bar Kelmscott.xls"
-SANDC = "./test_files/S and C Fiolo.xls"
+#------------------------------DRIVER CODE----------------------------------------
+
+
+DATA_FILE = "test_files/inputs/Food Business Listing 2021.22 - CoA Summary.xls"
+CAKEAWAY = "./test_files/inputs/CakeawaybySina.xlsx"
+CHANDAS = "./test_files/inputs/Chanda'sFamilyChildCare.xlsx"
+JINGS = "./test_files/inputs/Jing's Noodle Bar Kelmscott.xls"
+SANDC = "./test_files/inputs/S and C Fiolo.xls"
 LGA = "Armadale, City of"
 
 sample_cleaned_csv = main(JINGS, LGA)
