@@ -243,9 +243,8 @@ def req_place_details(df: pd.DataFrame) -> tuple:
 
 
 #----------------------------HELPERS-----------------------------------
-# These are some functions to extract details from the basic details and contact detail objects
-
-
+# These are some functions to extract details from the 
+# basic details and contact detail objects
 def get_formatted_addr(basic):
     return basic[0]["candidates"][0]["formatted_address"]
 
@@ -278,6 +277,10 @@ def get_website(contact):
         return contact[1]["result"]["website"]
     else:
         return " "
+
+
+#---------------------------------------------------------------------------------------
+# The following functions take in a list and place data in the correct index
 
 def fill_empty(length, fill=""):
     return [fill for x in range(length)]
