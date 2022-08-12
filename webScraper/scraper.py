@@ -14,7 +14,7 @@ API_LIMIT = 5
 API_KEY = os.environ["PLACES_API"]
 
 # Option to save responses from google api
-SAVE_API_DATA = True
+SAVE_API_DATA = False
 
 # TODO: Read in json file of headers instead of hard coding it?
 HEADERS = {
