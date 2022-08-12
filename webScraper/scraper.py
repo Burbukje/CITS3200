@@ -14,7 +14,7 @@ API_LIMIT = 5
 API_KEY = os.environ["PLACES_API"]
 
 # Option to save responses from google api
-SAVE_API_DATA = False
+SAVE_API_DATA = True
 
 # TODO: Read in json file of headers instead of hard coding it?
 HEADERS = {
@@ -440,6 +440,7 @@ def main(file: str, lga: str):
     num_headers = len(list(HEADERS.keys()))
 
     num_calls = 0
+    
     for i in range(num_business):
 
         if num_calls == API_LIMIT:
@@ -449,6 +450,10 @@ def main(file: str, lga: str):
         new_row = fill_empty(num_headers)
         curr_business = df.iloc[i, :]
         scraped_data = req_place_details(curr_business)
+        
+        # For testing, this will print out the response data and break
+        if SAVE_API_DATA:
+            break
 
         # Fills the lga name field
         add_lga(new_row, HEADERS, lga)
@@ -499,9 +504,9 @@ JINGS = "./test_files/inputs/Jing's Noodle Bar Kelmscott.xls"
 SANDC = "./test_files/inputs/S and C Fiolo.xls"
 LGA = "Armadale, City of"
 
-sample_cleaned_csv = main(JINGS, LGA)
+sample_cleaned_csv = main(CHANDAS, LGA)
 
-write_to_csv(sample_cleaned_csv, "JINGS_SAMPLE.csv")
+#write_to_csv(sample_cleaned_csv, "JINGS_SAMPLE.csv")
 
 
 # print(main(CAKEAWAY))
