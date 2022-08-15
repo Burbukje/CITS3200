@@ -245,49 +245,99 @@ def req_place_details(df: pd.DataFrame) -> tuple:
     # Call google api for contact info
     contact_details = request_contact_info(place_id)
 
-    if SAVE_API_DATA:
-        format_name = name.title().replace(" ", "")
-        location = f"./test_files/api_business_data/{format_name}.json"
-
-        with open(location, "w") as output:
-            json.dump([basic_details, contact_details], output)
-
     return (basic_details, contact_details)
 
 
 #----------------------------HELPERS-----------------------------------
 # These are some functions to extract details from the 
 # basic details and contact detail objects
-def get_formatted_addr(basic):
+def get_formatted_addr(basic: tuple) -> str:
+    '''
+    Extracts formatted address from Google Places API json response
+
+    Param:
+        basic: tuple containing basic data json and contact details json
+
+    Return:
+        str: Formatted address of the business
+    '''
     return basic[0]["candidates"][0]["formatted_address"]
 
 
-def get_lat_long(basic):
-    lat = basic[0]["candidates"][0]["geometry"]["location"]["lat"]
-    lng = basic[0]["candidates"][0]["geometry"]["location"]["lng"]
+def get_lat_long(basic: tuple) -> tuple:
+    '''
+    Extracts long and lat from Google Places API json response
+
+    Param:
+        basic: tuple containing basic data json and contact details json
+
+    Return:
+        tuple: int representation of lat and long
+    '''
+    lat = int(basic[0]["candidates"][0]["geometry"]["location"]["lat"])
+    lng = int(basic[0]["candidates"][0]["geometry"]["location"]["lng"])
     return (lat, lng)
 
 
-def get_business_types(basic):
+def get_business_types(basic: tuple) -> list:
+    '''
+    Extracts a list of types the business falls under
+
+    Param:
+        basic: tuple containing basic data json and contact details json
+
+    Return:
+        list: decirptive words of the business
+    '''
     return basic[0]["candidates"][0]["types"]
 
+# TODO: return a int instead?
+def get_phone_no(basic: tuple) -> str:
+    '''
+    Extracts the phone number
 
-def get_phone_no(contact):
-    return contact[1]["result"]["formatted_phone_number"]
+    Param:
+        basic: tuple containing basic data json and contact details json
+
+    Return:
+        str: phone number
+    '''
+    return basic[1]["result"]["formatted_phone_number"]
 
 
-def get_opening(contact, format="periods"):
+# TODO: add defensive programming clauses, i.e. what if invalid given for format
+def get_opening(basic: tuple, format="periods") -> dict:
+    '''
+    Extracts the opening hours
+
+    Param:
+        basic: tuple containing basic data json and contact details json
+
+    format: default is "periods" will return a dictionary representation of the opening and closing hours
+            "text" will return an easy to read text representation of opening and closing hours
+
+    Return:
+        str: phone number
+    '''
     if format == "periods":
-        return contact[1]["result"]["opening_hours"]["periods"]
-    else:
-        return contact[1]["result"]["opening_hours"]["weekday_text"]
+        return basic[1]["result"]["opening_hours"]["periods"]
+    elif format == "text":
+        return basic[1]["result"]["opening_hours"]["weekday_text"]
 
 
-def get_website(contact):
+def get_website(basic: tuple) -> str:
+    '''
+    Extracts the website
+        
+    Param:
+        basic: tuple containing basic data json and contact details json
 
+    Return:
+        str: The website or an empty string if no website exists
+    '''
     # Business has a website return the website else send an emtpy string
-    if "website" in contact[1]["result"]:
-        return contact[1]["result"]["website"]
+    if "website" in basic[1]["result"]:
+        return basic[1]["result"]["website"]
     else:
         return " "
 
@@ -295,27 +345,27 @@ def get_website(contact):
 #---------------------------------------------------------------------------------------
 # The following functions take in a list and place data in the correct index
 
-def fill_empty(length, fill=""):
+def fill_empty(length: int, fill="") -> list:
     return [fill for x in range(length)]
 
 
-def add_name(lst: list, headers: dict, df: pd.DataFrame):
+def add_name(lst: list, headers: dict, df: pd.DataFrame) -> None:
     index = headers["business_name"]
     lst[index] = df.loc["business_name"]
 
 
-def add_lga(lst: list, headers: dict, lga: str):
+def add_lga(lst: list, headers: dict, lga: str) -> None:
     index = headers["local_government_area"]
     lst[index] = lga
 
 
-def add_year(lst: list, headers: dict):
+def add_year(lst: list, headers: dict) -> None:
     year = date.today().year
     index = headers["collection_year"]
     lst[index] = year
 
 
-def add_lat_long(lst: list, headers: dict, data: tuple):
+def add_lat_long(lst: list, headers: dict, data: tuple) -> None:
     coordinates = get_lat_long(data)
     lat_index = headers["y_latitude"]
     long_index = headers["x_longitude"]
@@ -323,20 +373,20 @@ def add_lat_long(lst: list, headers: dict, data: tuple):
     lst[long_index] = coordinates[1]
 
 
-def add_phone(lst: list, headers: dict, data: tuple):
+def add_phone(lst: list, headers: dict, data: tuple) -> None:
     phone_no = get_phone_no(data)
     index = headers["contact_1"]
     lst[index] = phone_no
 
 
-def add_website(lst: list, headers: dict, data: tuple):
+def add_website(lst: list, headers: dict, data: tuple) -> None:
     website = get_website(data)
     index = headers["website"]
     lst[index] = website
 
 
 # TODO: add conditions on shop address that are inside a shopping centre
-def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame):
+def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame) -> None:
     address = get_formatted_addr(data).split()
     address = [x.replace(",", "") for x in address]
     orig_addr = curr.loc["parcel_address"]
@@ -364,7 +414,7 @@ def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame):
     
 
 # TODO: add the sums of the weekends and weekdays
-def add_opening_times(lst: list, headers: dict, data: dict):
+def add_opening_times(lst: list, headers: dict, data: dict) -> None:
     FMT = '%H%M'
     DAYS = 7
 
@@ -419,16 +469,23 @@ def add_opening_times(lst: list, headers: dict, data: dict):
             lst[hrs_index] = "closed"
 
 
-def write_to_csv(data, filename):
+def write_to_csv(data: pd.DataFrame, filename: str) -> None:
     with open(filename, "w") as f:
         write = csv.writer(f)
         write.writerows(data)
 
 
+def dump_json_data(curr: pd.DataFrame, data: dict) -> None:
+    format_name = curr.loc["business_name"].title().replace(" ", "")
+    location = f"./test_files/api_business_data/{format_name}.json"
+
+    with open(location, "w") as output:
+        json.dump([data[0], data[1]], output)
+
 #---------------------------MAIN------------------------------------
 
 
-def main(file: str, lga: str):
+def main(file: str, lga: str) -> list:
     # Elapsed time start
     start = time.perf_counter()
 
@@ -453,6 +510,7 @@ def main(file: str, lga: str):
         
         # For testing, this will print out the response data and break
         if SAVE_API_DATA:
+            dump_json_data(curr_business, scraped_data)
             break
 
         # Fills the lga name field
