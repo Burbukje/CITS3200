@@ -137,7 +137,7 @@ def read_file(file: str) -> pd.DataFrame:
 #-----------------------CALLS TO API--------------------------------------------------------------
 
 
-def request_contact_info(place_id: str) -> dict:
+def request_contact_info(place_id: str, api_key: str) -> dict:
     '''
     Calls Google Places API for contact information. phone number, opening hours, and website
 
@@ -151,7 +151,7 @@ def request_contact_info(place_id: str) -> dict:
     format = 'json'
     base_endpoints_place = f'https://maps.googleapis.com/maps/api/place/details/{format}'
     params = {
-        "key" : API_KEY,
+        "key" : api_key,
         "place_id" : place_id,
         "fields" : "formatted_phone_number,opening_hours,website"
     }
@@ -169,7 +169,7 @@ def request_contact_info(place_id: str) -> dict:
 
     return r.json()
 
-def request_basic_info(name: str, addr: str) -> dict:
+def request_basic_info(name: str, addr: str, api_key: str) -> dict:
     '''
     Calls Google Places API for formatted address, geometry(lattitude, longitude), name of the business,
     place identifier, and business type
@@ -192,7 +192,7 @@ def request_basic_info(name: str, addr: str) -> dict:
     search_str = f"{name} {addr}"
 
     params = {
-        "key" : API_KEY,
+        "key" : api_key,
         "input" : search_str,
         "inputtype": "textquery",
         "fields" : "formatted_address,geometry,name,place_id,type"
@@ -221,7 +221,7 @@ def request_basic_info(name: str, addr: str) -> dict:
     return r.json()
 
 
-def req_place_details(df: pd.DataFrame) -> tuple:
+def req_place_details(df: pd.DataFrame, api_key: str) -> tuple:
     '''
     Helper function requests both business details and contact information
 
@@ -236,14 +236,14 @@ def req_place_details(df: pd.DataFrame) -> tuple:
     addr = df.loc["parcel_address"]
 
     # call google api for buiness info
-    basic_details = request_basic_info(name, addr)
+    basic_details = request_basic_info(name, addr, api_key)
 
     # Extract the place id, we will need it to request
     # contact details
     place_id = basic_details['candidates'][0]['place_id']
 
     # Call google api for contact info
-    contact_details = request_contact_info(place_id)
+    contact_details = request_contact_info(place_id, api_key)
 
     return (basic_details, contact_details)
 
@@ -485,7 +485,7 @@ def dump_json_data(curr: pd.DataFrame, data: dict) -> None:
 #---------------------------MAIN------------------------------------
 
 
-def main(file: str, lga: str) -> list:
+def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
     # Elapsed time start
     start = time.perf_counter()
 
@@ -506,7 +506,7 @@ def main(file: str, lga: str) -> list:
         # Create a list with x empty elements
         new_row = fill_empty(num_headers)
         curr_business = df.iloc[i, :]
-        scraped_data = req_place_details(curr_business)
+        scraped_data = req_place_details(curr_business, api_key)
         
         # For testing, this will print out the response data and break
         if SAVE_API_DATA:
