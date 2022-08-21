@@ -47,12 +47,12 @@ Headers must fit the specifications detailed in the headers_format.md documentat
 # API Requests
 In this module we will be using Googles Places Api to request information on a business.
 
-Data requested include:
+Data requested includes:
 
 Basic Information:
-- Google Places unique id
+- Google Place's unique 'Place ID'
 - Formated Address
-- location (longitude and latitudes)
+- Location (longitude and latitude)
 - Business Name
 - Business Type
 
