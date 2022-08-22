@@ -10,7 +10,7 @@ import csv
 import json
 
 # A SAFE GUARD TO PREVENT INIFINITE CALLS TO API
-API_LIMIT = 5
+API_LIMIT = 15
 API_KEY = os.environ["PLACES_API"]
 
 # Option to save responses from google api
@@ -23,6 +23,7 @@ HEADERS = [
     "places_id",
     "collection_year",
     "business_name",
+    "temp_business_types",
     "classification_name",
     "category_1",
     "sub_category_1",
@@ -212,7 +213,7 @@ def req_place_details(df: pd.DataFrame, api_key: str) -> tuple:
 
     # Extract the place id, we will need it to request
     # contact details
-    place_id = basic_details['candidates'][0]['place_id']
+    place_id = extract_places_id(basic_details)
 
     # Call google api for contact info
     contact_details = request_contact_info(place_id, api_key)
@@ -233,8 +234,11 @@ def get_formatted_addr(basic: tuple) -> str:
     Return:
         str: Formatted address of the business
     '''
-    return basic[0]["candidates"][0]["formatted_address"]
 
+    if "formatted_address" in basic[0]["candidates"][0]:
+        return basic[0]["candidates"][0]["formatted_address"]
+    else:
+        return "-"
 
 def get_lat_long(basic: tuple) -> tuple:
     '''
@@ -246,8 +250,8 @@ def get_lat_long(basic: tuple) -> tuple:
     Return:
         tuple: int representation of lat and long
     '''
-    lat = int(basic[0]["candidates"][0]["geometry"]["location"]["lat"])
-    lng = int(basic[0]["candidates"][0]["geometry"]["location"]["lng"])
+    lat = str(basic[0]["candidates"][0]["geometry"]["location"]["lat"])
+    lng = str(basic[0]["candidates"][0]["geometry"]["location"]["lng"])
     return (lat, lng)
 
 
@@ -261,7 +265,11 @@ def get_business_types(basic: tuple) -> list:
     Return:
         list: decirptive words of the business
     '''
-    return basic[0]["candidates"][0]["types"]
+
+    if "types" in basic[0]["candidates"][0]:
+        return basic[0]["candidates"][0]["types"]
+    else:
+        return "-"
 
 # TODO: return a int instead?
 def get_phone_no(basic: tuple) -> str:
@@ -274,7 +282,11 @@ def get_phone_no(basic: tuple) -> str:
     Return:
         str: phone number
     '''
-    return basic[1]["result"]["formatted_phone_number"]
+    
+    if "formatted_phone_number" in basic[1]["result"]:
+        return basic[1]["result"]["formatted_phone_number"]
+    else:
+        return "-"
 
 
 # TODO: add defensive programming clauses, i.e. what if invalid given for format
@@ -285,16 +297,25 @@ def get_opening(basic: tuple, format="periods") -> dict:
     Param:
         basic: tuple containing basic data json and contact details json
 
-    format: default is "periods" will return a dictionary representation of the opening and closing hours
-            "text" will return an easy to read text representation of opening and closing hours
+    format: 
+        default is "periods" will return a dictionary representation of the opening and closing hours
+        "text" will return an easy to read text representation of opening and closing hours
 
     Return:
-        str: phone number
+        json: opening hours
     '''
-    if format == "periods":
-        return basic[1]["result"]["opening_hours"]["periods"]
-    elif format == "text":
-        return basic[1]["result"]["opening_hours"]["weekday_text"]
+
+    if "opening_hours" in basic[1]["result"]:
+
+        if format == "periods":
+            
+            return basic[1]["result"]["opening_hours"]["periods"]
+
+        elif format == "text":
+
+            return basic[1]["result"]["opening_hours"]["weekday_text"]
+
+    return "-"
 
 
 def get_website(basic: tuple) -> str:
@@ -311,8 +332,12 @@ def get_website(basic: tuple) -> str:
     if "website" in basic[1]["result"]:
         return basic[1]["result"]["website"]
     else:
-        return " "
+        return "-"
 
+
+def extract_places_id(basic: dict):
+
+    return basic['candidates'][0]['place_id']
 
 #---------------------------------------------------------------------------------------
 # The following functions take in a list and place data in the correct index
@@ -341,6 +366,7 @@ def add_lat_long(lst: list, headers: list, data: tuple) -> None:
     coordinates = get_lat_long(data)
     lat_index = headers.index("y_latitude")
     long_index = headers.index("x_longitude")
+
     lst[lat_index] = coordinates[0]
     lst[long_index] = coordinates[1]
 
@@ -449,15 +475,32 @@ def add_opening_times(lst: list, headers: list, data: dict) -> None:
             lst[hrs_index] = "closed"
 
 
+def add_places_id(lst: list, headers: list, data: dict) -> None:
+    places_id = extract_places_id(data[0])
+    id_index = headers.index("places_id")
+
+    lst[id_index] = places_id
+
+
+def add_types(lst: list, headers: list, data: dict) -> None:
+    b_types = get_business_types(data)
+    types_index = headers.index("temp_business_types")
+    b_types_to_str = ", ".join(b_types)
+    lst[types_index] = b_types_to_str
+
+#TODO: currently the unicode "\u2013" which is a "-" does not get printed properly
+#       we need to replace it with something else or the correct unicode for "-"
 def add_json_opening_hours(lst: list, headers: list, data: dict) -> None:
-    headers.index("opening_hours")
+    opening_index = headers.index("opening_hours")
     opening = get_opening(data, format="text")
-    print(json.dumps(opening))
+
+    lst[opening_index] = json.dumps(opening, separators=(",", ":"))
 
 
 
 def write_to_csv(data: pd.DataFrame, filename: str) -> None:
-    with open(filename, "w") as f:
+    dir_loc = f'./test_files/outputs/{filename}'
+    with open(dir_loc, "w") as f:
         write = csv.writer(f)
         write.writerows(data)
 
@@ -484,17 +527,19 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
     num_headers = len(HEADERS)
 
     num_calls = 0
-    
+    print("Scraping....")
     for i in range(num_business):
-
         if num_calls == API_LIMIT:
             break
 
         # Create a list with x empty elements
         new_row = fill_empty(num_headers)
         curr_business = df.iloc[i, :]
+
+        print(f"{curr_business.loc['business_name']}...")
+
         scraped_data = req_place_details(curr_business, api_key)
-        
+
         # For testing, this will print out the response data and break
         if SAVE_API_DATA:
             dump_json_data(curr_business, scraped_data)
@@ -517,11 +562,12 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
         # Filles the opening times fields
         #add_opening_times(new_row, HEADERS, scraped_data)
 
-
+        add_types(new_row, HEADERS, scraped_data)
+        add_places_id(new_row, HEADERS, scraped_data)
         add_json_opening_hours(new_row, HEADERS, scraped_data)
         add_formatted_address(new_row, HEADERS, scraped_data, curr_business)
 
-        break
+        
         #TODO add classification
         #TODO add Categories
 
@@ -553,9 +599,9 @@ JINGS = "./test_files/inputs/Jing's Noodle Bar Kelmscott.xls"
 SANDC = "./test_files/inputs/S and C Fiolo.xls"
 LGA = "Armadale, City of"
 
-sample_cleaned_csv = get_cleaned_table(CHANDAS, LGA, API_KEY)
+sample_cleaned_csv = get_cleaned_table(DATA_FILE, LGA, API_KEY)
 
-#write_to_csv(sample_cleaned_csv, "JINGS_SAMPLE.csv")
+write_to_csv(sample_cleaned_csv, "armadale_cleaned.csv")
 
 
 # print(main(CAKEAWAY))
