@@ -17,60 +17,60 @@ API_KEY = os.environ["PLACES_API"]
 SAVE_API_DATA = False
 
 # TODO: Read in json file of headers instead of hard coding it?
-HEADERS = {
-    "local_government_area":    0,
-    "redcap_id":                1,
-    "business_id":              2,
-    "collection_year":          3,
-    "business_name":            4,
-    "classification_name":      5,
-    "category_1":               6,
-    "sub_category_1":           7,
-    "category_2":               8,
-    "sub_category_2":           9,
-    "category_3":               10,
-    "sub_category_3":           11,
-    "y_latitude":               12,
-    "x_longitude":              13,
-    "original_lga_provided_address": 14,
-    "new_unit_shop_number":     15,
-    "new_street_number":        16,
-    "new_street_name":          17,
-    "new_street_type":          18,
-    "new_street_suffix":        19,
-    "new_suburb":               20,
-    "new_postcode":             21,
-    "contact_1":                22,
-    "contact_2":                23,
-    "email":                    24,
-    "website":                  25,
-    "menu_(yes,_provided_on_website/no)": 26,
-    "children's_menu_provided_(yes/no)": 27,
-    "mon_open":                 28,
-    "mon_close":                29,
-    "mon_total_hrs":            30,
-    "tues_open":                31,
-    "tues_close":               32,
-    "tues_total_hrs":           33,
-    "weds_open":                34,
-    "weds_close":                35,
-    "weds_total_hrs":            36,
-    "thurs_open":               37,
-    "thurs_close":               38,
-    "thurs_total_hrs":           39,
-    "fri_open":                 40,
-    "fri_close":                41,
-    "fri_total_hrs":            42,
-    "sat_open":                 43,
-    "sat_close":                44,
-    "sat_total_hrs":            45,
-    "sun_open":                 46,
-    "sun_close":                47,
-    "sun_total_hrs":            48,
-    "total_weekdays_hrs":       49,
-    "total_weekend_hrs":        50,
-    "notes":                    51
-}
+HEADERS = [
+    "local_government_area",
+    "redcap_id",
+    "business_id",
+    "collection_year",
+    "business_name",
+    "classification_name",
+    "category_1",
+    "sub_category_1",
+    "category_2",
+    "sub_category_2",
+    "category_3",
+    "sub_category_3",
+    "y_latitude",
+    "x_longitude",
+    "original_lga_provided_address",
+    "new_unit_shop_number",
+    "new_street_number",
+    "new_street_name",
+    "new_street_type",
+    "new_street_suffix",
+    "new_suburb",
+    "new_postcode",
+    "contact_1",
+    "contact_2",
+    "email",
+    "website",
+    "menu_(yes,_provided_on_website/no)",
+    "children's_menu_provided_(yes/no)",
+    "mon_open",
+    "mon_close",
+    "mon_total_hrs",
+    "tues_open",
+    "tues_close",
+    "tues_total_hrs",
+    "weds_open",
+    "weds_close",
+    "weds_total_hrs",
+    "thurs_open",
+    "thurs_close",
+    "thurs_total_hrs",
+    "fri_open",
+    "fri_close",
+    "fri_total_hrs",
+    "sat_open",
+    "sat_close",
+    "sat_total_hrs",
+    "sun_open",
+    "sun_close",
+    "sun_total_hrs",
+    "total_weekdays_hrs",
+    "total_weekend_hrs",
+    "notes",
+]
 
 
 def get_business_name_add(file: str) -> dict:
@@ -349,55 +349,55 @@ def fill_empty(length: int, fill="") -> list:
     return [fill for x in range(length)]
 
 
-def add_name(lst: list, headers: dict, df: pd.DataFrame) -> None:
-    index = headers["business_name"]
+def add_name(lst: list, headers: list, df: pd.DataFrame) -> None:
+    index = headers.index("business_name")
     lst[index] = df.loc["business_name"]
 
 
-def add_lga(lst: list, headers: dict, lga: str) -> None:
-    index = headers["local_government_area"]
+def add_lga(lst: list, headers: list, lga: str) -> None:
+    index = headers.index("local_government_area")
     lst[index] = lga
 
 
-def add_year(lst: list, headers: dict) -> None:
+def add_year(lst: list, headers: list) -> None:
     year = date.today().year
-    index = headers["collection_year"]
+    index = headers.index("collection_year")
     lst[index] = year
 
 
-def add_lat_long(lst: list, headers: dict, data: tuple) -> None:
+def add_lat_long(lst: list, headers: list, data: tuple) -> None:
     coordinates = get_lat_long(data)
-    lat_index = headers["y_latitude"]
-    long_index = headers["x_longitude"]
+    lat_index = headers.index("y_latitude")
+    long_index = headers.index("x_longitude")
     lst[lat_index] = coordinates[0]
     lst[long_index] = coordinates[1]
 
 
-def add_phone(lst: list, headers: dict, data: tuple) -> None:
+def add_phone(lst: list, headers: list, data: tuple) -> None:
     phone_no = get_phone_no(data)
-    index = headers["contact_1"]
+    index = headers.index("contact_1")
     lst[index] = phone_no
 
 
-def add_website(lst: list, headers: dict, data: tuple) -> None:
+def add_website(lst: list, headers: list, data: tuple) -> None:
     website = get_website(data)
-    index = headers["website"]
+    index = headers.index("website")
     lst[index] = website
 
 
 # TODO: add conditions on shop address that are inside a shopping centre
-def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame) -> None:
+def add_address(lst: list, headers: list, data: dict, curr: pd.DataFrame) -> None:
     address = get_formatted_addr(data).split()
     address = [x.replace(",", "") for x in address]
     orig_addr = curr.loc["parcel_address"]
 
-    num_index = headers["new_street_number"]
-    name_index = headers["new_street_name"]
-    type_index = headers["new_street_type"]
-    suffix_index = headers["new_street_suffix"] # NOT USED
-    suburb_index = headers["new_suburb"]
-    postcode_index = headers["new_postcode"]
-    orig_index = headers["original_lga_provided_address"]
+    num_index = headers.index("new_street_number")
+    name_index = headers.index("new_street_name")
+    type_index = headers.index("new_street_type")
+    suffix_index = headers.index("new_street_suffix") # NOT USED
+    suburb_index = headers.index("new_suburb")
+    postcode_index = headers.index("new_postcode")
+    orig_index = headers.index("original_lga_provided_address")
 
     # Street Number
     lst[num_index] = address[0]
@@ -414,7 +414,7 @@ def add_address(lst: list, headers: dict, data: dict, curr: pd.DataFrame) -> Non
     
 
 # TODO: add the sums of the weekends and weekdays
-def add_opening_times(lst: list, headers: dict, data: dict) -> None:
+def add_opening_times(lst: list, headers: list, data: dict) -> None:
     FMT = '%H%M'
     DAYS = 7
 
@@ -449,9 +449,9 @@ def add_opening_times(lst: list, headers: dict, data: dict) -> None:
         total_hrs = datetime.strptime(c_time, FMT) - datetime.strptime(o_time, FMT)
         total_hrs = total_hrs.total_seconds() / 60 / 60
 
-        open_index = headers[current_day+"open"]
-        close_index = headers[current_day+"close"]
-        hrs_index = headers[current_day+"total_hrs"]
+        open_index = headers.index(current_day+"open")
+        close_index = headers.index(current_day+"close")
+        hrs_index = headers.index(current_day+"total_hrs")
 
         lst[open_index] = o_time
         lst[close_index] = c_time
@@ -460,9 +460,9 @@ def add_opening_times(lst: list, headers: dict, data: dict) -> None:
     for closed, day in enumerate(is_open):
         if closed:
             current_day = days_index[day]
-            open_index = headers[current_day+"open"]
-            close_index = headers[current_day+"close"]
-            hrs_index = headers[current_day+"total_hrs"]
+            open_index = headers.index(current_day+"open")
+            close_index = headers.index(current_day+"close")
+            hrs_index = headers.index(current_day+"total_hrs")
 
             lst[open_index] = "closed"
             lst[close_index] = "closed"
@@ -491,10 +491,10 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
 
     cleaned_data = list()
     df = read_file(file)
-    cleaned_data.append(list(HEADERS.keys()))
+    cleaned_data.append(HEADERS)
 
     num_business = df.shape[0]
-    num_headers = len(list(HEADERS.keys()))
+    num_headers = len(HEADERS)
 
     num_calls = 0
     
