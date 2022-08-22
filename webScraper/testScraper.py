@@ -11,7 +11,7 @@ class TestScraper(unittest.TestCase):
     skip_api_test = True
 
 
-    DATA_FILE = "./test_files/Food Business Listing 2021.22 - CoA Summary.xls"
+    DATA_FILE = "./test_files/inputs/Food Business Listing 2021.22 - CoA Summary.xls"
 
     cider_house_test = {
         "name":  "The Naked Apple Cider House (formerly Hopsscotch Restaurant)",
@@ -63,12 +63,12 @@ class TestScraper(unittest.TestCase):
     def test_cleaned_headers(self):
         headers = scraper.HEADERS
         expected_headers = list()
-        with open("./test_files/headers_cleaned.txt", "r") as f:
+        with open("./test_files/headers/headers_cleaned.txt", "r") as f:
             for line in f:
                 expected_headers.append(line.strip())
 
         for index, head in enumerate(expected_headers):
-            self.assertTrue(headers[head] == index, msg=f'Failed at {head}')
+            self.assertTrue(headers.index(head) == index, msg=f'Failed at {head}')
 
 
     #TODO: add more tests
