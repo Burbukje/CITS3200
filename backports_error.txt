@@ -1,0 +1,5 @@
+For python3.9 and greater avoid using backports.
+
+Edit your requirements.txt file:
+
+backports.zoneinfo==0.2.1;python_version<"3.9"
