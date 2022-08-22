@@ -385,6 +385,14 @@ def add_address(lst: list, headers: list, data: dict, curr: pd.DataFrame) -> Non
     lst[orig_index] = orig_addr
     
 
+def add_formatted_address(lst: list, headers: list, data: dict, curr: pd.DataFrame) -> None:
+    orig_addr = curr.loc["parcel_address"]
+    format_addr_index = headers.index("formatted_address")
+    orig_index = headers.index("original_lga_provided_address")
+
+    lst[orig_index] = orig_addr
+    lst[format_addr_index] = get_formatted_addr(data)
+
 # TODO: add the sums of the weekends and weekdays
 def add_opening_times(lst: list, headers: list, data: dict) -> None:
     FMT = '%H%M'
@@ -439,6 +447,13 @@ def add_opening_times(lst: list, headers: list, data: dict) -> None:
             lst[open_index] = "closed"
             lst[close_index] = "closed"
             lst[hrs_index] = "closed"
+
+
+def add_json_opening_hours(lst: list, headers: list, data: dict) -> None:
+    headers.index("opening_hours")
+    opening = get_opening(data, format="text")
+    print(json.dumps(opening))
+
 
 
 def write_to_csv(data: pd.DataFrame, filename: str) -> None:
@@ -498,11 +513,15 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
         # Fills website field
         add_website(new_row, HEADERS, scraped_data)
         # Fills address fields
-        add_address(new_row, HEADERS, scraped_data, curr_business)
+        #add_address(new_row, HEADERS, scraped_data, curr_business)
         # Filles the opening times fields
-        add_opening_times(new_row, HEADERS, scraped_data)
+        #add_opening_times(new_row, HEADERS, scraped_data)
 
 
+        add_json_opening_hours(new_row, HEADERS, scraped_data)
+        add_formatted_address(new_row, HEADERS, scraped_data, curr_business)
+
+        break
         #TODO add classification
         #TODO add Categories
 
@@ -534,7 +553,7 @@ JINGS = "./test_files/inputs/Jing's Noodle Bar Kelmscott.xls"
 SANDC = "./test_files/inputs/S and C Fiolo.xls"
 LGA = "Armadale, City of"
 
-#sample_cleaned_csv = main(CHANDAS, LGA)
+sample_cleaned_csv = get_cleaned_table(CHANDAS, LGA, API_KEY)
 
 #write_to_csv(sample_cleaned_csv, "JINGS_SAMPLE.csv")
 
