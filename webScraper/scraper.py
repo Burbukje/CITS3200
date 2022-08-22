@@ -10,7 +10,7 @@ import csv
 import json
 
 # A SAFE GUARD TO PREVENT INIFINITE CALLS TO API
-API_LIMIT = 15
+API_LIMIT = 5
 API_KEY = os.environ["PLACES_API"]
 
 # Option to save responses from google api
@@ -211,14 +211,19 @@ def req_place_details(df: pd.DataFrame, api_key: str) -> tuple:
     # call google api for buiness info
     basic_details = request_basic_info(name, addr, api_key)
 
-    # Extract the place id, we will need it to request
-    # contact details
-    place_id = extract_places_id(basic_details)
+    status = get_status(basic_details)
 
-    # Call google api for contact info
-    contact_details = request_contact_info(place_id, api_key)
+    if status == "OK":
+        # Extract the place id, we will need it to request
+        # contact details
+        place_id = extract_places_id(basic_details)
 
-    return (basic_details, contact_details)
+        # Call google api for contact info
+        contact_details = request_contact_info(place_id, api_key)
+
+        return (basic_details, contact_details)
+    else:
+        return None
 
 
 #----------------------------HELPERS-----------------------------------
@@ -338,6 +343,10 @@ def get_website(basic: tuple) -> str:
 def extract_places_id(basic: dict):
 
     return basic['candidates'][0]['place_id']
+
+
+def get_status(basic: dict):
+    return basic["status"]
 
 #---------------------------------------------------------------------------------------
 # The following functions take in a list and place data in the correct index
@@ -519,9 +528,14 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
     # Elapsed time start
     start = time.perf_counter()
 
+    # scraped list
     cleaned_data = list()
     df = read_file(file)
     cleaned_data.append(HEADERS)
+
+    # list of businesses places could not find data
+    no_online_data = list()
+    no_online_data.append(HEADERS)
 
     num_business = df.shape[0]
     num_headers = len(HEADERS)
@@ -538,36 +552,52 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
 
         print(f"{curr_business.loc['business_name']}...")
 
+        # Scraped data will be None if Google cannot find anything
         scraped_data = req_place_details(curr_business, api_key)
 
-        # For testing, this will print out the response data and break
-        if SAVE_API_DATA:
-            dump_json_data(curr_business, scraped_data)
-            break
+        if not scraped_data == None:
 
-        # Fills the lga name field
-        add_lga(new_row, HEADERS, lga)
-        # Fills the collection year field
-        add_year(new_row, HEADERS)
-        # Fills the name of the business field
-        add_name(new_row, HEADERS, curr_business)
-        # Fills latitude and longitude field
-        add_lat_long(new_row, HEADERS, scraped_data)
-        # Fills phone number field
-        add_phone(new_row, HEADERS, scraped_data)
-        # Fills website field
-        add_website(new_row, HEADERS, scraped_data)
-        # Fills address fields
-        #add_address(new_row, HEADERS, scraped_data, curr_business)
-        # Filles the opening times fields
-        #add_opening_times(new_row, HEADERS, scraped_data)
+            # For testing, this will print out the response data and break
+            if SAVE_API_DATA:
+                dump_json_data(curr_business, scraped_data)
+                break
 
-        add_types(new_row, HEADERS, scraped_data)
-        add_places_id(new_row, HEADERS, scraped_data)
-        add_json_opening_hours(new_row, HEADERS, scraped_data)
-        add_formatted_address(new_row, HEADERS, scraped_data, curr_business)
+            # Fills the lga name field
+            add_lga(new_row, HEADERS, lga)
+            # Fills the collection year field
+            add_year(new_row, HEADERS)
+            # Fills the name of the business field
+            add_name(new_row, HEADERS, curr_business)
+            # Fills latitude and longitude field
+            add_lat_long(new_row, HEADERS, scraped_data)
+            # Fills phone number field
+            add_phone(new_row, HEADERS, scraped_data)
+            # Fills website field
+            add_website(new_row, HEADERS, scraped_data)
+            # Fills address fields
+            #add_address(new_row, HEADERS, scraped_data, curr_business)
+            # Filles the opening times fields
+            #add_opening_times(new_row, HEADERS, scraped_data)
 
-        
+            add_types(new_row, HEADERS, scraped_data)
+            add_places_id(new_row, HEADERS, scraped_data)
+            add_json_opening_hours(new_row, HEADERS, scraped_data)
+            add_formatted_address(new_row, HEADERS, scraped_data, curr_business)
+
+            cleaned_data.append(new_row)
+
+        else:
+            # Fills the lga name field
+            add_lga(new_row, HEADERS, lga)
+            # Fills the collection year field
+            add_year(new_row, HEADERS)
+            # Fills the name of the business field
+            add_name(new_row, HEADERS, curr_business)
+
+            no_online_data.append(new_row)
+
+
+
         #TODO add classification
         #TODO add Categories
 
@@ -577,7 +607,7 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
         #TODO add childrens menu
 
         # Add the row to the cleaned data list
-        cleaned_data.append(new_row)
+        
 
         num_calls += 1
 
@@ -585,7 +615,7 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
     end = time.perf_counter()
     print("Finised in {:.3g} seconds".format(end-start))
 
-    return cleaned_data
+    return (cleaned_data, no_online_data)
 
 
 
@@ -599,9 +629,11 @@ JINGS = "./test_files/inputs/Jing's Noodle Bar Kelmscott.xls"
 SANDC = "./test_files/inputs/S and C Fiolo.xls"
 LGA = "Armadale, City of"
 
-sample_cleaned_csv = get_cleaned_table(DATA_FILE, LGA, API_KEY)
+#sample_cleaned_csv, no_data_csv = get_cleaned_table(DATA_FILE, LGA, API_KEY)
 
-write_to_csv(sample_cleaned_csv, "armadale_cleaned.csv")
+#write_to_csv(sample_cleaned_csv, "armadale_cleaned.csv")
+
+#write_to_csv(no_data_csv, "no_data.csv")
 
 
 # print(main(CAKEAWAY))
