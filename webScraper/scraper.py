@@ -428,6 +428,7 @@ def add_formatted_address(lst: list, headers: list, data: dict, curr: pd.DataFra
     lst[orig_index] = orig_addr
     lst[format_addr_index] = get_formatted_addr(data)
 
+
 # TODO: add the sums of the weekends and weekdays
 def add_opening_times(lst: list, headers: list, data: dict) -> None:
     FMT = '%H%M'
