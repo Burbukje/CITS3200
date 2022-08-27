@@ -3,6 +3,8 @@ CREATE TABLE Classification
   classification_code CHAR NOT NULL,
   classification_type VARCHAR NOT NULL,
   description VARCHAR NOT NULL,
+  internal_id INT NOT NULL,
+  FOREIGN KEY (internal_id) REFERENCES business(internal_id)
   PRIMARY KEY (classification_code)
 );
 
