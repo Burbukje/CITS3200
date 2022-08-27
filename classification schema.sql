@@ -4,8 +4,8 @@ CREATE TABLE Classification
   classification_type VARCHAR NOT NULL,
   description VARCHAR NOT NULL,
   internal_id INT NOT NULL,
+  PRIMARY KEY (classification_code),
   FOREIGN KEY (internal_id) REFERENCES business(internal_id)
-  PRIMARY KEY (classification_code)
 );
 
 CREATE TABLE Category
