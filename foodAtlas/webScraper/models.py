@@ -24,14 +24,20 @@ class Business(models.Model):
     business_name = models.CharField(max_length=128)
     notes = models.TextField(max_length=256)
 
+    def __str__(self):
+        return self.business_name
+
 
 class Contact_Details(models.Model):
     business_id = models.ForeignKey(Business, on_delete=models.CASCADE)
     longitude = models.DecimalField(max_digits=18, decimal_places=15)
     latitude = models.DecimalField(max_digits=18, decimal_places=15)
-    parcels_address = models.CharField(max_length=128)
+    parcel_address = models.CharField(max_length=128)
     formatted_address = models.CharField(max_length=128)
     phone = models.CharField(max_length=15)
     website = models.CharField(max_length=128)
     menu = models.BooleanField(default=False)
     opening_hours = models.JSONField()
+
+    def __str__(self):
+        return str(self.business_id)
