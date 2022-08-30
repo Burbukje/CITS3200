@@ -38,6 +38,8 @@ class BusinessTests(TestCase):
     def test_year(self) -> None:
         obj = Collection_Year.objects.get(year=2022)
         self.assertEqual(obj.year, 2022)
+        self.assertEqual(obj.get_year(), 2022)
+        
 
 
     def test_local_government(self) -> None:
@@ -45,6 +47,9 @@ class BusinessTests(TestCase):
         self.assertEqual(obj.local_government_area, "Armadale, City of")
         self.assertNotEqual(obj.local_government_area, "armadale, city of")
         self.assertEqual(obj.year.year, 2022)
+        self.assertEqual(obj.year.get_year(), 2022)
+        self.assertEqual(obj.get_lga(), "Armadale, City of")
+
 
 
     def test_business(self) -> None:
@@ -53,6 +58,9 @@ class BusinessTests(TestCase):
         self.assertNotEqual(obj.business_name, "armadale primary school canteen")
         self.assertEqual(obj.notes, "This is a test 12345")
         self.assertNotEqual(obj.notes, "This is a test 123")
+
+        self.assertEqual(obj.get_name(), "Armadale Primary School Canteen")
+        self.assertEqual(obj.get_notes(), "This is a test 12345")
 
 
     def test_contacts(self) -> None:
@@ -66,6 +74,9 @@ class BusinessTests(TestCase):
         self.assertEquals(obj.website, "http://armadaleps.wa.edu.au")
         self.assertEquals(obj.menu, False)
         self.assertEquals(obj.opening_hours, self.hours)
+
+
+        
 
 
     def test_classification(self) -> None:
