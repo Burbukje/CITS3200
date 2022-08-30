@@ -1,5 +1,6 @@
 from django.test import TestCase
-from webScraper.models import Collection_Year, Contact_Details, Business, Local_Government
+from webScraper.models import Collection_Year, Contact_Details, Business, Local_Government, Classification
+from webScraper.classification_enums import *
 import decimal
 
 # Create your tests here.
@@ -30,6 +31,9 @@ class BusinessTests(TestCase):
                                                     menu=False,
                                                     opening_hours=self.hours
                                                 )
+
+        
+        self.classification = Classification.objects.create(business_id=self.business)
 
     def test_year(self) -> None:
         obj = Collection_Year.objects.get(year=2022)
@@ -62,3 +66,16 @@ class BusinessTests(TestCase):
         self.assertEquals(obj.website, "http://armadaleps.wa.edu.au")
         self.assertEquals(obj.menu, False)
         self.assertEquals(obj.opening_hours, self.hours)
+
+
+    def test_classification(self) -> None:
+        obj = Classification.objects.all()[0]
+        self.assertEquals(obj.classification, '')
+        obj.classification = Classification_Appendix.E
+
+        obj.category_one = Category_A.BAKERY
+
+        self.assertEquals(obj.business_id, self.business)
+        self.assertEquals(obj.business_id.id, self.business.id)
+        self.assertEquals(obj.classification, 'E')
+        self.assertEquals(obj.category_one, '7.0')
