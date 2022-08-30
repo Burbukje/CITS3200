@@ -10,12 +10,22 @@ class Collection_Year(models.Model):
     def __str__(self):
         return str(self.year)
 
+    def get_year(self) -> int:
+        return self.year 
+
 
 class Local_Government(models.Model):
     year = models.ForeignKey(Collection_Year, on_delete=models.CASCADE)
     local_government_area = models.CharField(max_length=128, primary_key=True)
 
     def __str__(self):
+        return self.local_government_area
+
+    def get_year(self) -> int:
+        return self.year.get_year()
+
+
+    def get_lga(self) -> str:
         return self.local_government_area
 
 
@@ -27,6 +37,12 @@ class Business(models.Model):
 
     def __str__(self):
         return self.business_name
+
+    def get_name(self) -> str:
+        return self.business_name
+
+    def get_notes(self) -> str:
+        return self.notes
 
 
 class Contact_Details(models.Model):
@@ -62,3 +78,25 @@ class Classification(models.Model):
             return f'{self.classification}'
         else:
             return f'{self.classification}{self.category_one}'
+
+    
+    def get_class(self) -> str:
+        return self.classification
+
+    def get_cat_one(self) -> int:
+        return self.category_one
+
+    def get_sub_cat_one(self) -> int:
+        return self.sub_cat_one
+
+    def get_cat_two(self) -> int:
+        return self.category_two
+
+    def get_sub_cat_two(self) -> int:
+        return self.sub_cat_two
+
+    def get_cat_three(self) -> int:
+        return self.category_three
+
+    def get_sub_cat_three(self) -> int:
+        return self.sub_cat_three
