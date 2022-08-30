@@ -1,5 +1,6 @@
 from django.db import models
 import uuid
+from webScraper.classification_enums import *
 
 # Create your models here.
 
@@ -41,3 +42,23 @@ class Contact_Details(models.Model):
 
     def __str__(self):
         return str(self.business_id)
+
+
+class Classification(models.Model):
+    business_id = models.ForeignKey(Business, on_delete=models.CASCADE)
+    classification = models.CharField(max_length=1, choices=Classification_Appendix.choices, default="")
+    
+    category_one = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    sub_cat_one = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+
+    category_two = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    sub_cat_two = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+
+    category_three = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    sub_cat_three = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+
+    def __str__(self):
+        if self.category_one is None:
+            return f'{self.classification}'
+        else:
+            return f'{self.classification}{self.category_one}'
