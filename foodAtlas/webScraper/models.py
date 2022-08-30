@@ -44,6 +44,9 @@ class Business(models.Model):
     def get_notes(self) -> str:
         return self.notes
 
+    def get_id(self):
+        return self.id
+
 
 class Contact_Details(models.Model):
     business_id = models.ForeignKey(Business, on_delete=models.CASCADE)
@@ -57,7 +60,34 @@ class Contact_Details(models.Model):
     opening_hours = models.JSONField()
 
     def __str__(self):
-        return str(self.business_id)
+        return str(self.business_id.get_name())
+
+    def get_name(self) -> str:
+        return str(self.business_id.get_name())
+
+    def get_lat(self) -> int:
+        return self.latitude
+
+    def get_long(self):
+        return self.longitude
+
+    def get_parcel_add(self):
+        return self.parcel_address
+
+    def get_formatted_add(self):
+        return self.formatted_address
+
+    def get_phone(self):
+        return self.phone
+    
+    def get_website(self):
+        return self.website
+
+    def get_menu(self):
+        return self.menu
+
+    def get_opening(self):
+        return self.opening_hours
 
 
 class Classification(models.Model):
