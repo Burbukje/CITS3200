@@ -74,10 +74,7 @@ class BusinessTests(TestCase):
         self.assertEquals(obj.website, "http://armadaleps.wa.edu.au")
         self.assertEquals(obj.menu, False)
         self.assertEquals(obj.opening_hours, self.hours)
-
-
         
-
 
     def test_classification(self) -> None:
         obj = Classification.objects.all()[0]
