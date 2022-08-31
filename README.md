@@ -1,7 +1,9 @@
 # CITS3200
 
-This script creates a copy of 'armadale_cleaned.csv' called 'armadale_cleaned_with_menu.csv' and scrapes Google Maps using selenium to update the Menu column of the CSV file. If the latter file already exists, then the code will continue to add information for the rows where Menu is empty.
+This script creates a copy of 'armadale_cleaned.csv' called 'armadale_cleaned_with_menu.csv' and scrapes Google Maps using selenium to update the Menu column of the CSV file. If the latter file already exists, then the code will continue to add information to that file.
+
 Requires geckodriver: https://github.com/mozilla/geckodriver/releases
+
 Requires Firefox: https://www.mozilla.org/en-US/firefox/new/
 
 # In order for the code to work:
