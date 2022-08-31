@@ -1,5 +1,3 @@
-from socket import CAN_EFF_FLAG
-from types import GenericAlias
 from django.db import models
 
 class Classification_Appendix(models.TextChoices):
