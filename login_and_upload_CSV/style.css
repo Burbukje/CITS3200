@@ -1,3 +1,5 @@
+/* Background image source: https://pixabay.com/users/akenarinc-1965937/ */
+
 * {
   margin: 0;
   padding: 0;
@@ -7,8 +9,11 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background: linear-gradient(145deg, rgba(119,71,139,1) 0%, rgba(39,95,113,1) 100%);
+  /* background: linear-gradient(145deg, rgba(119,71,139,1) 0%, rgba(39,95,113,1) 100%); */
+  background: url("skyline-of-perth-at-night-in-australia-3.jpg");
   background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .login-form {
@@ -23,17 +28,21 @@ body {
   border-radius: 6px;
   box-shadow: 0 2px 25px rgba(0, 0, 0, 0.5);
 }
+
 .login-form h1 {
   padding: 35px 35px 0px 35px;
   font-weight: 300;
 }
+
 .login-form .content {
   padding: 35px;
   text-align: center;
 }
+
 .login-form .input-field {
   padding: 12px 5px;
 }
+
 .login-form .input-field input {
   font-size: 16px;
   display: block;
@@ -70,7 +79,6 @@ body {
   width: 100%;
   border: none;
   padding: 18px;
-  font-family: 'Rubik', sans-serif;
   cursor: pointer;
   text-transform: uppercase;
 /* background: #2d3b55; */
@@ -87,4 +95,11 @@ body {
 .login-form .action button:hover {
   opacity: 0.8;
   transition: 0.2s ease-out;
+}
+
+.login-form .remember-password {
+  align-items: left;
+  display: block;
+  letter-spacing: 0.2px;
+  display: inline-block;
 }

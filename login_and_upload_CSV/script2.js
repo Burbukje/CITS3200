@@ -37,6 +37,8 @@ function handleDrop(e) {
   var files = dt.files
 
   handleFiles(files)
+
+  
 }
 
 let uploadProgress = []
