@@ -6,6 +6,6 @@ Front-end used by client to upload CSV file
 
 'Show' button that gives option to show password characters instead of dots ✓
 
-Display name of file being uploaded, and an include button next to it to cancel ✓
+Display name of file being uploaded, and include a button next to it to cancel ✓
 
 Warning pop-up that requires confirmation after clicking 'upload' ✓
