@@ -6,10 +6,6 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  /*
-  background: linear-gradient(145deg, rgba(119,71,139,1) 0%, rgba(39,95,113,1) 100%);
-  background-attachment: fixed;
-  */
   background: url("skyline-of-perth-at-night-in-australia-3.jpg");
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -71,7 +67,6 @@ a {
   display: none;
 }
 
-
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -87,22 +82,24 @@ a {
   -webkit-animation-name: fadeIn; /* Fade in the background */
   -webkit-animation-duration: 0.4s;
   animation-name: fadeIn;
-  animation-duration: 0.4s
+  animation-duration: 0.4s;
 }
 
-/* Modal Content */
 .modal-content {
   position: fixed;
-  bottom: 0;
-  background-color: #fefefe;
-  width: 100%;
+  bottom: 0px;
+  left: 25%;
+  width: 50%;
+  /* min-width: 450px; */
+  background-color: white;
   -webkit-animation-name: slideIn;
   -webkit-animation-duration: 0.4s;
   animation-name: slideIn;
-  animation-duration: 0.4s
+  animation-duration: 0.4s;
+  border-radius: 6px;
+  box-shadow: 0 2px 25px rgba(0, 0, 0, 0.5);
 }
 
-/* The Close Button */
 .close {
   color: white;
   float: right;
@@ -119,19 +116,16 @@ a {
 
 .modal-header {
   padding: 2px 16px;
-  background-color: #5cb85c;
+  background-color: red;
   color: white;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
 }
 
-.modal-body {padding: 2px 16px;}
-
-.modal-footer {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  color: white;
+.modal-body {
+  padding: 15px 16px;
 }
 
-/* Add Animation */
 @-webkit-keyframes slideIn {
   from {bottom: -300px; opacity: 0} 
   to {bottom: 0; opacity: 1}

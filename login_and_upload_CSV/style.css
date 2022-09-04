@@ -3,13 +3,10 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
 }
 
 body {
   font-family: 'Arial', sans-serif;
-  /* background: linear-gradient(145deg, rgba(119,71,139,1) 0%, rgba(39,95,113,1) 100%); */
   background: url("skyline-of-perth-at-night-in-australia-3.jpg");
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -20,11 +17,8 @@ body {
   background: #fff;
   width: 500px;
   margin: 65px auto;
-  display: -webkit-box;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-          flex-direction: column;
+  flex-direction: column;
   border-radius: 6px;
   box-shadow: 0 2px 25px rgba(0, 0, 0, 0.5);
 }
@@ -36,22 +30,20 @@ body {
 
 .login-form .content {
   padding: 35px;
-  text-align: center;
 }
 
 .login-form .input-field {
-  padding: 12px 5px;
+  margin-bottom: 5px;
+  padding: 12px 5px 0px;
+  border-bottom: 1px solid #747474;
 }
 
 .login-form .input-field input {
   font-size: 16px;
-  display: block;
   width: 100%;
-  padding: 10px 1px;
+  padding: 10px 0px;
   border: 0;
-  border-bottom: 1px solid #747474;
   outline: none;
-  -webkit-transition: all .2s;
   transition: all .2s;
 }
 
@@ -59,47 +51,41 @@ body {
   border-color: #222;
 }
 
-.login-form a.link {
-  text-decoration: none;
-  color: #747474;
-  letter-spacing: 0.2px;
-  display: inline-block;
-  margin-top: 20px;
-}
-
-.login-form .action {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-          flex-direction: row;
-}
-
-.login-form .action button {
+.login-form .bottom button {
   width: 100%;
   border: none;
   padding: 18px;
   cursor: pointer;
-  text-transform: uppercase;
-/* background: #2d3b55; */
   background: linear-gradient(145deg, rgba(119,71,139,1) 0%, rgba(39,95,113,1) 100%);
-  color: #fff;
+  color: white;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   letter-spacing: 0.2px;
-  outline: 0;
-  -webkit-transition: all .3s;
-  transition: all .3s;
+  transition: 0.2s ease-out;
 }
 
-.login-form .action button:hover {
+.login-form .bottom button:hover {
   opacity: 0.8;
   transition: 0.2s ease-out;
 }
 
 .login-form .remember-password {
-  align-items: left;
-  display: block;
+  padding-top: 10px;
+  padding-left: 10px;
   letter-spacing: 0.2px;
-  display: inline-block;
+  user-select: none;
+}
+
+.login-form #show-hide {
+  background: none;
+  border: none;
+  padding-left: 5px;
+  border-left: 1px solid #222;
+  font-size: 16px;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+}
+
+.login-form #pass-input {
+  width: 87%;
 }

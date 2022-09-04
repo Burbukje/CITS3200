@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en-au" >
 <head>
   <meta charset="UTF-8">
-  <title>Simple Login Form Example</title>
+  <title>WA Food Atlas Login Page</title>
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -14,16 +14,16 @@
       <input type="username" placeholder="Username">
     </div>
     <div class="input-field">
-      <input type="password" placeholder="Password">
+      <input id = "pass-input" type="password" placeholder="Password">
+      <button type="button" id = "show-hide" onclick = "showHidePassword()">Show</button>
     </div>
     <div class="remember-password">
-      <input type="checkbox" id="remember-me" checked>
+      <input type="checkbox" id="remember-me" unchecked>
       <label for="remember-me">Remember me</label>
     </div>
-
   </div>
-  <div class="action">
-    <button>Login</button>
+  <div class="bottom">
+    <button>LOGIN</button>
   </div>
 </form>
 

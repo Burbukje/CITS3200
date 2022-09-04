@@ -12,6 +12,7 @@ let dropArea = document.getElementById("drop-area")
   dropArea.addEventListener(eventName, highlight, false)
 })
 
+// Unhighlight drop area after item is dropped
 ;['dragleave', 'drop'].forEach(eventName => {
   dropArea.addEventListener(eventName, unhighlight, false)
 })
@@ -33,14 +34,27 @@ function unhighlight(e) {
 }
 
 function handleDrop(e) {
-  var dt = e.dataTransfer
-  var files = dt.files
-
-  handleFiles(files)
-
-  
+  var dt = e.dataTransfer;
+  var files = dt.files;
+  handleFiles(files);
 }
 
+function handleFiles(files) {
+  files = [...files]; // convert fileList to array to make iteration easier
+  files.forEach(previewFile);
+  // initializeProgress(files.length)
+  // files.forEach(uploadFile)
+}
+
+function previewFile(file) {
+  const output = document.getElementById('gallery');
+  output.textContent = '';
+  const li = document.createElement('li');
+  li.textContent = file.name;
+  output.appendChild(li);
+}
+
+/*
 let uploadProgress = []
 let progressBar = document.getElementById('progress-bar')
 
@@ -48,9 +62,8 @@ function initializeProgress(numFiles) {
   progressBar.value = 0
   uploadProgress = []
 
-  for(let i = numFiles; i > 0; i--) {
+  for(let i = numFiles; i > 0; i--)
     uploadProgress.push(0)
-  }
 }
 
 function updateProgress(fileNumber, percent) {
@@ -59,30 +72,6 @@ function updateProgress(fileNumber, percent) {
   progressBar.value = total
 }
 
-function handleFiles(files) {
-  files = [...files]
-  initializeProgress(files.length)
-  // files.forEach(uploadFile)
-  files.forEach(previewFile)
-}
-
-function previewFile(file) {
-  let reader = new FileReader()
-  reader.readAsDataURL(file)
-  reader.onloadend = function() {
-    let img = document.createElement('img')
-    img.src = reader.result
-    document.getElementById('gallery').appendChild(img)
-  }
- /*
-  const gallery = document.getElementById('gallery')
-  const img = document.createElement('img')
-  img.textContent = file.name
-  gallery.appendChild(img)
-  */
-}
-
-/*
 function uploadFile(file, i) {
   var url = 'https://api.cloudinary.com/v1_1/joezimim007/image/upload'
   var xhr = new XMLHttpRequest()
@@ -109,3 +98,37 @@ function uploadFile(file, i) {
   xhr.send(formData)
 }
 */
+
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("upload-btn");
+
+// Get the <span> (x) element that closes the modal
+var cross = document.getElementsByClassName("close")[0];
+
+// Get the cancel button that closes the modal
+var cancelButton = document.getElementById("cancel-btn");
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x) close the modal
+cross.onclick = function() {
+  modal.style.display = "none";
+}
+
+// WHen the user clicks the button, close the modal
+cancelButton.onclick = function() {
+  modal.style.display ="none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
