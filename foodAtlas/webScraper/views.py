@@ -3,5 +3,9 @@ from django.http import HttpResponse
 
 # Create your views here.
 
-def index(request):
+def login(request):
     return render(request, "login.html")
+
+
+def uploader(request):
+    return render(request, "uploader.html")
