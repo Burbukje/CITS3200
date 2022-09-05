@@ -13,24 +13,28 @@
     <title>Food Atlas - Login</title>
 </head>
 <body>
-    <form class = "login-form">
+    <form class = "login-form" method="POST">
+        {% csrf_token %}
         <h1>WA Food Atlas</h1>
         <div class="content">
           <div class="input-field">
-            <input type="username" placeholder="Username">
+            <input type="text" name="username" placeholder="Username">
           </div>
           <div class="input-field">
-            <input id = "pass-input" type="password" placeholder="Password">
-            <button type="button" id = "show-hide" onclick = "">Show</button>
+            <input id = "pass-input" type="password" name="password" placeholder="Password">
+            <button type="submit" id = "show-hide">Show</button>
           </div>
           <div class="remember-password">
             <input type="checkbox" id="remember-me" unchecked>
             <label for="remember-me">Remember me</label>
           </div>
         </div>
+
         <div class="bottom">
           <button>LOGIN</button>
         </div>
       </form>
+
+
 </body>
 </html>

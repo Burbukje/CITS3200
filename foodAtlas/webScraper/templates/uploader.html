@@ -16,7 +16,7 @@
     <title>Food Atlas - Uploader</title>
 </head>
 <body>
-
+    {% if user.is_authenticated %}
     <form class="upload-form">
         <div id="drop-area">
           <p>Upload CSV file via the dialog or drop file into dashed region</p>
@@ -42,5 +42,14 @@
         </div>
       </div>
 
+      <form class = "login-form" action="{% url 'logout' %}" method="POST">
+        {% csrf_token %}
+        <div class="bottom">
+            <button type="submit">LOGOUT</button>
+          </div>
+        </div>
+      </form>
+
+    {% endif %}
 </body>
 </html>
