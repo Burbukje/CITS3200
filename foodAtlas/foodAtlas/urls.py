@@ -20,7 +20,8 @@ from webScraper import views as webScraper_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", map_views.index, name="Food Atlas"),
-    path("login/", webScraper_views.login, name="Food Atlas - Login"),
-    path("uploader/", webScraper_views.uploader, name="Food Atlas - Uploader"),
+    path("", map_views.index, name="index"),
+    path("login_view/", webScraper_views.login_view, name="login"),
+    path("uploader/", webScraper_views.uploader, name="uploader"),
+    path("logout_view", webScraper_views.logout_view, name="logout")
 ]
