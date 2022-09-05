@@ -4,6 +4,10 @@ from webScraper.classification_enums import *
 
 # Create your models here.
 
+
+#------------------------------------Business DB--------------------------------------------
+
+
 class Collection_Year(models.Model):
     year = models.IntegerField(primary_key=True)
 
@@ -130,3 +134,7 @@ class Classification(models.Model):
 
     def get_sub_cat_three(self) -> int:
         return self.sub_cat_three
+
+
+#---------------------------------User Login------------------------------------------
+
