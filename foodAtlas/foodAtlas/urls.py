@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from map import views
+from map import views as map_views
+from webScraper import views as webScraper_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", views.index, name="Food Atlas"),
+    path("", map_views.index, name="Food Atlas"),
+    path("login/", webScraper_views.index, name="Food Atlas - Login"),
 ]
