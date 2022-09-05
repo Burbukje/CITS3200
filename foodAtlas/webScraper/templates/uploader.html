@@ -17,12 +17,13 @@
 </head>
 <body>
     {% if user.is_authenticated %}
-    <form class="upload-form">
+    <form class="upload-form" action="{% url 'uploader' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
         <div id="drop-area">
           <p>Upload CSV file via the dialog or drop file into dashed region</p>
-          <input type="file" id="fileElem" accept=".csv" onchange="handleFiles(this.files)">
+          <input type="file" id="fileElem" accept=".xlsx" name="excel_file" onchange="handleFiles(this.files)">
           <label class="button" for="fileElem">Select CSV file</label>
-          <label class="button" id = "upload-btn">Upload file</label>
+          <button type="submit" class="button" id = "upload-btn" value="Upload">Upload file</button>
           <progress id="progress-bar" value=0 max=100></progress>
           <div id="gallery"></div>
         </div>
@@ -42,14 +43,22 @@
         </div>
       </div>
 
-      <form class = "login-form" action="{% url 'logout' %}" method="POST">
-        {% csrf_token %}
+      <form class = "login-form">
         <div class="bottom">
-            <button type="submit">LOGOUT</button>
+            <span class="button"><a href="{% url 'logout' %}">Logout</a></span>
           </div>
         </div>
       </form>
 
     {% endif %}
+
+    <p></p>
+
+    {% for row in excel_data %}
+        {% for cell in row %}
+            {{ cell }}&nbsp;&nbsp;
+        {% endfor %}
+        <br>
+    {% endfor %}
 </body>
 </html>
