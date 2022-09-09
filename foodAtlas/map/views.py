@@ -47,7 +47,7 @@ def create_lga_map():
     return map1
 
 def read_geojson():
-    geo_file = "map/geoJSON/LGA_Boundaries_LGATE_233_WA_GDA2020_Public.geojson"
+    geo_file = "map/geoJSON/LGA_Boundaries_Metro_Area.geojson"
 
     with open(geo_file, "r") as f:
         lga_dict = json.load(f)
