@@ -1,0 +1,8 @@
+For windows users
+
+https://stackoverflow.com/questions/54734667/error-installing-geopandas-a-gdal-api-version-must-be-specified-in-anaconda
+
+pip install pipwin
+pipwin install gdal
+pipwin install fiona
+pip install geopandas

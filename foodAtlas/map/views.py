@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import folium
 import json
+import geopandas as gpd
 
 # Create your views here.
 
@@ -45,6 +46,15 @@ def create_lga_map():
     folium.LayerControl().add_to(map1)
 
     return map1
+
+def create_detailed_lga_map():
+    filename = "map/geoJSON/LGA_Boundaries_Metro_Area.geojson"
+    file = open(filename)
+    df = gpd.read_file(file)
+    map2 = df.explore()
+
+    folium.LayerControl().add_to(map2)
+    return map2
 
 def read_geojson():
     geo_file = "map/geoJSON/LGA_Boundaries_Metro_Area.geojson"
