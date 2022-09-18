@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn atlantides.wsgi
+web: gunicorn foodAtlas.wsgi
