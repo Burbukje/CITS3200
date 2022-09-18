@@ -1,1 +1,1 @@
-web: gunicorn atlantides.wsgi
+web: gunicorn atlantides.wsgi:application
