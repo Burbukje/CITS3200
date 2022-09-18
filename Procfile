@@ -1,1 +1,1 @@
-web: gunicorn atlantides.wsgi:application
+web: gunicorn foodAtlas.wsgi:application
