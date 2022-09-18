@@ -100,7 +100,7 @@ TODO: Register models in admin.py so you can see the database.
 
 To access the admin page simply add `/admin` at the end of the address
 ```
-username: amdin
+username: admin
 password atlantides
 ```
 
