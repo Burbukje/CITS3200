@@ -8,8 +8,8 @@ import geopandas as gpd
 
 def index(request):
     # Creating starting location and zoom of displayed map
-    map1 = create_lga_map()
-
+    #map1 = create_lga_map()
+    map1 = create_detailed_lga_map()
     # Format Map to display on webpage
     map1 = map1._repr_html_()
     context={
