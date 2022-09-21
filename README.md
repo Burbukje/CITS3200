@@ -42,7 +42,7 @@ For Windows
 ```python
 $ py -m venv venv
 ```
-
+4
 2. Activate the environment. You may have to enable scripts to be run.
 
 For more information.
