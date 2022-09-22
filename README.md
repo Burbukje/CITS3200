@@ -56,7 +56,7 @@ $ venv\Scripts\activate
 
 3. Install requirements using the "requirements.txt".
 ```python
-$ py pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 4. Deactivate environment
@@ -70,13 +70,48 @@ $ deactivate
 
 1. Ensure you are in the directory with the manage.py file
 ```python
-python manage.py runserver
+$ python manage.py runserver
 
 # if python doesnt work try
-python3 manage.py runserver
+$ python3 manage.py runserver
 ```
 2. Open local host (usually 127.0.0.1:8000) in web browser of your choice.
 
+#
+
+## Migrating the DataBase
+
+Ensure you are in the directory with the manage.py file
+
+1. Update the database schema
+```python
+$ python manage.py makemigrations
+```
+2. Create the database
+```python
+$ python manage.py migrate
+```
+
+The database should be up and running, you can view the database in the Admin page
+
+## Accessing the Admin page
+
+TODO: Register models in admin.py so you can see the database.
+
+To access the admin page simply add `/admin` at the end of the address
+```
+username: admin
+password atlantides
+```
+
+#
+
+## Running unit tests
+To run unit tests simply run the command
+
+```python
+$ python3 manage.py test
+```
 
 ## Deployment
 TBC
