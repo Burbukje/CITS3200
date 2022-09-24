@@ -36,6 +36,7 @@ class Business(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     business_name = models.CharField(max_length=128)
     google_id = models.CharField(max_length=128, null=True, default=" ")
+    google_business_types = models.CharField(max_length=128, null=True, default=" ")
     notes = models.TextField(max_length=256, null=True)
 
     def __str__(self):
@@ -55,8 +56,8 @@ class Business(models.Model):
 
 class Contact_Details(models.Model):
     business_id = models.OneToOneField(Business, null=True, on_delete=models.CASCADE)
-    longitude = models.DecimalField(max_digits=18, decimal_places=15, null=True, default=0.0)
-    latitude = models.DecimalField(max_digits=18, decimal_places=15, null=True, default=0.0)
+    longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, default=-31.9524993)
+    latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, default=115.8612164)
     parcel_address = models.CharField(max_length=128, null=True, default="")
     formatted_address = models.CharField(max_length=128, null=True, default="")
     phone = models.CharField(max_length=15, null=True, default="")
