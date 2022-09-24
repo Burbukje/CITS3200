@@ -92,11 +92,10 @@ def add_minimal_excel_to_db(file: str):
         # Create a list with x empty elements
         curr_business = data.iloc[i, :]
         name = curr_business.loc['business_name']
-        print(f"{name}...")
-
         lga = curr_business.loc['local_government_area'].upper()
 
         if lga == "ARMADALE, CITY OF":
+            print(f"{name}...")
             coll_year = int(curr_business.loc['collection_year'])
             classification = curr_business.loc['classification']
             cat_one = curr_business.loc['category_1']
