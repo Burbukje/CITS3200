@@ -91,15 +91,21 @@ def add_minimal_excel_to_db(file: str):
     for i in range(num_business):
         # Create a list with x empty elements
         curr_business = data.iloc[i, :]
-        name = curr_business.loc['business_name']
+        name = str(curr_business.loc['business_name']).strip()
         lga = curr_business.loc['local_government_area'].upper().strip()
 
-        if lga == "BELMONT, CITY OF":
+        if lga == "COCKBURN, CITY OF":
             print(f"{name}...")
             coll_year = int(curr_business.loc['collection_year'])
             classification = curr_business.loc['classification']
             cat_one = curr_business.loc['category_1']
-            parcel_address = curr_business.loc['original_lga_provided_address']
+            # parcel_address = name.split("-", 1)
+
+            # if len(parcel_address) == 2:
+            #     name = parcel_address[0].strip()
+            #     parcel_address = parcel_address[1].strip()
+
+            parcel_address = curr_business.loc['original_lga_provided_address'].strip()
             phone = curr_business.loc['contact_number_1']
             web = curr_business.loc['website']
 
