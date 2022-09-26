@@ -629,3 +629,131 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
 
     return (cleaned_data, no_online_data)
 
+#----------------------------------------------Updates the DB-------------------------------------------------------------
+
+def req_place_details(business, address, api_key: str) -> tuple:
+    '''
+    Helper function requests both business details and contact information
+
+    Param:
+        df: DataFrame containing business name and parcel address
+
+    Return:
+        Tuple: dictionary of the details and a dictionary of the contact information.
+    '''
+
+    name = business
+    addr = address
+
+    # call google api for buiness info
+    basic_details = request_basic_info(name, addr, api_key)
+
+    status = get_status(basic_details)
+
+    if status == "OK":
+        # Extract the place id, we will need it to request
+        # contact details
+        place_id = extract_places_id(basic_details)
+
+        # Call google api for contact info
+        contact_details = request_contact_info(place_id, api_key)
+
+        return (basic_details, contact_details)
+    else:
+        return None
+
+def scrape_lga(lga: str, year: int):
+    # Elapsed time start
+    start = time.perf_counter()
+    
+    lga = lga.upper()
+    year = int(year)
+
+    year_obj = Collection_Year.objects.filter(year=year)[0]
+    lga_object = Local_Government.objects.filter(local_government_area=lga, year=year_obj)[0]
+    query_set = Business.objects.filter(local_government_area=lga_object)
+
+    if len(query_set) == 0:
+        print("No businesses found")
+        return
+    
+    for business in query_set:
+        print(f"{business}")
+
+        contact_obj = Contact_Details.objects.filter(business_id=business)
+        classification_obj = Classification.objects.filter(business_id=business)
+
+        if len(contact_obj) == 0 or len(classification_obj) == 0:
+            print(f"No business found for {business}")
+            continue
+
+        curr_business_details = contact_obj[0]
+        curr_business_class = classification_obj[0]
+
+        # # Scraped data will be None if Google cannot find anything
+        scraped_data = req_place_details(business.get_name(), curr_business_details.get_parcel_add(), API_KEY)
+            
+        if not scraped_data == None:
+            db_add_places_id(business, scraped_data)
+            db_add_types(business, scraped_data)
+
+            db_add_lat_long(curr_business_details, scraped_data)
+            # # Fills phone number field
+            db_add_phone(curr_business_details, scraped_data)
+            # # Fills website field
+            db_add_website(curr_business_details, scraped_data)
+            # # Fills address fields
+            # #add_address(new_row, HEADERS, scraped_data, curr_business)
+            # # Filles the opening times fields
+            #add_opening_times(new_row, HEADERS, scraped_data)
+            db_add_json_opening_hours(curr_business_details, scraped_data)
+            db_add_formatted_address(curr_business_details, scraped_data)
+
+            
+        
+        else:
+            print(f"Google API cannot find {business}")
+
+    
+    # Elapsed time end
+    end = time.perf_counter()
+    print("Finised in {:.3g} seconds".format(end-start))
+
+    return
+
+
+def db_add_lat_long(business, data: tuple) -> None:
+    coordinates = get_lat_long(data)
+    business.latitude = coordinates[0]
+    business.longitude = coordinates[1]
+    business.save()
+    
+def db_add_phone(business, data: tuple) -> None:
+    phone_no = get_phone_no(data)
+    business.phone = phone_no
+    business.save()
+
+def db_add_website(business, data: tuple) -> None:
+    website = get_website(data)
+    business.website = website
+    business.save()
+
+def db_add_types(business, data: tuple) -> None:
+    b_types = get_business_types(data)
+    business.google_business_types = b_types
+    business.save()
+
+def db_add_places_id(business, data: tuple) -> None:
+    places_id = extract_places_id(data[0])
+    business.google_id = places_id
+    business.save()
+
+def db_add_json_opening_hours(business, data: tuple) -> None:
+    opening = get_opening(data, format="text")
+    business.opening_hours = opening
+    business.save()
+
+def db_add_formatted_address(business, data: tuple) -> None:
+    formatted_addr = get_formatted_addr(data)
+    business.formatted_address = formatted_addr
+    business.save()
