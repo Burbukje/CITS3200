@@ -21,4 +21,4 @@ COPY . /CITS3200/
 RUN python manage.py collectstatic --noinput
 
 # run gunicorn
-CMD gunicorn hello_django.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn foodAtlas.wsgi:application --bind 0.0.0.0:$PORT
