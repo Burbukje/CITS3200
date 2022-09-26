@@ -9,358 +9,275 @@ The purpose of this document is to describe the tables :
 
 # 
 
-## Table : auth_group 
+## Table 1 : webScraper_business 
+- id 
+- business_name 
+- notes 
+- local_government_area_id 
+- webScraper_local_government 
+
+## Table 2 : webScraper_classification 
+- id 
+- classification 
+- business_id_id 
+- webScraper_business 
+- category_one 
+- category_three 
+- category_two 
+- sub_cat_three 
+- sub_cat_two 
+- sub_cat_one 
+
+## Table 3 : webScraper_collection_year
+- year 
+
+## Table 4 : webScraper_contact_details
+- id 
+- longitude 
+- latitude 
+- parcel_address 
+- formatted_address 
+- phone 
+- website 
+- menu 
+- opening_hours 
+- business_id_id 
+- webScraper_business 
+
+## Table 5 : webScraper_local_government
+- local_government_area
+- year_id
+- webScraper_collection_year
+
+#
+
+## Table 1 : webScraper_business 
+About Table :  Each record represents a food business
+
 Columns : 
 
 ### id 
-expected type : integer 
-expected input : 
+Description of field : unique identifier for that business
 
-### name 
-expected type : varchar(150) 
-expected input : 
+Expected type : varchar(32) 
 
-# 
-
-## Table : auth_group_permissions 
-Columns : 
-
-### id 
-expected type : integer 
-expected input : 
-
-### group_id 
-expected type : integer 
-expected input : 
-
-### permission_id 
-expected type : integer 
-expected input : 
-
-# 
-
-## Table : auth_permission 
-Columns : 
-
-### id 
-expected type : integer 
-expected input : 
-
-### content_type_id 
-expected type : integer 
-expected input : 
-
-### codename 
-expected type : varchar(100) 
-expected input : 
-
-### name 
-expected type : varchar(255) 
-expected input : 
-
-# 
-
-## Table : auth_user 
-Columns : 
-
-### id 
-expected type : integer 
-expected input : 
-
-### password 
-expected type : varchar(128) 
-expected input : 
-
-### last_login 
-expected type : datetime 
-expected input : 
-
-### is_superuser 
-expected type : bool 
-expected input : 
-
-### username 
-expected type : varchar(150) 
-expected input : 
-
-### last_name 
-expected type : varchar(150) 
-expected input : 
-
-### email 
-expected type : varchar(254) 
-expected input : 
-
-### is_staff 
-expected type : bool 
-expected input : 
-
-### is_active 
-expected type : bool 
-expected input : 
-
-### date_joined 
-expected type : datetime 
-expected input : 
-
-### first_name 
-expected type : varchar(150) 
-expected input : 
-
-# 
-
-## Table : auth_user_group 
-Columns : 
-
-### id 
-expected type : integer 
-expected input : 
-
-### user_id 
-expected type : integer 
-expected input : 
-
-### group_id 
-expected type : integer 
-expected input : 
-
-# 
-
-## Table : auth_user_user_permissions 
-Columns : 
-
-### id 
-expected type : integer 
-expected input : 
-
-### user_id 
-expected type : integer 
-expected input : 
-
-### permission_id 
-expected type : integer 
-expected input : 
-
-# 
-
-## Table : django_admin_log 
-Columns : 
-
-### id 
-expected type : integer 
-expected input : 
-
-### object_id 
-expected type : text 
-expected input : 
-
-### object_repr 
-expected type : varchar(200) 
-expected input : 
-
-### action_flag 
-expected type : smallint 
-expected input : 
-
-### change_message 
-expected type : text 
-expected input : 
-
-### content_type_id 
-expected type : integer 
-expected input : 
-
-### user_id 
-expected type : integer 
-expected input : 
-
-### action_time 
-expected type : datetime 
-expected input : 
-
-# 
-
-## Table : django_content_type 
-Columns : 
-
-### id 
-expected type : integer 
-expected input : 
-
-### app_label 
-expected type : varchar(100) 
-expected input : 
-
-### model 
-expected type : varchar(100) 
-expected input : 
-
-# 
-
-## Table : django_migrations 
-Columns : 
-
-### id 
-expected type : integer 
-expected input : 
-
-### app 
-expected type : varchar(255) 
-expected input : 
-
-### name 
-expected type : varchar(255) 
-expected input : 
-
-### applied 
-expected type : datetime 
-expected input : 
-
-# 
-
-## Table : django_session 
-Columns : 
-
-### session_key 
-expected type : varchar(40) 
-expected input : 
-
-### session_data 
-expected type : text 
-expected input : 
-
-### expire_date 
-expected type : datetime 
-expected input : 
-
-# 
-
-## Table : webScraper_business 
-Columns : 
-
-### id 
-expected type : varchar(32) 
-expected input : 
+Expected input : 
 
 ### business_name 
-expected type : varchar(128) 
-expected input : 
+Description of field : name of business 
+
+Expected type : varchar(128) 
+
+Expected input : 
 
 ### notes 
-expected type : text 
-expected input : 
+Description of field : Notes the user would potentially want to add
+
+Expected type : text 
+
+Expected input : 
 
 ### local_government_area_id 
-expected type : varchar(128) 
-expected input : 
+Description of field : foreign key referencing the "local_government_area" field from the webScraper_local_government table 
+
+Expected type : varchar(128) 
+
+Expected input : 
 
 # 
 
-## Table : webScraper_classification 
+## Table 2 : webScraper_classification 
+About Table : Stores the different types of organisations 
+
 Columns : 
 
 ### id 
-expected type : integer 
-expected input : 
+Description of field : unique identifier for each type of organisation 
+
+Expected type : integer 
+
+Expected input : 
 
 ### classification 
-expected type : varchar(1) 
-expected input : 
+Description of field : A code representing each type of organisation. Defined in Appendix A : Food Business Classification Framework. 
+
+Expected type : varchar(1) 
+
+Expected input : A - F 
 
 ### business_id_id 
-expected type : char(32) 
-expected input : 
+Description of field : foreign key referencing the "id" field from the webScraper_business table.  
+
+Expected type : char(32) 
+
+Expected input : 
 
 ### category_one 
-expected type : decimal 
-expected input : 
+Description of field : 
+
+Expected type : decimal 
+
+Expected input : 
 
 ### category_three 
-expected type : decimal 
-expected input : 
+Description of field : 
+
+Expected type : decimal 
+
+Expected input : 
 
 ### category_two 
-expected type : decimal 
-expected input : 
+Description of field : 
+
+Expected type : decimal 
+
+Expected input : 
 
 ### sub_cat_one 
-expected type : decimal 
-expected input : 
+Description of field : 
+
+Expected type : decimal 
+
+Expected input : 
 
 ### sub_cat_three 
-expected type : decimal 
-expected input : 
+Description : 
+
+Expected type : decimal 
+
+Expected input : 
 
 ### sub_cat_two 
-expected type : decimal 
-expected input : 
+Description : 
+
+Expected type : decimal 
+
+Expected input : 
 
 # 
 
-## Table : webScraper_collection_year 
+## Table 3 : webScraper_collection_year 
+About Table : Stores the years in which data was collected
+
 Columns : 
 
 ### year 
-expected type : integer 
-expected input : 
+Description : The year the data was collected
+
+Expected type : integer 
+
+Expected input 
+- 2020
+- 1976 
 
 # 
 
-## Table : webScraper_contact_details 
+## Table 4 : webScraper_contact_details 
+About Table : This table represents the contact details and location of a business
+
 Columns : 
 
 ### id 
-expected type : integer 
-expected input : 
+Description : unique identifier for each record
+
+Expected type : integer 
+
+Expected input : 
 
 ### longitude 
-expected type : decimal 
-expected input : 
+Description : the geographic coordinate of the business
+
+Expected type : decimal 
+
+Expected input : 151.199025
 
 ### latitude 
-expected type : decimal 
-expected input : 
+Description : the geographic coordinate of the business
+
+Expected type : decimal 
+
+Expected input : 151.199025
 
 ### parcel_address 
-expected type : varchar(128) 
-expected input : 
+Description : 
+
+Expected type : varchar(128) 
+
+Expected input : 
 
 ### formatted_address 
-expected type : varchar(128) 
-expected input : 
+Description : provided by the Google Places API
+
+Expected type : varchar(128) 
+
+Expected input : Shop 16/10 Langton Road, Mount Barker
 
 ### phone 
-expected type : varchar(15) 
-expected input : 
+Description : phone number to contact business 
+
+Expected type : varchar(15) 
+
+Expected input : 
 
 ### website 
-expected type : varchar(128) 
-expected input : 
+Description : webpage link for a food business
+
+Expected type : varchar(128) 
+
+Expected input : 
+- https://www.karribank.com.au/bar
+- https://www.facebook.com/cateringandcafe/about
 
 ### menu 
-expected type : bool 
-expected input : 
+Description : shows if a food business provides a menu
+
+Expected type : bool 
+
+Expected input : 
 
 ### opening_hours 
-expected type : text 
-expected input : 
+Description : the opening hours provided by Google API
+
+Expected type : text 
+
+Expected input : 
 
 ### business_id_id 
-expected type : char(32) 
-expected input : 
+Description : foreign key that references the "id" field of the webScraper_business table
+
+Expected type : char(32) 
+
+Expected input : 
 
 # 
 
-## Table : webScraper_local_government 
+## Table 5 : webScraper_local_government 
+About Table : each record of this table represents a local government area
+
 Columns : 
 
 ### local_government_area 
-expected type : varchar(128) 
-expected input : 
+Description : 
+
+Expected type : varchar(128) 
+
+Expected input : 
+The standard format for LGA names will be "[Name], City of" or "[Name], Shire of"
+
+For example "Armadale, City of".
+
+What we will NOT accept is "City of Armadale"
+
+The reason for this is for ease of sorting in excel spread sheets
 
 ### year_id 
-expected type : integer 
-expected input : 
+Description : foreign key referencing the "year" field in the webScraper_collection_year table
+
+Expected type : integer 
+
+Expected input : 
+- 2020
+- 1992 
 
 # 
 
