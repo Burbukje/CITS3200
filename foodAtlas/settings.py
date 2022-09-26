@@ -28,6 +28,7 @@ DEBUG = int(os.environ.get('DEBUG', default=0))
 
 ALLOWED_HOSTS = ['atlantides.herokuapp.com', '127.0.0.1', '0.0.0.0']
 
+CSRF_TRUSTED_ORIGINS = ['https://atlantides.herokuapp.com']
 
 # Application definition
 
