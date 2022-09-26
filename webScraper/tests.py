@@ -78,7 +78,7 @@ class BusinessTests(TestCase):
 
     def test_classification(self) -> None:
         obj = Classification.objects.all()[0]
-        self.assertEquals(obj.classification, '')
+        self.assertEquals(obj.classification, 'None')
         obj.classification = Classification_Appendix.E
 
         obj.category_one = Category_A.BAKERY
