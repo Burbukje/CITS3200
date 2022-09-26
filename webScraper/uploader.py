@@ -78,7 +78,7 @@ def add_excel_to_db(file: str):
         db_contact.save()
     return
 
-def add_minimal_excel_to_db(file: str):
+def add_minimal_excel_to_db(input):
 
     test_one = "webScraper_script/test_files/2022_files/ALL FOOD BUSINESS DATA 2022.xlsx"
     data = read_file(test_one)
@@ -94,7 +94,7 @@ def add_minimal_excel_to_db(file: str):
         name = str(curr_business.loc['business_name']).strip()
         lga = curr_business.loc['local_government_area'].upper().strip()
 
-        if lga == "COCKBURN, CITY OF":
+        if lga == input:
             print(f"{name}...")
             coll_year = int(curr_business.loc['collection_year'])
             classification = curr_business.loc['classification']
