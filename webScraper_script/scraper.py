@@ -600,6 +600,9 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
 
 
         #TODO add classification
+
+
+        
         #TODO add Categories
 
         #TODO add email

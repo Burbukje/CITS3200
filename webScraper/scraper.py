@@ -8,6 +8,9 @@ import time
 import csv
 import json
 from webScraper.models import Collection_Year, Contact_Details, Business, Local_Government, Classification
+import numpy as np
+from operator import itemgetter
+
 
 # A SAFE GUARD TO PREVENT INIFINITE CALLS TO API
 API_LIMIT = 5
@@ -533,6 +536,84 @@ def dump_json_data(curr: pd.DataFrame, data: dict) -> None:
     with open(location, "w") as output:
         json.dump([data[0], data[1]], output)
 
+
+
+
+def get_match_sheet():
+    match_sheet = pd.read_excel('GOOGLE API BUSSINESS TYPE NAMES.xlsx',header=0,sheet_name = 'Only_matched')
+    match_sheet['GOOGLE API ALL BUSINESS TYPE'] = match_sheet['GOOGLE API ALL BUSINESS TYPE'].str.strip()
+    match_sheet['GOOGLE API ALL BUSINESS TYPE'] = match_sheet['GOOGLE API ALL BUSINESS TYPE'].str.lower()
+
+    return match_sheet
+
+
+def classification_dictionarys(match_sheet):
+    match_sheet['Weight'] = match_sheet['Weight'].astype(int)
+    classification  = dict(zip(match_sheet['GOOGLE API ALL BUSINESS TYPE'], match_sheet['Classification']))
+    Category  = dict(zip(match_sheet['GOOGLE API ALL BUSINESS TYPE'], match_sheet['Category']))
+    Category_code  = dict(zip(match_sheet['GOOGLE API ALL BUSINESS TYPE'], match_sheet['Category code']))
+    Sub_category  = dict(zip(match_sheet['GOOGLE API ALL BUSINESS TYPE'], match_sheet['Sub-category']))
+    Sub_category_code  = dict(zip(match_sheet['GOOGLE API ALL BUSINESS TYPE'], match_sheet['Sub- category code']))
+
+    classification  = {a : (c, b) for (a, b), c in zip(classification.items(), match_sheet['Weight'])} 
+    Category  = {a : (c, b) for (a, b), c in zip(Category.items(),match_sheet['Weight'])} 
+    Category_code  = {a : (c, b) for (a, b), c in zip(Category_code.items(),match_sheet['Weight'])} 
+    Sub_category  = {a : (c, b) for (a, b), c in zip(Sub_category.items(), match_sheet['Weight'])} 
+    Sub_category_code  = {a : (c, b)for (a, b), c in zip(Sub_category_code.items(), match_sheet['Weight'])} 
+  
+    return classification,Category,Category_code,Sub_category,Sub_category_code
+
+
+def class_matching(business_type_list,match_sheet) :
+
+    classification,Category,Category_code,Sub_category,Sub_category_code = classification_dictionarys(match_sheet)
+  
+    classification_l = []
+    Category_l = []
+    Category_code_l = []
+    Sub_category_l = []
+    Sub_category_code_l = []
+
+    for k in business_type_list :
+        key = k.strip()
+        classification_l.append(classification.get(key,(0,'undefined')))
+        Category_l.append(Category.get(key.strip(),(0,'undefined')))
+        Category_code_l.append(Category_code.get(key.strip(),(0,'undefined')))
+        Sub_category_l.append(Sub_category.get(key.strip(),(0,'undefined')))
+        Sub_category_code_l.append(Sub_category_code.get(key.strip(),(0,'undefined'))
+) 
+
+#remove na
+    classification_l =[x for x in classification_l if x == x]
+    Category_l = [x for x in  Category_l if x == x]
+    Category_code_l = [x for x in Category_code_l if x == x]
+    Sub_category_l = [x for x in Sub_category_l if x == x]
+    Sub_category_code_l = [x for x in Sub_category_code_l if x == x]
+
+
+    #get maximum
+    classification_l =max(classification_l,key=lambda item:item[0], default=[(0,'undefined')])
+    Category_l = max(Category_l,key=lambda item:item[0], default=[(0,'undefined')])
+    Category_code_l =max(Category_code_l,key=lambda item:item[0], default=[(0,'undefined')])
+    Sub_category_l = max(Sub_category_l,key=lambda item:item[0], default=[(0,'undefined')])
+    Sub_category_code_l = max(Sub_category_code_l ,key=lambda item:item[0], default=[(0,'undefined')])
+
+#remove duplicate
+    classification_l =list(dict.fromkeys(classification_l))
+    Category_l = list(dict.fromkeys(Category_l))
+    Category_code_l = list(dict.fromkeys(Category_code_l))
+    Sub_category_l = list(dict.fromkeys(Sub_category_l ))
+    Sub_category_code_l = list(dict.fromkeys(Sub_category_code_l))
+   
+    result = {
+     'classification':   [classification_l[1], 'code'],
+     'category_one':     [Category_l[1], Category_code_l[1]],
+     'sub_category_one': [Sub_category_l[1],Sub_category_code_l[1]]}
+   
+
+    return result
+
+
 #---------------------------MAIN------------------------------------
 
 
@@ -567,6 +648,12 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
         # Scraped data will be None if Google cannot find anything
         scraped_data = req_place_details(curr_business, api_key)
 
+
+
+    #    match_sheet = match_sheet()
+    #    matched_class = class_matching(curr_business,match_sheet)
+
+
         if not scraped_data == None:
 
             # For testing, this will print out the response data and break
@@ -595,8 +682,17 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
             add_places_id(new_row, HEADERS, scraped_data)
             add_json_opening_hours(new_row, HEADERS, scraped_data)
             add_formatted_address(new_row, HEADERS, scraped_data, curr_business)
+#----------------- add classification -----------
+
+
 
             cleaned_data.append(new_row)
+        
+
+
+
+
+
 
         else:
             # Fills the lga name field
@@ -608,9 +704,21 @@ def get_cleaned_table(file: str, lga: str, api_key: str) -> list:
 
             no_online_data.append(new_row)
 
-
+        
 
         #TODO add classification
+
+
+
+
+
+
+
+
+
+
+
+
         #TODO add Categories
 
         #TODO add email
@@ -662,6 +770,13 @@ def req_place_details(business, address, api_key: str) -> tuple:
     else:
         return None
 
+
+
+#def possible_classification(google_category):
+
+
+
+
 def scrape_lga(lga: str, year: int):
     # Elapsed time start
     start = time.perf_counter()
@@ -688,7 +803,10 @@ def scrape_lga(lga: str, year: int):
             continue
 
         curr_business_details = contact_obj[0]
-        curr_business_class = classification_obj[0]
+        
+
+
+
 
         # # Scraped data will be None if Google cannot find anything
         scraped_data = req_place_details(business.get_name(), curr_business_details.get_parcel_add(), API_KEY)
@@ -708,11 +826,35 @@ def scrape_lga(lga: str, year: int):
             #add_opening_times(new_row, HEADERS, scraped_data)
             db_add_json_opening_hours(curr_business_details, scraped_data)
             db_add_formatted_address(curr_business_details, scraped_data)
-
-            
-        
         else:
             print(f"Google API cannot find {business}")
+
+
+
+
+        curr_business_class = classification_obj[0]
+        curr_goggle_business_types = business.google_business_types 
+
+        match_sheet = match_sheet()
+        matched_class = class_matching(curr_goggle_business_types,match_sheet)
+
+
+        if not matched_class == None:
+            db_add_possible_classification(curr_business_class, matched_class)
+
+        else:
+            print(f"Cannot match possible classification for {business}")
+
+
+
+        
+    
+
+
+
+
+
+
 
     
     # Elapsed time end
@@ -757,3 +899,12 @@ def db_add_formatted_address(business, data: tuple) -> None:
     formatted_addr = get_formatted_addr(data)
     business.formatted_address = formatted_addr
     business.save()
+
+
+def  db_add_possible_classification(classification, headers: list,matched) -> None:
+
+    classification_name = matched
+    classification.possible_classifications = classification_name
+    classification.save()
+   
+
