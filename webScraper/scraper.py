@@ -901,10 +901,6 @@ def db_add_formatted_address(business, data: tuple) -> None:
     business.save()
 
 
-def  db_add_possible_classification(classification, headers: list,matched) -> None:
 
-    classification_name = matched
-    classification.possible_classifications = classification_name
-    classification.save()
    
 
