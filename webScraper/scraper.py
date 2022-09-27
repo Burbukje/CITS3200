@@ -709,12 +709,9 @@ def scrape_lga(lga: str, year: int):
             db_add_json_opening_hours(curr_business_details, scraped_data)
             db_add_formatted_address(curr_business_details, scraped_data)
 
-            
-        
         else:
             print(f"Google API cannot find {business}")
 
-    
     # Elapsed time end
     end = time.perf_counter()
     print("Finised in {:.3g} seconds".format(end-start))
