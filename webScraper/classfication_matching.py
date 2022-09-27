@@ -4,11 +4,15 @@ GB_TYPES = "webScraper/static/assets/GOOGLE_API_BUSSINESS_TYPE_NAMES.xlsx"
 
 
 
-def  db_add_possible_classification(classification, matched) -> None:
+def  db_add_possible_classification(classification_obj, matched) -> None:
 
     classification_name = matched
-    classification.possible_classifications = classification_name
-    classification.save()
+
+
+    classification_obj.possible_classifications = classification_name
+
+   #print(classification_obj)
+    classification_obj.save()
 
 
 def  db_add_possible_cats(classification, matched) -> None:
@@ -46,29 +50,36 @@ def classification_dictionarys(match_sheet):
 def class_matching(business_type_list,match_sheet):
 
     classification,Category,Category_code,Sub_category,Sub_category_code = classification_dictionarys(match_sheet)
-  
+
     classification_l = []
     Category_l = []
     Category_code_l = []
     Sub_category_l = []
     Sub_category_code_l = []
+    
+     #   google_types = business_obj.google_business_types
+      #  classification_obj = Classification.objects.filter(business_id=business_obj)[0]
+    try:
+      
+        type_list = eval(business_type_list)
 
-    for business_obj in business_type_list:
-        
-        google_types = business_obj.google_business_types
-        classification_obj = Classification.objects.filter(business_id=business_obj)[0]
+    except:
+        type_list = ['undefined']
 
-        db_add_possible_classification(classification_obj, "THIS IS A TEST")
 
-        print(google_types)
-        break
 
-        # classification_l.append(classification.get(key,(0,'undefined')))
-        # Category_l.append(Category.get(key.strip(),(0,'undefined')))
-        # Category_code_l.append(Category_code.get(key.strip(),(0,'undefined')))
-        # Sub_category_l.append(Sub_category.get(key.strip(),(0,'undefined')))
-        # Sub_category_code_l.append(Sub_category_code.get(key.strip(),(0,'undefined'))) 
+    for key in type_list:
+        key =  key.strip()
+        classification_l.append(classification.get(key,(0,'undefined')))
+        Category_l.append(Category.get(key.strip(),(0,'undefined')))
+        Category_code_l.append(Category_code.get(key.strip(),(0,'undefined')))
+        Sub_category_l.append(Sub_category.get(key.strip(),(0,'undefined')))
+        Sub_category_code_l.append(Sub_category_code.get(key.strip(),(0,'undefined'))) 
 
+
+
+
+   # db_add_possible_classification(classification_obj, "THIS IS A TEST")
 #remove na
     classification_l =[x for x in classification_l if x == x]
     Category_l = [x for x in  Category_l if x == x]
@@ -110,7 +121,14 @@ def get_lga_business():
     lga_object = Local_Government.objects.filter(local_government_area=lga, year=year_obj)[0]
     query_set = Business.objects.filter(local_government_area=lga_object)
 
-    class_matching(query_set, get_match_sheet())
 
-
-
+    for business in query_set:
+        classification_obj = Classification.objects.filter(business_id=business)
+    
+        print(business.google_business_types)
+        #print(get_match_sheet())
+        #print(classification_dictionarys(get_match_sheet()))
+    
+        matched = class_matching(business.google_business_types, get_match_sheet())
+        #print(matched)
+        db_add_possible_classification(classification_obj[0], matched['classification'][0])
