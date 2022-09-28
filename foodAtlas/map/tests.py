@@ -6,14 +6,12 @@ import jinja2
 from jinja2 import Environment, PackageLoader
 
 
-
-# Create your tests here.
-#type - folium map object
-#use the data in index()
 class TestFolium(object):
     """"""
     def setup(self):
-        """"""
+        """
+        set map
+        """
         #set up the folium map
         attr = 'http://127.0.0.1:8000/'
         self.m = folium.Map(
@@ -41,17 +39,4 @@ class TestFolium(object):
         assert self.m.width == (900, 'px')
         assert self.m.left == (0, '%')
         assert self.m.top == (0, '%')
-        assert self.m.global_switches.no_touch is False
-        assert self.m.global_switches.disable_3d is False
-        assert self.m.to_dict() == {
-            'name': 'Map',
-            'id': self.m._id,
-            'children': {
-                'openstreetmap': {
-                    'name': 'TileLayer',
-                    'id': self.m._children["openstreetmap"]._id,
-                    'children': {}
-                }
-            }
-        }
     
