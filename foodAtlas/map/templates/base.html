@@ -22,9 +22,10 @@
   <!-- AJAX -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <title>{%block title%}Food Atlas - Navbar{% endblock %}</title>
-
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'css/baseStyles.css' %}">
   {% block customcss %} {% endblock %}
-  <link rel="stylesheet" href="static/css/baseStyles.css">
+  
 </head>
 
 <body>
