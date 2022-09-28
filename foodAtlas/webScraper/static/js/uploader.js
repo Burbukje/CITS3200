@@ -1,38 +1,38 @@
 "use strict";
 
 // Drag and drop
-let dropArea = document.getElementById("drop-area")
+let dropArea = document.getElementById("drop-area");
 
 // Prevent default drag behaviors
 ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-  dropArea.addEventListener(eventName, preventDefaults, false)   
-  document.body.addEventListener(eventName, preventDefaults, false)
+  dropArea.addEventListener(eventName, preventDefaults, false);
+  document.body.addEventListener(eventName, preventDefaults, false);
 })
 
 // Highlight drop area when item is dragged over it
 ;['dragenter', 'dragover'].forEach(eventName => {
-  dropArea.addEventListener(eventName, highlight, false)
+  dropArea.addEventListener(eventName, highlight, false);
 })
 
 // Unhighlight drop area after item is dropped
 ;['dragleave', 'drop'].forEach(eventName => {
-  dropArea.addEventListener(eventName, unhighlight, false)
+  dropArea.addEventListener(eventName, unhighlight, false);
 })
 
 // Handle dropped files
-dropArea.addEventListener('drop', handleDrop, false)
+dropArea.addEventListener('drop', handleDrop, false);
 
 function preventDefaults (e) {
-  e.preventDefault()
-  e.stopPropagation()
+  e.preventDefault();
+  e.stopPropagation();
 }
 
 function highlight(e) {
-  dropArea.classList.add('highlight')
+  dropArea.classList.add('highlight');
 }
 
 function unhighlight(e) {
-  dropArea.classList.remove('active')
+  dropArea.classList.remove('highlight');
 }
 
 function handleDrop(e) {
@@ -116,7 +116,7 @@ cross.onclick = function() {
   modal.style.display = "none";
 }
 
-// WHen the user clicks the button, close the modal
+// When the user clicks the button, close the modal
 cancelButton.onclick = function() {
   modal.style.display ="none";
 }
@@ -125,5 +125,19 @@ cancelButton.onclick = function() {
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
+  }
+}
+
+// Button to show and hide password
+function showHidePassword() {
+  var buttonName = document.getElementById("show-hide");
+  var pInput = document.getElementById("pass-input");
+  if (pInput.type == "password") {
+      pInput.type = "text";
+      buttonName.innerHTML = "Hide";
+  }  
+  else {
+      pInput.type = "password";
+      buttonName.innerHTML = "Show";
   }
 }
