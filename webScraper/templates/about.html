@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Food Atlas - About{% endblock %}
+
+{% block customcss %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/loginStyles.css' %}">
+{% endblock %}
+
+{% block pagecontent %}
+  <div class="bottom">
+    <p>About Content</p>
+  </div>
+
+  {% load static %}
+  <script  src="{% static 'js/uploader.js' %}"></script>
+
+  {% endblock %}

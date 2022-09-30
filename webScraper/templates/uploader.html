@@ -1,64 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'base.html' %}
 
-    {% load static %}
-    <!-- base css -->
-    <link rel="stylesheet" 
-    href="{% static 'css/loginStyles.css' %}">
-    
-    <script src="{% static 'js/uploader.js' %}"></script>
+{% block title %}Food Atlas - Upload{% endblock %}
 
+{% block customcss %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/loginStyles.css' %}">
+{% endblock %}
 
-    <title>Food Atlas - Uploader</title>
-</head>
-<body>
-    {% if user.is_authenticated %}
-    <form class="upload-form" action="{% url 'uploader' %}" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-        <div id="drop-area">
-          <p>Upload CSV file via the dialog or drop file into dashed region</p>
-          <input type="file" id="fileElem" accept=".xlsx" name="excel_file" onchange="handleFiles(this.files)">
-          <label class="button" for="fileElem">Select CSV file</label>
-          <button type="submit" class="button" id = "upload-btn" value="Upload">Upload file</button>
-          <progress id="progress-bar" value=0 max=100></progress>
-          <div id="gallery"></div>
-        </div>
-      </form>
-      
-      <div id="myModal" class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <span class="close">&times;</span>
-            <h2>Warning: Submission incurs cost</h2>
-          </div>
-          <div class="modal-body">
-            <p>$0.06 USD charged per business in CSV file</p>
-            <label class="button">Submit</label>
-            <label class="button" id="cancel-btn">Cancel</label>
-          </div>
-        </div>
-      </div>
+{% block pagecontent %}
+{% if user.is_authenticated %}
+<form class="upload-form">
+  {% csrf_token %}
+  <div id="drop-area">
+    <p>Upload CSV file via the dialog or drop file into dashed region</p>
+    <input type="file" id="fileElem" accept=".xlsx" name="excel_file" onchange="handleFiles(this.files)">
+    <label class="button" for="fileElem">Select CSV file</label>
+    <label class="button" id = "upload-btn">Upload file</label>
+    <progress id="progress-bar" value=0 max=100></progress>
+    <div id="gallery"></div>
+  </div>
+</form>
 
-      <form class = "login-form">
-        <div class="bottom">
-            <span class="button"><a href="{% url 'logout' %}">Logout</a></span>
-          </div>
-        </div>
-      </form>
+<form id="myModal" class="modal" action="{% url 'uploader' %}" method="POST" enctype="multipart/form-data">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Warning: Submission incurs cost</h2>
+      <span class="close">&times;</span>
+    </div>
+    <div class="modal-body">
+      <p>$0.06 USD charged per business in CSV file</p>
+      <label type = "Submit" class="button">Submit</label>
+      <label class="button" id="cancel-btn">Cancel</label>
+    </div>
+  </div>
+</form>
+{% endif %}
 
-    {% endif %}
+<p></p>
+{% for row in excel_data %}
+  {% for cell in row %}
+    {{ cell }}&nbsp;&nbsp;
+  {% endfor %}
+  <br>
+{% endfor %}
 
-    <p></p>
-
-    {% for row in excel_data %}
-        {% for cell in row %}
-            {{ cell }}&nbsp;&nbsp;
-        {% endfor %}
-        <br>
-    {% endfor %}
-</body>
-</html>
+{% load static %}
+<script src="{% static 'js/uploader.js' %}"></script>
+{% endblock %}
