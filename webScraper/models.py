@@ -138,3 +138,40 @@ class Classification(models.Model):
 
 #---------------------------------User Login------------------------------------------
 
+
+
+
+class Class_statistic(models.Model):
+    local_government_area = models.ForeignKey(Local_Government,on_delete=models.CASCADE)
+    Classification_count = models.IntegerField(default = 0)
+    Classification_count = models.IntegerField(default = 0)
+    Category_one_count = models.IntegerField(default = 0)
+    Sub_one_count = models.IntegerField(default = 0)
+
+
+    def str(self):
+        return self.local_government_area.get_name()
+
+    def get_class_count(self) -> str:
+        return self.Classification_coun
+
+    def get_cat_one_ount(self) -> str:
+        return self.Category_one_count
+
+    def get_sub_one_ount(self) -> str:
+        return self.sub_one_count
+
+
+class Business_classification(models.Model):
+    local_government_area = models.CharField(max_length=128)
+    business_name = models.CharField(max_length=128)
+    classification = models.CharField(max_length=1, null=True, default="None")
+
+    def __str__(self):
+        return self.business_name
+
+    def get_lga(self) -> str:
+        return self.local_government_area
+
+    def get_class(self) -> str:
+        return self.classification

@@ -1,5 +1,8 @@
 from webScraper.models import Collection_Year, Contact_Details, Business, Local_Government, Classification
 import pandas as pd
+from django.db.models import Count
+
+
 GB_TYPES = "webScraper/static/assets/GOOGLE_API_BUSSINESS_TYPE_NAMES.xlsx"
 
 
@@ -132,3 +135,4 @@ def get_lga_business():
         matched = class_matching(business.google_business_types, get_match_sheet())
         #print(matched)
         db_add_possible_classification(classification_obj[0], matched['classification'][0])
+        db_add_possible_cats(classification_obj[0], matched['category_one'][0])
