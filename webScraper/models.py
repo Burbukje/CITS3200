@@ -139,28 +139,72 @@ class Classification(models.Model):
 #---------------------------------User Login------------------------------------------
 
 
+#Possible 
 
-
-class Class_statistic(models.Model):
-    local_government_area = models.ForeignKey(Local_Government,on_delete=models.CASCADE)
-    Classification_count = models.IntegerField(default = 0)
-    Classification_count = models.IntegerField(default = 0)
-    Category_one_count = models.IntegerField(default = 0)
-    Sub_one_count = models.IntegerField(default = 0)
+class P_Class_statistic(models.Model):
+    local_government_area = models.CharField(max_length=128)
+    possible_classifications = models.CharField(max_length=128, null=True, default="None")
+    P_classification_count = models.IntegerField(default = 0)
 
 
     def str(self):
-        return self.local_government_area.get_name()
+        return self.local_government_area
+
+    def get_class(self) -> str:
+        return self.possible_classifications
 
     def get_class_count(self) -> str:
-        return self.Classification_coun
+        return self.P_classification_count
 
-    def get_cat_one_ount(self) -> str:
-        return self.Category_one_count
+class P_Category_statistic(models.Model):
+    local_government_area =models.CharField(max_length=128)
+    possible_categories = models.CharField(max_length=128, null=True, default="None")
+    P_categories_count = models.IntegerField(default = 0)
 
-    def get_sub_one_ount(self) -> str:
-        return self.sub_one_count
 
+    def str(self):
+        return self.local_government_area
+
+    def get_class(self) -> str:
+        return self.classification
+
+    def get_class_count(self) -> str:
+        return self.P_categories_count
+
+#manual 
+
+class Class_statistic(models.Model):
+    local_government_area = models.CharField(max_length=128)
+    classifications = models.CharField(max_length=128, null=True, default="None")
+    classifications_count = models.IntegerField(default = 0)
+
+
+    def str(self):
+        return self.local_government_area
+
+    def get_class(self) -> str:
+        return self.classifications
+
+    def get_class_count(self) -> str:
+        return self.classifications_count
+
+class Category_statistic(models.Model):
+    local_government_area = models.CharField(max_length=128)
+    categories = models.CharField(max_length=128, null=True, default="None")
+    categories_count = models.IntegerField(default = 0)
+
+
+    def str(self):
+        return self.local_government_area
+
+    def get_class(self) -> str:
+        return self.categories
+
+    def get_class_count(self) -> str:
+        return self.categories_count
+
+
+# Temporary class to covert data to count
 
 class Business_classification(models.Model):
     local_government_area = models.CharField(max_length=128)
