@@ -69,6 +69,8 @@ Description of field : name of business
 Expected type : varchar(128) 
 
 Expected input : 
+- Gilbert Wines
+- Plantagenet Wines
 
 ### notes 
 Description of field : Notes the user would potentially want to add
@@ -76,6 +78,8 @@ Description of field : Notes the user would potentially want to add
 Expected type : text 
 
 Expected input : 
+- another email they provided is wine@plantagenetwines.com
+- no phone number, website or email provided
 
 ### local_government_area_id 
 Description of field : foreign key referencing the "local_government_area" field from the webScraper_local_government table 
@@ -204,13 +208,17 @@ Description :
 Expected type : varchar(128) 
 
 Expected input : 
+- 1 Carradine Road BEDFORDALE WA 6112
+- 169 South Western Highway ARMADALE WA 6112
+- 39 Seville Drive SEVILLE GROVE WA 6112
 
 ### formatted_address 
 Description : provided by the Google Places API
 
 Expected type : varchar(128) 
 
-Expected input : Shop 16/10 Langton Road, Mount Barker
+Expected input : 
+- Shop 16/10 Langton Road, Mount Barker
 
 ### phone 
 Description : phone number to contact business 
@@ -218,6 +226,9 @@ Description : phone number to contact business
 Expected type : varchar(15) 
 
 Expected input : 
+- 0898531123
+- 0862433913
+- 0898491132
 
 ### website 
 Description : webpage link for a food business
@@ -234,6 +245,8 @@ Description : shows if a food business provides a menu
 Expected type : bool 
 
 Expected input : 
+- Yes, provided on website
+- No
 
 ### opening_hours 
 Description : the opening hours provided by Google API
