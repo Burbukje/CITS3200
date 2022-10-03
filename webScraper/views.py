@@ -32,24 +32,23 @@ def uploader(request):
             
 #-----------------The following is just a sanity check----------------------
             # you may put validations here to check extension or file size
-            wb = openpyxl.load_workbook(excel_file)
+            # wb = openpyxl.load_workbook(excel_file)
 
             # getting a particular sheet by name out of many sheets
-            worksheet = wb.active
-            print(worksheet)
+            # worksheet = wb.active
+            # print(worksheet)
 
-            excel_data = list()
+            # excel_data = list()
             # iterating over the rows and
             # getting value from each cell in row
-            for row in worksheet.iter_rows():
-                row_data = list()
-                for cell in row:
-                    row_data.append(str(cell.value))
-                excel_data.append(row_data)
+            # for row in worksheet.iter_rows():
+            #     row_data = list()
+            #     for cell in row:
+            #         row_data.append(str(cell.value))
+            #     excel_data.append(row_data)
 #------------------------------------------------------------------------
 
-
-            return render(request, "uploader.html", {"excel_data":excel_data})
+            return render(request, "uploader.html")
 
         else:
             return render(request, "uploader.html", {})
