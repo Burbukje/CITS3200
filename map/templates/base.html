@@ -51,11 +51,12 @@
       {% endif %}
       <li><a href="/">About</a></li>
 
-    {% elif request.path == "/uploader/" %}
+    {% elif request.path == "/uploader/" or  request.path == "/downloader_view/"%}
       <li><a href="{% url 'index' %}">Home</a></li>
       {% if user.is_authenticated %}
       <li><a href="{% url 'logout' %}">Logout</a></li>
       <li><a class = "active" href="{% url 'uploader' %}">Submit</a></li>
+      <li><a  href="{% url 'downloader' %}">Download Files</a></li>
       {% else %}
       <li><a href="{% url 'login' %}">Login</a></li>
       {% endif %}
