@@ -28,6 +28,19 @@ class Local_Government(models.Model):
     
     food_retail = models.IntegerField(default=0)
     food_service = models.IntegerField(default=0)
+    CHARITABLE_FOOD_PROVISION = models.IntegerField(default=0)
+    FOOD_PRODUCTION_AND_PREPARATION = models.IntegerField(default=0)
+    INSTITUTIONAL_FOOD = models.IntegerField(default=0)
+    ACCOMMODATION_RECREATION_SERVICES = models.IntegerField(default=0)
+
+
+
+
+
+
+
+
+
 
 
     def __str__(self):
@@ -150,81 +163,81 @@ class Classification(models.Model):
 
 #Possible 
 
-class P_Class_statistic(models.Model):
-    local_government_area = models.CharField(max_length=128)
-    possible_classifications = models.CharField(max_length=128, null=True, default="None")
-    P_classification_count = models.IntegerField(default = 0)
+# class P_Class_statistic(models.Model):
+#     local_government_area = models.CharField(max_length=128)
+#     possible_classifications = models.CharField(max_length=128, null=True, default="None")
+#     P_classification_count = models.IntegerField(default = 0)
 
 
-    def str(self):
-        return self.local_government_area
+#     def str(self):
+#         return self.local_government_area
 
-    def get_class(self) -> str:
-        return self.possible_classifications
+#     def get_class(self) -> str:
+#         return self.possible_classifications
 
-    def get_class_count(self) -> str:
-        return self.P_classification_count
+#     def get_class_count(self) -> str:
+#         return self.P_classification_count
 
-class P_Category_statistic(models.Model):
-    local_government_area =models.CharField(max_length=128)
-    possible_categories = models.CharField(max_length=128, null=True, default="None")
-    P_categories_count = models.IntegerField(default = 0)
-
-
-    def str(self):
-        return self.local_government_area
-
-    def get_class(self) -> str:
-        return self.classification
-
-    def get_class_count(self) -> str:
-        return self.P_categories_count
-
-#manual 
-
-class Class_statistic(models.Model):
-    local_government_area = models.CharField(max_length=128)
-    classifications = models.CharField(max_length=128, null=True, default="None")
-    classifications_count = models.IntegerField(default = 0)
+# class P_Category_statistic(models.Model):
+#     local_government_area =models.CharField(max_length=128)
+#     possible_categories = models.CharField(max_length=128, null=True, default="None")
+#     P_categories_count = models.IntegerField(default = 0)
 
 
-    def str(self):
-        return self.local_government_area
+#     def str(self):
+#         return self.local_government_area
 
-    def get_class(self) -> str:
-        return self.classifications
+#     def get_class(self) -> str:
+#         return self.classification
 
-    def get_class_count(self) -> str:
-        return self.classifications_count
+#     def get_class_count(self) -> str:
+#         return self.P_categories_count
 
-class Category_statistic(models.Model):
-    local_government_area = models.CharField(max_length=128)
-    categories = models.CharField(max_length=128, null=True, default="None")
-    categories_count = models.IntegerField(default = 0)
+# #manual 
 
-
-    def str(self):
-        return self.local_government_area
-
-    def get_class(self) -> str:
-        return self.categories
-
-    def get_class_count(self) -> str:
-        return self.categories_count
+# class Class_statistic(models.Model):
+#     local_government_area = models.CharField(max_length=128)
+#     classifications = models.CharField(max_length=128, null=True, default="None")
+#     classifications_count = models.IntegerField(default = 0)
 
 
-# Temporary class to covert data to count
+#     def str(self):
+#         return self.local_government_area
 
-class Business_classification(models.Model):
-    local_government_area = models.CharField(max_length=128)
-    business_name = models.CharField(max_length=128)
-    classification = models.CharField(max_length=1, null=True, default="None")
+#     def get_class(self) -> str:
+#         return self.classifications
 
-    def __str__(self):
-        return self.business_name
+#     def get_class_count(self) -> str:
+#         return self.classifications_count
 
-    def get_lga(self) -> str:
-        return self.local_government_area
+# class Category_statistic(models.Model):
+#     local_government_area = models.CharField(max_length=128)
+#     categories = models.CharField(max_length=128, null=True, default="None")
+#     categories_count = models.IntegerField(default = 0)
 
-    def get_class(self) -> str:
-        return self.classification
+
+#     def str(self):
+#         return self.local_government_area
+
+#     def get_class(self) -> str:
+#         return self.categories
+
+#     def get_class_count(self) -> str:
+#         return self.categories_count
+
+
+# # Temporary class to covert data to count
+
+# class Business_classification(models.Model):
+#     local_government_area = models.CharField(max_length=128)
+#     business_name = models.CharField(max_length=128)
+#     classification = models.CharField(max_length=1, null=True, default="None")
+
+#     def __str__(self):
+#         return self.business_name
+
+#     def get_lga(self) -> str:
+#         return self.local_government_area
+
+#     def get_class(self) -> str:
+#         return self.classification

@@ -90,6 +90,7 @@ $ python manage.py makemigrations
 2. Create the database
 ```python
 $ python manage.py migrate
+
 ```
 
 The database should be up and running, you can view the database in the Admin page
