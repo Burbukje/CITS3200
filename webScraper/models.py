@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from webScraper.classification_enums import *
+import json
 
 # Create your models here.
 
@@ -93,7 +94,7 @@ class Contact_Details(models.Model):
         return self.menu
 
     def get_opening(self):
-        return self.opening_hours
+        return json.dumps(self.opening_hours)
 
 
 class Classification(models.Model):
@@ -115,10 +116,10 @@ class Classification(models.Model):
         return self.business_id.get_name()
 
     def get_class(self) -> str:
-        return self.classification
+        return self.possible_classifications
 
     def get_cat_one(self) -> str:
-        return self.category_one
+        return self.possible_categories
 
     def get_sub_cat_one(self) -> str:
         return self.sub_cat_one

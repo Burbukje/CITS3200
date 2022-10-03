@@ -6,6 +6,7 @@ import openpyxl
 from webScraper.scraper import *
 import xlwt
 from django.http import HttpResponse
+from webScraper.downloader import *
 
 # Create your views here.
 
@@ -88,7 +89,30 @@ def download_excel_data(request):
     font_style.font.bold = True
 
     #column header names, you can use your own headers here
-    columns = ['Column 1', 'Column 2', 'Column 3', 'Column 4', ]
+    columns = [
+    "local_government_area",
+    "collection_year",
+    "business_name",
+    "classification_name",
+    "category_1",
+    "sub_category_1",
+    "category_2",
+    "sub_category_2",
+    "category_3",
+    "sub_category_3",
+    "y_latitude",
+    "x_longitude",
+    "original_lga_provided_address",
+    "formatted_address",
+    "contact_1",
+    "contact_2",
+    "email",
+    "website",
+    "menu_(yes,_provided_on_website/no)",
+    "children's_menu_provided_(yes/no)",
+    "opening_hours",
+    "notes",
+]
 
     #write column headers in sheet
     for col_num in range(len(columns)):
@@ -99,13 +123,39 @@ def download_excel_data(request):
 
     #get your data, from database or from a text file...
     #data = get_data() #dummy method to fetch data.
-    data = [1, 2, 3]
+    lga = "ARMADALE, CITY OF"
+    year = 2022
+    data = get_lga_to_excel(lga=lga, year=year)
     for my_row in data:
         row_num = row_num + 1
-        # ws.write(row_num, 0, my_row.name, font_style)
-        # ws.write(row_num, 1, my_row.start_date_time, font_style)
-        # ws.write(row_num, 2, my_row.end_date_time, font_style)
-        # ws.write(row_num, 3, my_row.notes, font_style)
+        # LGA
+        ws.write(row_num, 0, lga, font_style)
+        # Collection year
+        ws.write(row_num, 1, year, font_style)
+        # Business Name
+        ws.write(row_num, 3, my_row.get_name(), font_style)
+
+        curr_classes = Classification.objects.filter(business_id=my_row)[0]
+        # Classification
+        ws.write(row_num, 4, curr_classes.get_class(), font_style)
+        # Categories
+        ws.write(row_num, 5, curr_classes.get_cat_one(), font_style)
+
+        curr_contact = Contact_Details.objects.filter(business_id=my_row)[0]
+        # latitude
+        ws.write(row_num, 10, curr_contact.get_lat(), font_style)
+        # longitude
+        ws.write(row_num, 11, curr_contact.get_long(), font_style)
+        # Orginal add
+        ws.write(row_num, 12, curr_contact.get_parcel_add(), font_style)
+        # formatted add
+        ws.write(row_num, 13, curr_contact.get_formatted_add(), font_style)
+        # contact 1
+        ws.write(row_num, 14, curr_contact.get_phone(), font_style)
+        # website
+        ws.write(row_num, 17, curr_contact.get_website(), font_style)
+        # opening hours
+        ws.write(row_num, 20, curr_contact.get_opening(), font_style)
 
     wb.save(response)
     return response
