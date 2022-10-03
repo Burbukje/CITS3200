@@ -1,38 +1,38 @@
 "use strict";
 
 // Drag and drop
-let dropArea = document.getElementById("drop-area")
+let dropArea = document.getElementById("drop-area");
 
 // Prevent default drag behaviors
 ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-  dropArea.addEventListener(eventName, preventDefaults, false)   
-  document.body.addEventListener(eventName, preventDefaults, false)
+  dropArea.addEventListener(eventName, preventDefaults, false);
+  document.body.addEventListener(eventName, preventDefaults, false);
 })
 
 // Highlight drop area when item is dragged over it
 ;['dragenter', 'dragover'].forEach(eventName => {
-  dropArea.addEventListener(eventName, highlight, false)
+  dropArea.addEventListener(eventName, highlight, false);
 })
 
 // Unhighlight drop area after item is dropped
 ;['dragleave', 'drop'].forEach(eventName => {
-  dropArea.addEventListener(eventName, unhighlight, false)
+  dropArea.addEventListener(eventName, unhighlight, false);
 })
 
 // Handle dropped files
-dropArea.addEventListener('drop', handleDrop, false)
+dropArea.addEventListener('drop', handleDrop, false);
 
 function preventDefaults (e) {
-  e.preventDefault()
-  e.stopPropagation()
+  e.preventDefault();
+  e.stopPropagation();
 }
 
 function highlight(e) {
-  dropArea.classList.add('highlight')
+  dropArea.classList.add('highlight');
 }
 
 function unhighlight(e) {
-  dropArea.classList.remove('active')
+  dropArea.classList.remove('highlight');
 }
 
 function handleDrop(e) {
@@ -95,35 +95,49 @@ function uploadFile(file, i) {
 */
 
 // Get the modal
-var modal = document.getElementById("myModal");
+//var modal = document.getElementById("myModal");
 
 // Get the button that opens the modal
-var btn = document.getElementById("upload-btn");
+// var btn = document.getElementById("upload-btn");
 
 // Get the <span> (x) element that closes the modal
-var cross = document.getElementsByClassName("close")[0];
+// var cross = document.getElementsByClassName("close")[0];
 
 // Get the cancel button that closes the modal
-var cancelButton = document.getElementById("cancel-btn");
+// var cancelButton = document.getElementById("cancel-btn");
 
 // When the user clicks the button, open the modal 
-btn.onclick = function() {
-  modal.style.display = "block";
-}
+// btn.onclick = function() {
+//   modal.style.display = "block";
+// }
 
 // When the user clicks on <span> (x) close the modal
-cross.onclick = function() {
-  modal.style.display = "none";
-}
+// cross.onclick = function() {
+//   modal.style.display = "none";
+// }
 
-// WHen the user clicks the button, close the modal
-cancelButton.onclick = function() {
-  modal.style.display ="none";
-}
+// When the user clicks the button, close the modal
+// cancelButton.onclick = function() {
+//   modal.style.display ="none";
+// }
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
+// window.onclick = function(event) {
+//   if (event.target == modal) {
+//     modal.style.display = "none";
+//   }
+// }
+
+// Button to show and hide password
+function showHidePassword() {
+  var buttonName = document.getElementById("show-hide");
+  var pInput = document.getElementById("pass-input");
+  if (pInput.type == "password") {
+      pInput.type = "text";
+      buttonName.innerHTML = "Hide";
+  }  
+  else {
+      pInput.type = "password";
+      buttonName.innerHTML = "Show";
   }
 }
