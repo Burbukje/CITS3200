@@ -17,9 +17,18 @@ class Collection_Year(models.Model):
         return self.year 
 
 
+# class P_Class(models.Model):
+    
+
+
 class Local_Government(models.Model):
     year = models.ForeignKey(Collection_Year, on_delete=models.CASCADE)
     local_government_area = models.CharField(max_length=128)
+    # classifications = models.ForeignKey(P_Class, on_delete=models.CASCADE)
+    
+    food_retail = models.IntegerField(default=0)
+    food_service = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.local_government_area
