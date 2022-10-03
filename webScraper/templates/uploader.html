@@ -12,9 +12,10 @@
     
     <script src="{% static 'js/uploader.js' %}"></script>
 
-
     <title>Food Atlas - Uploader</title>
 </head>
+
+
 <body>
     {% if user.is_authenticated %}
     <form class="upload-form" action="{% url 'uploader' %}" method="POST" enctype="multipart/form-data">
@@ -62,3 +63,4 @@
     {% endfor %}
 </body>
 </html>
+
