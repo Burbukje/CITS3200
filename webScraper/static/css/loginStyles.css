@@ -1,16 +1,16 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Arial', sans-serif;
-    background: url("../assets/skyline-of-perth-at-night-in-australia-3.jpg");
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: url("../assets/skyline-of-perth-at-night-in-australia-3.jpg");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
   
   a {
     color: #369;
@@ -90,13 +90,13 @@
     bottom: 0px;
     left: 25%;
     width: 50%;
-    /* min-width: 450px; */
+    /* width: 450px; */
     background-color: white;
     -webkit-animation-name: slideIn;
     -webkit-animation-duration: 0.4s;
     animation-name: slideIn;
     animation-duration: 0.4s;
-    border-radius: 6px;
+    border-radius: 7px;
     box-shadow: 0 2px 25px rgba(0, 0, 0, 0.5);
   }
   
@@ -145,7 +145,6 @@
     from {opacity: 0} 
     to {opacity: 1}
   }
-
 
   /* Background image source: https://pixabay.com/users/akenarinc-1965937/ */
   

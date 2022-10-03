@@ -68,16 +68,13 @@ $ deactivate
 
 ## Running the app
 
-1. Ensure you are in the directory with the manage.py file
-```python
-$ python manage.py runserver
+Go to the root directory where Dockerfile and docker-compose.yml are
+First run  `docker-compose build`
+After that, run  `docker-compose up`
+Open the app through http://0.0.0.0:8000/ 
 
-# if python doesnt work try
-$ python3 manage.py runserver
-```
-2. Open local host (usually 127.0.0.1:8000) in web browser of your choice.
-
-#
+### Important
+Everytime you make a change to the code, remember to run `docker-compose build` first and then run `docker-compose up`
 
 ## Migrating the DataBase
 

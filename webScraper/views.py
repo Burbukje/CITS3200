@@ -29,8 +29,7 @@ def uploader(request):
     else:
         if request.method == "POST" and "excel_file" in request.FILES.keys():
             excel_file = request.FILES["excel_file"]
-
-
+            
 #-----------------The following is just a sanity check----------------------
             # you may put validations here to check extension or file size
             wb = openpyxl.load_workbook(excel_file)
