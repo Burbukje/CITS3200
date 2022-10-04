@@ -7,6 +7,11 @@ from webScraper.scraper import *
 import xlwt
 from django.http import HttpResponse
 from webScraper.downloader import *
+from webScraper.uploader import *
+from django.template import loader
+
+SUCCESS = 0
+FAIL = 1
 
 # Create your views here.
 
@@ -32,28 +37,16 @@ def uploader(request):
         return redirect("login")
     else:
         if request.method == "POST" and "excel_file" in request.FILES.keys():
+            lga = request.POST.get("lga")
+            year = request.POST.get("year")
             excel_file = request.FILES["excel_file"]
-            
-#-----------------The following is just a sanity check----------------------
-            # you may put validations here to check extension or file size
-            # wb = openpyxl.load_workbook(excel_file)
-
-            # getting a particular sheet by name out of many sheets
-            # worksheet = wb.active
-            # print(worksheet)
-
-            # excel_data = list()
-            # iterating over the rows and
-            # getting value from each cell in row
-            # for row in worksheet.iter_rows():
-            #     row_data = list()
-            #     for cell in row:
-            #         row_data.append(str(cell.value))
-            #     excel_data.append(row_data)
-#------------------------------------------------------------------------
-
-            return render(request, "uploader.html")
-
+            uploaded = add_excel_to_db(excel_file, lga, year)
+            #uploaded = 0
+            template = loader.get_template("uploader.html")
+            context = {
+                'uploaded': uploaded,
+            }
+            return HttpResponse(template.render(context, request))
         else:
             return render(request, "uploader.html", {})
 
