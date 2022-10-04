@@ -8,24 +8,13 @@
 {% endblock %}
 
 {% block pagecontent %}
-<div class="container">
-    <div class="row">
-        <p><br>
+<div class="login-form">
+    <div class="content">
+        <form method="GET" value="{{request.GET.q}}">
+            {% csrf_token %}
+            <input type="text" name="q" value="{{request.GET.q}}" class="form-control rounded" placeholder="LGA" aria-label="Search" aria-describedby="search-addon">
+            <input type="submit" name="submit" value="Search" class="btn btn-outline-primary">
+        </form>
     </div>
-    <div class="row">
-        <div class="col"></div>
-        <div class="col">
-            <div class="input-group">
-                <form method="GET" value="{{ request.GET.q }}">
-                {% csrf_token %}
-                <input type="text" name="q" value="{{request.GET.q}}" class="form-control rounded" placeholder="LGA" aria-label="Search" aria-describedby="search-addon">
-                <input type="submit" name="submit" value="Search" class="btn btn-outline-primary">
-                </form>
-            </div>
-        </div>
-        <div class="col"></div>
-    </div>
-
 </div>
-
 {% endblock %}

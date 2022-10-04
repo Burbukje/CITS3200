@@ -24,5 +24,6 @@ urlpatterns = [
     path("login_view/", webScraper_views.login_view, name="login"),
     path("uploader/", webScraper_views.uploader, name="uploader"),
     path("logout_view/", webScraper_views.logout_view, name="logout"),
-    path("downloader_view/", webScraper_views.downloader_view, name="downloader")
+    path("downloader_view/", webScraper_views.downloader_view, name="downloader"),
+    path("about_view/", webScraper_views.about_view, name="about")
 ]

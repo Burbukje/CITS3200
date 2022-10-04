@@ -5,7 +5,7 @@
 ul {
   list-style-type: none;
   margin: auto;
-  padding: 10px 20px;
+  padding: 10px 20px; /* 10px 20px */
   background-color: rgb(255, 255, 255);
   text-align: center;
   border-bottom-left-radius: 7px;
@@ -20,14 +20,11 @@ li {
 
 li a {
   color: black;
-  padding: 10px 30px;
+  padding: 10px 30px; /* 10px 30px */
   text-decoration: none;
   font-size: 20px;
   transition: 0.2s ease-out;
   border-radius: 6px;
-
-  border-left: 1px;
-  border-right: 1px;
 }
 
 /*
@@ -65,4 +62,17 @@ li a:hover {
 h1 {
   display: inline-block;
   text-align: left;
+}
+
+.centre {
+  border-left: 1px solid #222;
+  border-right: 1px solid #222;
+}
+
+.left {
+  border-left: 1px solid #222;
+}
+
+.right {
+  border-right: 1px solid #222;
 }
