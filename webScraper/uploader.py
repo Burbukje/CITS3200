@@ -32,30 +32,36 @@ def add_excel_to_db(file: str, lga: str, year: int):
     data = read_file(file)
     # TODO: Add checks that the files is valid
 
-    num_business = data.shape[0]
+    if not data == None:
 
-    print("Adding to db...")
-    for i in range(num_business):
-        # Create a list with x empty elements
-        curr_business = data.iloc[i, :]
-        name = curr_business.loc['business_name']
-        print(f"{name}...")
+        num_business = data.shape[0]
 
-        lga = lga.upper()
-        coll_year = int(year)
-        parcel_address = curr_business.loc['parcel_address']
+        print("Adding to db...")
+        for i in range(num_business):
+            # Create a list with x empty elements
+            curr_business = data.iloc[i, :]
+            name = curr_business.loc['business_name']
+            print(f"{name}...")
 
-        year_obj = Collection_Year.objects.filter(year=coll_year)[0]
-        db_lga = Local_Government.objects.filter(local_government_area=lga, year=year_obj)[0]
+            lga = lga.upper().strip()
+            coll_year = int(year)
+            parcel_address = curr_business.loc['parcel_address']
 
-        db_business = Business.objects.create(local_government_area=db_lga, business_name=name)
-        db_business.save()
-        db_classification = Classification.objects.create(business_id=db_business)
-        db_classification.save()
-        db_contact = Contact_Details.objects.create(business_id=db_business, 
-                                                    parcel_address=parcel_address)
-        db_contact.save()
-    return
+            year_obj = Collection_Year.objects.filter(year=coll_year)[0]
+            db_lga = Local_Government.objects.filter(local_government_area=lga, year=year_obj)[0]
+
+            db_business = Business.objects.create(local_government_area=db_lga, business_name=name)
+            db_business.save()
+            db_classification = Classification.objects.create(business_id=db_business)
+            db_classification.save()
+            db_contact = Contact_Details.objects.create(business_id=db_business, 
+                                                        parcel_address=parcel_address)
+            db_contact.save()
+
+        # SUCCESS
+        return 0
+    # FAIL
+    return 1
 
 
 
