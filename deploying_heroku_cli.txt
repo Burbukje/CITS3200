@@ -1,0 +1,41 @@
+Step 1. Run heroku cli and login
+
+heroku login
+
+Step 2. Pick the app
+
+To see what apps are available
+
+heroku apps
+
+To pick the app you want to deploy your container to
+
+heroku git:remote -a <your_app_name>
+
+Step 3. Login to the container
+
+heroku container:login
+
+Step 4. Build the container and run the container
+
+Build
+
+docker-compose build
+
+Run
+
+docker-compose up
+
+Check its running
+
+docker ps
+
+Step 5. Push the docker based app
+
+heroku container:push web
+
+Step 6. Deploy the changes
+
+heroku container:release web
+
+
