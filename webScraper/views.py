@@ -40,18 +40,15 @@ def uploader(request):
             lga = request.POST.get("lga")
             year = request.POST.get("year")
             excel_file = request.FILES["excel_file"]
-            #uploaded = add_excel_to_db(excel_file, lga, year)
-            uploaded = 0
-            return render(request, "uploader.html", {"uploaded": uploaded})
-        else:
-            uploaded = 0
-            print("TEST")
+            uploaded = add_excel_to_db(excel_file, lga, year)
+            #uploaded = 0
             template = loader.get_template("uploader.html")
             context = {
-                'uploaded': 0,
+                'uploaded': uploaded,
             }
             return HttpResponse(template.render(context, request))
-            #return render(request, "uploader.html", {"uploaded": uploaded})
+        else:
+            return render(request, "uploader.html", {})
 
 
 def downloader_view(request):

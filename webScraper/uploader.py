@@ -1,3 +1,4 @@
+from django.db import models
 from webScraper.models import Collection_Year, Contact_Details, Business, Local_Government, Classification
 from webScraper.scraper import *
 
@@ -14,8 +15,7 @@ def add_local_gov(coll_year: int):
     year_obj = Collection_Year.objects.filter(year=coll_year)
 
     if len(year_obj) == 0:
-        year_obj = Collection_Year.objects.create(year=coll_year)
-        year_obj.save()
+        year_obj = create_year_obj(coll_year)
         print("New Collection Created")
     else:
         year_obj = year_obj[0]
@@ -30,25 +30,32 @@ def add_local_gov(coll_year: int):
 
 def add_excel_to_db(file: str, lga: str, year: int):
     data = read_file(file)
-    # TODO: Add checks that the files is valid
 
-    if not data == None:
-
+    try:
         num_business = data.shape[0]
-
         print("Adding to db...")
         for i in range(num_business):
             # Create a list with x empty elements
             curr_business = data.iloc[i, :]
             name = curr_business.loc['business_name']
-            print(f"{name}...")
 
             lga = lga.upper().strip()
             coll_year = int(year)
             parcel_address = curr_business.loc['parcel_address']
 
-            year_obj = Collection_Year.objects.filter(year=coll_year)[0]
-            db_lga = Local_Government.objects.filter(local_government_area=lga, year=year_obj)[0]
+            year_obj = Collection_Year.objects.filter(year=coll_year)
+            
+            if len(year_obj) == 0:
+                year_obj = create_year_obj(coll_year)
+            else:
+                year_obj = year_obj[0]
+            
+            db_lga = Local_Government.objects.filter(local_government_area=lga, year=year_obj)
+
+            if len(db_lga) == 0:
+                db_lga = create_lga_obj(lga, year_obj)
+            else:
+                db_lga = db_lga[0]
 
             db_business = Business.objects.create(local_government_area=db_lga, business_name=name)
             db_business.save()
@@ -60,9 +67,23 @@ def add_excel_to_db(file: str, lga: str, year: int):
 
         # SUCCESS
         return 0
-    # FAIL
-    return 1
 
+    except:
+        print("Uploading Failed")
+        # FAIL
+        return 1
+
+
+def create_year_obj(coll_year: int) -> Collection_Year:
+    year_obj = Collection_Year.objects.create(year=coll_year)
+    year_obj.save()
+    return year_obj
+
+
+def create_lga_obj(lga: str, year:Collection_Year) -> Local_Government:
+    lga_obj = Local_Government(local_government_area=lga, year=year)
+    lga.save()
+    return lga_obj
 
 
 #---------------------------USED TO UPLOAD ALL DATA-------------------------------------
