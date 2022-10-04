@@ -67,6 +67,8 @@ def downloader_view(request):
         else:
             return render(request, "downloader.html")
 
+def about_view(request):
+    return render(request, "about.html")
 
 def download_excel_data(request):
     # content-type of response

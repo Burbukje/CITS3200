@@ -34,39 +34,38 @@
     {% if request.path == "/" %}
       <li><a class="active" href="{% url 'index' %}">Home</a></li>
       {% if user.is_authenticated %}
-      <li><a href="{% url 'logout' %}">Logout</a></li>
-      <li><a href="{% url 'uploader' %}">Submit</a></li>
-      <li><a  href="{% url 'downloader' %}">Download</a></li>
+      <li class = "left"><a href="{% url 'logout' %}">Logout</a></li>
+      <li class = "centre"><a href="{% url 'uploader' %}">Submit</a></li>
+      <li class = "right"><a  href="{% url 'downloader' %}">Download</a></li>
       {% else %}
-      <li><a href="{% url 'login' %}">Login</a></li>
+      <li class = "centre"><a href="{% url 'login' %}">Login</a></li>
       {% endif %}
       <li><a href="/">About</a></li>
     
     {% elif request.path == "/login_view/" %}
       <li><a href="{% url 'index' %}">Home</a></li>
-      <li><a class = "active" href="{% url 'login' %}">Login</a></li>
-      {% endif %}
+      <li class = "centre"><a class = "active" href="{% url 'login' %}">Login</a></li>
       <li><a href="/">About</a></li>
 
     {% elif request.path == "/uploader/" %}
       <li><a href="{% url 'index' %}">Home</a></li>
       {% if user.is_authenticated %}
-      <li><a href="{% url 'logout' %}">Logout</a></li>
-      <li><a class = "active" href="{% url 'uploader' %}">Submit</a></li>
-      <li><a  href="{% url 'downloader' %}">Download</a></li>
+      <li class = "left"><a href="{% url 'logout' %}">Logout</a></li>
+      <li class = "centre"><a class = "active" href="{% url 'uploader' %}">Submit</a></li>
+      <li class = "right"><a  href="{% url 'downloader' %}">Download</a></li>
       {% else %}
-      <li><a href="{% url 'login' %}">Login</a></li>
+      <li class = "centre"><a href="{% url 'login' %}">Login</a></li>
       {% endif %}
       <li><a href="/">About</a></li>
 
       {% elif request.path == "/downloader_view/"%}
       <li><a href="{% url 'index' %}">Home</a></li>
       {% if user.is_authenticated %}
-      <li><a href="{% url 'logout' %}">Logout</a></li>
-      <li><a href="{% url 'uploader' %}">Submit</a></li>
-      <li><a class = "active" href="{% url 'downloader' %}">Download</a></li>
+      <li class = "left"><a href="{% url 'logout' %}">Logout</a></li>
+      <li class = "centre"><a href="{% url 'uploader' %}">Submit</a></li>
+      <li class = "right"><a class = "active" href="{% url 'downloader' %}">Download</a></li>
       {% else %}
-      <li><a href="{% url 'login' %}">Login</a></li>
+      <li class = "centre"><a href="{% url 'login' %}">Login</a></li>
       {% endif %}
       <li><a href="/">About</a></li>
       
