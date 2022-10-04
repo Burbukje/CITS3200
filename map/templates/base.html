@@ -36,6 +36,7 @@
       {% if user.is_authenticated %}
       <li><a href="{% url 'logout' %}">Logout</a></li>
       <li><a href="{% url 'uploader' %}">Submit</a></li>
+      <li><a  href="{% url 'downloader' %}">Download</a></li>
       {% else %}
       <li><a href="{% url 'login' %}">Login</a></li>
       {% endif %}
@@ -43,24 +44,32 @@
     
     {% elif request.path == "/login_view/" %}
       <li><a href="{% url 'index' %}">Home</a></li>
-      {% if user.is_authenticated %}
-      <li><a href="{% url 'logout' %}">Logout</a></li>
-      <li><a href="{% url 'uploader' %}">Submit</a></li>
-      {% else %}
       <li><a class = "active" href="{% url 'login' %}">Login</a></li>
       {% endif %}
       <li><a href="/">About</a></li>
 
-    {% elif request.path == "/uploader/" or  request.path == "/downloader_view/"%}
+    {% elif request.path == "/uploader/" %}
       <li><a href="{% url 'index' %}">Home</a></li>
       {% if user.is_authenticated %}
       <li><a href="{% url 'logout' %}">Logout</a></li>
       <li><a class = "active" href="{% url 'uploader' %}">Submit</a></li>
-      <li><a  href="{% url 'downloader' %}">Download Files</a></li>
+      <li><a  href="{% url 'downloader' %}">Download</a></li>
       {% else %}
       <li><a href="{% url 'login' %}">Login</a></li>
       {% endif %}
       <li><a href="/">About</a></li>
+
+      {% elif request.path == "/downloader_view/"%}
+      <li><a href="{% url 'index' %}">Home</a></li>
+      {% if user.is_authenticated %}
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+      <li><a href="{% url 'uploader' %}">Submit</a></li>
+      <li><a class = "active" href="{% url 'downloader' %}">Download</a></li>
+      {% else %}
+      <li><a href="{% url 'login' %}">Login</a></li>
+      {% endif %}
+      <li><a href="/">About</a></li>
+      
     {% endif %}
     </ul>
   </div>
