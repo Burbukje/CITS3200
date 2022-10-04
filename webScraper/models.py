@@ -1,6 +1,7 @@
 from django.db import models
 import uuid
 from webScraper.classification_enums import *
+import json
 
 # Create your models here.
 
@@ -10,7 +11,6 @@ from webScraper.classification_enums import *
 
 class Collection_Year(models.Model):
     year = models.IntegerField(primary_key=True)
-
     def __str__(self):
         return str(self.year)
 
@@ -20,14 +20,13 @@ class Collection_Year(models.Model):
 
 class Local_Government(models.Model):
     year = models.ForeignKey(Collection_Year, on_delete=models.CASCADE)
-    local_government_area = models.CharField(max_length=128, primary_key=True)
+    local_government_area = models.CharField(max_length=128)
 
     def __str__(self):
         return self.local_government_area
 
     def get_year(self) -> int:
         return self.year.get_year()
-
 
     def get_lga(self) -> str:
         return self.local_government_area
@@ -37,7 +36,9 @@ class Business(models.Model):
     local_government_area = models.ForeignKey(Local_Government, on_delete=models.CASCADE)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     business_name = models.CharField(max_length=128)
-    notes = models.TextField(max_length=256)
+    google_id = models.CharField(max_length=128, null=True, default=" ")
+    google_business_types = models.CharField(max_length=128, null=True, default=" ")
+    notes = models.TextField(max_length=256, null=True)
 
     def __str__(self):
         return self.business_name
@@ -51,20 +52,22 @@ class Business(models.Model):
     def get_id(self):
         return self.id
 
+    def get_google_id(self):
+        return self.google_id
 
 class Contact_Details(models.Model):
-    business_id = models.ForeignKey(Business, on_delete=models.CASCADE)
-    longitude = models.DecimalField(max_digits=18, decimal_places=15)
-    latitude = models.DecimalField(max_digits=18, decimal_places=15)
-    parcel_address = models.CharField(max_length=128)
-    formatted_address = models.CharField(max_length=128)
-    phone = models.CharField(max_length=15)
-    website = models.CharField(max_length=128)
-    menu = models.BooleanField(default=False)
-    opening_hours = models.JSONField()
+    business_id = models.OneToOneField(Business, null=True, on_delete=models.CASCADE)
+    longitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, default=-31.9524993)
+    latitude = models.DecimalField(max_digits=10, decimal_places=7, null=True, default=115.8612164)
+    parcel_address = models.CharField(max_length=128, null=True, default="")
+    formatted_address = models.CharField(max_length=128, null=True, default="")
+    phone = models.CharField(max_length=15, null=True, default="")
+    website = models.CharField(max_length=128, null=True, default="")
+    menu = models.BooleanField(default=False, null=True)
+    opening_hours = models.JSONField(default=dict, null=True)
 
     def __str__(self):
-        return str(self.business_id.get_name())
+        return self.business_id.get_name()
 
     def get_name(self) -> str:
         return str(self.business_id.get_name())
@@ -91,49 +94,47 @@ class Contact_Details(models.Model):
         return self.menu
 
     def get_opening(self):
-        return self.opening_hours
+        return json.dumps(self.opening_hours)
 
 
 class Classification(models.Model):
-    business_id = models.ForeignKey(Business, on_delete=models.CASCADE)
-    classification = models.CharField(max_length=1, choices=Classification_Appendix.choices, default="")
-    
-    category_one = models.DecimalField(max_digits=4, decimal_places=2, null=True)
-    sub_cat_one = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    business_id = models.OneToOneField(Business, null=True, on_delete=models.CASCADE)
 
-    category_two = models.DecimalField(max_digits=4, decimal_places=2, null=True)
-    sub_cat_two = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    possible_classifications = models.CharField(max_length=128, null=True, default="None")
+    classification = models.CharField(max_length=1, choices=Classification_Appendix.choices, null=True, default="None")
+    possible_categories = models.CharField(max_length=128, null=True, default="None")
+    category_one = models.CharField(max_length=5, choices=Category_A.choices, null=True, default="None")
+    sub_cat_one = models.CharField(max_length=128, null=True, default="None")
 
-    category_three = models.DecimalField(max_digits=4, decimal_places=2, null=True)
-    sub_cat_three = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    # category_two = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    # sub_cat_two = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+
+    # category_three = models.DecimalField(max_digits=4, decimal_places=2, null=True)
+    # sub_cat_three = models.DecimalField(max_digits=4, decimal_places=2, null=True)
 
     def __str__(self):
-        if self.category_one is None:
-            return f'{self.classification}'
-        else:
-            return f'{self.classification}{self.category_one}'
+        return self.business_id.get_name()
 
-    
     def get_class(self) -> str:
-        return self.classification
+        return self.possible_classifications
 
-    def get_cat_one(self) -> int:
-        return self.category_one
+    def get_cat_one(self) -> str:
+        return self.possible_categories
 
-    def get_sub_cat_one(self) -> int:
+    def get_sub_cat_one(self) -> str:
         return self.sub_cat_one
 
-    def get_cat_two(self) -> int:
-        return self.category_two
+    # def get_cat_two(self) -> int:
+    #     return self.category_two
 
-    def get_sub_cat_two(self) -> int:
-        return self.sub_cat_two
+    # def get_sub_cat_two(self) -> int:
+    #     return self.sub_cat_two
 
-    def get_cat_three(self) -> int:
-        return self.category_three
+    # def get_cat_three(self) -> int:
+    #     return self.category_three
 
-    def get_sub_cat_three(self) -> int:
-        return self.sub_cat_three
+    # def get_sub_cat_three(self) -> int:
+    #     return self.sub_cat_three
 
 
 #---------------------------------User Login------------------------------------------
