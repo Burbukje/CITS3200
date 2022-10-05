@@ -68,6 +68,18 @@
       <li class = "centre"><a href="{% url 'login' %}">Login</a></li>
       {% endif %}
       <li><a href="/">About</a></li>
+
+      <!-- TOM ADDED -->
+      {% elif request.path == "/about_view/"%}
+      <li><a href="{% url 'index' %}">Home</a></li>
+      {% if user.is_authenticated %}
+      <li class = "left"><a href="{% url 'logout' %}">Logout</a></li>
+      <li class = "centre"><a href="{% url 'uploader' %}">Submit</a></li>
+      <li class = "right"><a class = "active" href="{% url 'downloader' %}">Download</a></li>
+      {% else %}
+      <li class = "centre"><a href="{% url 'login' %}">Login</a></li>
+      {% endif %}
+      <li><a href="/">About</a></li>
       
     {% endif %}
     </ul>
