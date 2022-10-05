@@ -61,8 +61,6 @@ Description of field : unique identifier for that business
 
 Expected type : varchar(32) 
 
-Expected input : 
-
 ### business_name 
 Description of field : name of business 
 
@@ -77,16 +75,10 @@ Description of field : Notes the user would potentially want to add
 
 Expected type : text 
 
-Expected input : 
-- another email they provided is wine@plantagenetwines.com
-- no phone number, website or email provided
-
 ### local_government_area_id 
 Description of field : foreign key referencing the "local_government_area" field from the webScraper_local_government table 
 
 Expected type : varchar(128) 
-
-Expected input : 
 
 # 
 
@@ -100,63 +92,45 @@ Description of field : unique identifier for each type of organisation
 
 Expected type : integer 
 
-Expected input : 
-
 ### classification 
 Description of field : A code representing each type of organisation. Defined in Appendix A : Food Business Classification Framework. 
 
 Expected type : varchar(1) 
-
-Expected input : A - F 
 
 ### business_id_id 
 Description of field : foreign key referencing the "id" field from the webScraper_business table.  
 
 Expected type : char(32) 
 
-Expected input : 
-
 ### category_one 
 Description of field : 
 
 Expected type : decimal 
-
-Expected input : 
 
 ### category_three 
 Description of field : 
 
 Expected type : decimal 
 
-Expected input : 
-
 ### category_two 
 Description of field : 
 
 Expected type : decimal 
-
-Expected input : 
 
 ### sub_cat_one 
 Description of field : 
 
 Expected type : decimal 
 
-Expected input : 
-
 ### sub_cat_three 
 Description : 
 
 Expected type : decimal 
 
-Expected input : 
-
 ### sub_cat_two 
 Description : 
 
 Expected type : decimal 
-
-Expected input : 
 
 # 
 
@@ -170,10 +144,6 @@ Description : The year the data was collected
 
 Expected type : integer 
 
-Expected input 
-- 2020
-- 1976 
-
 # 
 
 ## Table 4 : webScraper_contact_details 
@@ -186,21 +156,15 @@ Description : unique identifier for each record
 
 Expected type : integer 
 
-Expected input : 
-
 ### longitude 
 Description : the geographic coordinate of the business
 
 Expected type : decimal 
 
-Expected input : 151.199025
-
 ### latitude 
 Description : the geographic coordinate of the business
 
 Expected type : decimal 
-
-Expected input : 151.199025
 
 ### parcel_address 
 Description : 
@@ -217,50 +181,30 @@ Description : provided by the Google Places API
 
 Expected type : varchar(128) 
 
-Expected input : 
-- Shop 16/10 Langton Road, Mount Barker
-
 ### phone 
 Description : phone number to contact business 
 
 Expected type : varchar(15) 
-
-Expected input : 
-- 0898531123
-- 0862433913
-- 0898491132
 
 ### website 
 Description : webpage link for a food business
 
 Expected type : varchar(128) 
 
-Expected input : 
-- https://www.karribank.com.au/bar
-- https://www.facebook.com/cateringandcafe/about
-
 ### menu 
 Description : shows if a food business provides a menu
 
 Expected type : bool 
-
-Expected input : 
-- Yes, provided on website
-- No
 
 ### opening_hours 
 Description : the opening hours provided by Google API
 
 Expected type : text 
 
-Expected input : 
-
 ### business_id_id 
 Description : foreign key that references the "id" field of the webScraper_business table
 
 Expected type : char(32) 
-
-Expected input : 
 
 # 
 
@@ -274,23 +218,10 @@ Description :
 
 Expected type : varchar(128) 
 
-Expected input : 
-The standard format for LGA names will be "[Name], City of" or "[Name], Shire of"
-
-For example "Armadale, City of".
-
-What we will NOT accept is "City of Armadale"
-
-The reason for this is for ease of sorting in excel spread sheets
-
 ### year_id 
 Description : foreign key referencing the "year" field in the webScraper_collection_year table
 
 Expected type : integer 
-
-Expected input : 
-- 2020
-- 1992 
 
 # 
 
