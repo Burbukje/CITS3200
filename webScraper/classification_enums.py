@@ -1,7 +1,7 @@
 from django.db import models
 
 class Classification_Appendix(models.TextChoices):
-
+    DEFAULT = '-', ("------------")
     A = 'A', ("Food Retail")
     B = 'B', ("Food Service")
     C = 'C', ("Charitable Food Provisions")
@@ -17,6 +17,7 @@ class Classification_Appendix(models.TextChoices):
 #---------------NOT USED-------------------------
 class Category_A(models.TextChoices):
     
+    START_CAT_A = '-', ("------------")
     SUPERMARKET = 1.00, ("Supermarket/Grocery Store")
     CONVENIENCE = 2.00, ("Convenience Store")
     WORLDFOOD   = 3.00, ("World/Ethnic Foods")
@@ -32,13 +33,17 @@ class Category_A(models.TextChoices):
     LIQUOR      = 13.00, ("Liquor/Bottle Shop")
     GENERAL     = 14.00, ("General Retail")
 
+    START_CAT_B = '--', ("------------")
+    CAFE = 15.00, ("Cafe/Coffee shop")
+
+    START_CAT_C = '---', ("------------")
+
     @classmethod
     def choices(cls):
         return[(item.value, item.name) for item in cls]
 
 
 class Category_B(models.TextChoices):
-
 
     @classmethod
     def choices(cls):

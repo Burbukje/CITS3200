@@ -11,7 +11,8 @@ from webScraper.models import Collection_Year, Contact_Details, Business, Local_
 
 # A SAFE GUARD TO PREVENT INIFINITE CALLS TO API
 API_LIMIT = 5
-API_KEY = os.environ["PLACES_API"]
+# API_KEY = os.environ["PLACES_API"]
+API_KEY = ""
 
 # Option to save responses from google api
 SAVE_API_DATA = False

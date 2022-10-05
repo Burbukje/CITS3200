@@ -104,7 +104,7 @@ class Classification(models.Model):
     classification = models.CharField(max_length=1, choices=Classification_Appendix.choices, null=True, default="None")
     possible_categories = models.CharField(max_length=128, null=True, default="None")
     category_one = models.CharField(max_length=5, choices=Category_A.choices, null=True, default="None")
-    sub_cat_one = models.CharField(max_length=128, null=True, default="None")
+    sub_cat_one = models.CharField(max_length=5, choices = Sub_Category_One.choices, null=True, default="None")
 
     # category_two = models.DecimalField(max_digits=4, decimal_places=2, null=True)
     # sub_cat_two = models.DecimalField(max_digits=4, decimal_places=2, null=True)
