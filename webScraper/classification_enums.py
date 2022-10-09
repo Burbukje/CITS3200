@@ -18,6 +18,7 @@ class Classification_Appendix(models.TextChoices):
 #---------------NOT USED-------------------------
 class Category_A(models.TextChoices):
     DEFAULT       = '-', ("------------")
+
     START_CAT_A   = '--', ("---- Food Retail ----")
     SUPERMARKET   = 1.00, ("Supermarket/Grocery Store")
     CONVENIENCE   = 2.00, ("Convenience Store")
@@ -52,17 +53,17 @@ class Category_A(models.TextChoices):
     HOME_CATERING    = 25.00, ("Home-Based Catering Business/Kitchens or Cooking Classes")
     FOOD_TRUCK       = 26.00, ("Food Truck / Coffee or other Drinks Van")
     DELIVERY_SERVICE = 27.00, ("Meal / Grocery Delivery Service")
-    MANUFACTURER    = 28.00, ("Food Manufacturer / Processor")
-    PRODUCER        = 29.00, ("Producer / Packer / Distributor")
+    MANUFACTURER     = 28.00, ("Food Manufacturer / Processor")
+    PRODUCER         = 29.00, ("Producer / Packer / Distributor")
 
-    START_CAT_E     = "------", ("Institutional Food")
-    HOSPITAL        = 30.00, ("Hospitals")
-    RESIENTIAL      = 31.00, ("Residential Care")
-    DEFENCE         = 32.00, ("Defence")
+    START_CAT_E    = "------", ("Institutional Food")
+    HOSPITAL       = 30.00, ("Hospitals")
+    RESIENTIAL     = 31.00, ("Residential Care")
+    DEFENCE        = 32.00, ("Defence")
 
-    START_CAT_F     = "-------", ("Accommodation / Recreation Services")
-    HEALTH_LEISURE  = 33.00, ("Health and Leisure Venue")
-    ACCOMODATION    = 34.00, ("Accommodatin with Food")
+    START_CAT_F    = "-------", ("Accommodation / Recreation Services")
+    HEALTH_LEISURE = 33.00, ("Health and Leisure Venue")
+    ACCOMODATION   = 34.00, ("Accommodatin with Food")
 
     @classmethod
     def choices(cls):
@@ -109,13 +110,14 @@ class Category_F(models.TextChoices):
 
 
 class Sub_Category_One(models.TextChoices):
-    SUP_GROCERY = "-", ("--- Supermarket/Grocery Store ---")
+
+    # SUP_GROCERY = "-", ("--- Supermarket/Grocery Store ---")
     SUPERMARKET = 0.01, ("Supermarket")
     DISCOUNT = 0.02, ("Discount Grocery Store")
     WHOLESALE = 0.03, ("Wholesale Grocery Store")
 
-    CONVENIENCE = "--", ("--- Convenience Store ---")
-    PETROL = 0.04, ("Petrol Station Store")
+    # CONVENIENCE = "--", ("--- Convenience Store ---")
+    # PETROL = 0.04, ("Petrol Station Store")
 
     @classmethod
     def choices(cls):
