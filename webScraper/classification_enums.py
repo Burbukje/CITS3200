@@ -32,7 +32,7 @@ class Category_A(models.TextChoices):
     CONFECTIONARY = 'A11.00', ("Confectionary/Chocolate/Ice-Cream")
     OTHER         = 'A12.0', ("Not otherwise specified")
     LIQUOR_SHOP   = 'A13.0', ("Liquor/Bottle Shop")
-    GENERAL       = 14.00, ("General Retail")
+    GENERAL       = 'A14.0', ("General Retail")
 
     START_CAT_B   = '---', ("---- Food Service ----")
     CAFE          = 15.00, ("Cafe/Coffee shop")
