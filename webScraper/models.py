@@ -23,7 +23,7 @@ class Local_Government(models.Model):
     local_government_area = models.CharField(max_length=128)
 
     def __str__(self):
-        return self.local_government_area
+        return f'{self.get_year()} {self.local_government_area}'
 
     def get_year(self) -> int:
         return self.year.get_year()
@@ -41,7 +41,9 @@ class Business(models.Model):
     notes = models.TextField(max_length=256, null=True)
 
     def __str__(self):
-        return self.business_name
+        lga = self.local_government_area.get_lga()
+        year = self.local_government_area.get_year()
+        return f'{year}-{self.business_name} ({lga})'
 
     def get_name(self) -> str:
         return self.business_name
