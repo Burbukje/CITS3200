@@ -62,7 +62,9 @@ class Contact_Details(models.Model):
     parcel_address = models.CharField(max_length=128, null=True, default="")
     formatted_address = models.CharField(max_length=128, null=True, default="")
     phone = models.CharField(max_length=15, null=True, default="")
+    phone_mobile = models.CharField(max_length=15, null=True, default="")
     website = models.CharField(max_length=128, null=True, default="")
+    email = models.CharField(max_length=128, null=True, default="")
     menu = models.BooleanField(default=False, null=True)
     opening_hours = models.JSONField(default=dict, null=True)
 
@@ -86,6 +88,9 @@ class Contact_Details(models.Model):
 
     def get_phone(self):
         return self.phone
+
+    def get_phone_mobile(self):
+        return self.phone_mobile
     
     def get_website(self):
         return self.website
@@ -95,6 +100,9 @@ class Contact_Details(models.Model):
 
     def get_opening(self):
         return json.dumps(self.opening_hours)
+
+    def get_email(self):
+        return self.email
 
 
 class Classification(models.Model):

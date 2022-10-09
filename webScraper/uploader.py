@@ -42,6 +42,7 @@ def add_excel_to_db(file: str, lga: str, year: int):
             lga = lga.upper().strip()
             coll_year = int(year)
             parcel_address = curr_business.loc['parcel_address']
+            email = curr_business.loc['email']
 
             year_obj = Collection_Year.objects.filter(year=coll_year)
             
@@ -62,14 +63,16 @@ def add_excel_to_db(file: str, lga: str, year: int):
             db_classification = Classification.objects.create(business_id=db_business)
             db_classification.save()
             db_contact = Contact_Details.objects.create(business_id=db_business, 
-                                                        parcel_address=parcel_address)
+                                                        parcel_address=parcel_address,
+                                                        email=email)
             db_contact.save()
 
         # SUCCESS
         return 0
 
-    except:
+    except Exception as e:
         print("Uploading Failed")
+        print(e)
         # FAIL
         return 1
 
@@ -82,7 +85,7 @@ def create_year_obj(coll_year: int) -> Collection_Year:
 
 def create_lga_obj(lga: str, year:Collection_Year) -> Local_Government:
     lga_obj = Local_Government(local_government_area=lga, year=year)
-    lga.save()
+    lga_obj.save()
     return lga_obj
 
 
