@@ -1,5 +1,16 @@
+from email.errors import CloseBoundaryNotFoundDefect
+from inspect import modulesbyfile
+from locale import currency
+from msilib import PID_LASTAUTHOR
+from multiprocessing.reduction import steal_handle
 from select import KQ_NOTE_RENAME
 from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE
+from subprocess import STARTF_USESHOWWINDOW
+from tkinter import PIESLICE
+from unittest.main import MAIN_EXAMPLES
+from winreg import CreateKey
+from xml.dom import NO_MODIFICATION_ALLOWED_ERR
+from xml.dom.xmlbuilder import DOMInputSource
 from django.db import models
 
 class Classification_Appendix(models.TextChoices):
@@ -126,11 +137,11 @@ class Sub_Category_One(models.TextChoices):
     WITH_H      = 0.07, ("With Shop Front")
     NO_H        = 0.08, ("No Shop Front")
 
-    LIQUOR      = '----', ("Liquor Merchant / Bottle Shop")
+    LIQUOR      = '----', ("--- Liquor Merchant / Bottle Shop ---")
     WITH_L      = 0.09, ("With Shop Front")
     NO_L        = 0.10, ("No Shop Front")
 
-    RESTAURANT  = '-----', ("Restaurant")
+    RESTAURANT  = '-----', ("--- Restaurant ---")
     MODERN      = 0.11, ("Modern Austrlia")
     AMERICAN    = 0.12, ("American")
     BRITISH     = 0.13, ("British")
@@ -166,13 +177,13 @@ class Sub_Category_One(models.TextChoices):
     MULTI_CUISINE = 0.43, ("Multiple Cuisines")
     AFGHAN      = 0.44, ("Afgan")
     POLISH      = 0.45, ("Polish")
-    GRILL       = 0.46, ("Modern Australian - Grill")
-    CAVERY      = 0.47, ("Modern Australian - Cavery")
+    AUS_GRILL   = 0.46, ("Modern Australian - Grill")
+    AUS_CAVERY  = 0.47, ("Modern Australian - Cavery")
     SOUTH_AMERICAN = 0.48, ("South American")
     IRISH       = 0.49, ("Irish")
     Polynesian  = 0.50, ("Polynesian")
 
-    TAKEAWAY    = "------", ("Fast Causal / Quick Service / Takeaway")
+    TAKEAWAY    = "------", ("--- Fast Causal / Quick Service / Takeaway ---")
     BURGERS     = 0.51, ("Burgers")
     ROAST_CHICKEN = 0.52, ("Roast / BQQ Chicken")
     FRIED_CHICKEN = 0.53, ("Fried Chicken")
@@ -181,8 +192,40 @@ class Sub_Category_One(models.TextChoices):
     KEBAB       = 0.56, ("Kebab / Gozleme")
     FISH_CHIPS  = 0.57, ("Fish and Chips")
     PRETZEL     = 0.58, ("Pretzel")
+    SUSHI       = 0.59, ("Sushi")
+    SANDWHICH   = 0.60, ("Sandwich")
+    SALAD       = 0.61, ("Salad")
+    PIES        = 0.62, ("Pies")
+    CAVERY      = 0.63, ("Cavery")
+    HOTDOG      = 0.64, ("Hotdog")
+    CAKE        = 0.65, ("Cakes / Pastry / Biscuits")
+    ICE_CREAM   = 0.66, ("Ice-Cream / Frozen Yogurt")
+    JUICE       = 0.67, ("Juice / Smoothies / Shakes")
+    BUBBLE_TEA  = 0.68, ("Bubble Tea")
+    TACO        = 0.69, ("Taco / Burrito / Nacho")
+    ASIAN       = 0.70, ("Asian / Noodles")
+    COFFEE      = 0.71, ("Coffee")
+    CURRY       = 0.72, ("Curry")
+    PASTA       = 0.73, ("Pasta")
+    MULTI_TYPE  = 0.74, ("Multiple Food Types")
+    WAFFLE      = 0.75, ("Waffles / Pancakes / Crepes")
+    VEGAN       = 0.76, ("Vegan")
+    MCDONALDS   = 0.77, ("McDonalds")
+    KFC         = 0.78, ("KFC")
+    DOMINOS     = 0.79, ("Dominos")
+    HUNGRY_JACKS = 0.80, ("Hungry Jacks")
+    SUBWAY      = 0.81, ("Subway")
+    RED_ROOSTER = 0.82, ("Red Rooster")
 
+    LIQUOR_VENUE = "-------", ("--- Licensed Liquor Venue ---")
+    SERVE       = 0.83, ("Serves Food")
+    NO_SERVE    = 0.84, ("No Food Served, only bar snacks")
 
+    MANUFACTURER = "--------", ("Charitable Food Provision")
+    HIGH_RISK   = 0.86, ("Manufacturer of high-risk foods")
+    MEDIUM_RISK = 0.87, ("Manufacturer of medium-risk foods")
+    LOW_RISK    = 0.88, ("Manufacturer of low-risk foods")
+    ALCOHOL     = 0.89 ("Alcohol / Beverages")
 
 
     @classmethod
