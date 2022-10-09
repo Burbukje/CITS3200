@@ -3,7 +3,7 @@ import pandas as pd
 from django.db.models import Count
 
 
-GB_TYPES = "webScraper/static/assets/GOOGLE_API_BUSSINESS_TYPE_NAMES.xlsx"
+GB_TYPES = "webScraper/static/assets/GOOGLE API BUSSINESS TYPE NAMES.xlsx"
 
 
 
