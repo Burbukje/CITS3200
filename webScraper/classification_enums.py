@@ -1,4 +1,5 @@
-from winreg import DisableReflectionKey
+from select import KQ_NOTE_RENAME
+from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE
 from django.db import models
 
 class Classification_Appendix(models.TextChoices):
@@ -49,19 +50,19 @@ class Category_A(models.TextChoices):
     MEALS         = 23.00, ("Emergency food provision - meals")
     DELIVERY      = 24.00, ("Meal preparation and delivery")
 
-    START_CAT_D      = "-----", ("--- Food Production and Preparation ---")
+    START_CAT_D      = '-----', ("--- Food Production and Preparation ---")
     HOME_CATERING    = 25.00, ("Home-Based Catering Business/Kitchens or Cooking Classes")
     FOOD_TRUCK       = 26.00, ("Food Truck / Coffee or other Drinks Van")
     DELIVERY_SERVICE = 27.00, ("Meal / Grocery Delivery Service")
     MANUFACTURER     = 28.00, ("Food Manufacturer / Processor")
     PRODUCER         = 29.00, ("Producer / Packer / Distributor")
 
-    START_CAT_E    = "------", ("Institutional Food")
+    START_CAT_E    = '------', ("Institutional Food")
     HOSPITAL       = 30.00, ("Hospitals")
     RESIENTIAL     = 31.00, ("Residential Care")
     DEFENCE        = 32.00, ("Defence")
 
-    START_CAT_F    = "-------", ("Accommodation / Recreation Services")
+    START_CAT_F    = '-------', ("Accommodation / Recreation Services")
     HEALTH_LEISURE = 33.00, ("Health and Leisure Venue")
     ACCOMODATION   = 34.00, ("Accommodatin with Food")
 
@@ -111,13 +112,78 @@ class Category_F(models.TextChoices):
 
 class Sub_Category_One(models.TextChoices):
 
-    # SUP_GROCERY = "-", ("--- Supermarket/Grocery Store ---")
+    SUP_GROCERY = '-', ("--- Supermarket/Grocery Store ---")
     SUPERMARKET = 0.01, ("Supermarket")
-    DISCOUNT = 0.02, ("Discount Grocery Store")
-    WHOLESALE = 0.03, ("Wholesale Grocery Store")
+    DISCOUNT    = 0.02, ("Discount Grocery Store")
+    WHOLESALE   = 0.03, ("Wholesale Grocery Store")
 
-    # CONVENIENCE = "--", ("--- Convenience Store ---")
-    # PETROL = 0.04, ("Petrol Station Store")
+    CONVENIENCE = '--', ("--- Convenience Store ---")
+    PETROL      = 0.04, ("Petrol Station Store")
+    CORNER      = 0.05, ("Milk Bar / Corner Store")
+    OTHER       = 0.06, ("Other Convenience Store")
+
+    HEALTH      = '---', ("--- Health Food Store ---")
+    WITH_H      = 0.07, ("With Shop Front")
+    NO_H        = 0.08, ("No Shop Front")
+
+    LIQUOR      = '----', ("Liquor Merchant / Bottle Shop")
+    WITH_L      = 0.09, ("With Shop Front")
+    NO_L        = 0.10, ("No Shop Front")
+
+    RESTAURANT  = '-----', ("Restaurant")
+    MODERN      = 0.11, ("Modern Austrlia")
+    AMERICAN    = 0.12, ("American")
+    BRITISH     = 0.13, ("British")
+    CARIBBEAN   = 0.14, ("Caribbean")
+    CHINESE     = 0.15, ("Chinese")
+    INDIAN      = 0.16, ("Indian")
+    ITALIAN     = 0.17, ("Italian")
+    VIETNAMESE  = 0.18, ("Vietnamese")
+    THAI        = 0.19, ("Thai")
+    JAPANESE    = 0.20, ("Japanese")
+    INDONESIAN  = 0.21, ("Indonesian")
+    MALAYSIAN   = 0.22, ("Malaysian")
+    AFRICAN     = 0.23, ("African")
+    MEXICAN     = 0.24, ("Mexican")
+    LEBANESE    = 0.25, ("Lebanese")
+    TURKISH     = 0.26, ("Turkish")
+    GREEK       = 0.27, ("Greek")
+    FRENCH      = 0.28, ("French")
+    MEDITERRANEAN = 0.29, ("Mediterranean")
+    SPANISH     = 0.30, ("Spanish")
+    MOROCCAN    = 0.31, ("Moroccan")
+    NEPALESES   = 0.32, ("Nepalese")
+    KOREAN      = 0.33, ("Korean")
+    CANTONESE   = 0.34, ("Cantonese")
+    FILLIPNO    = 0.35, ("Fillipino")
+    MIXED_ASIAN_FUSION = 0.36, ("Mixed Asian Fusion")
+    SINGAPOREAN = 0.37, ("Singaporean")
+    TAIWANESE   = 0.38, ("Taiwanese")
+    EGYPTIAN    = 0.39, ("Egyptian")
+    GERMAN      = 0.40, ("German")
+    CAMBODIAN   = 0.41, ("Cambodian")
+    PERSIAN     = 0.42, ("Persian")
+    MULTI_CUISINE = 0.43, ("Multiple Cuisines")
+    AFGHAN      = 0.44, ("Afgan")
+    POLISH      = 0.45, ("Polish")
+    GRILL       = 0.46, ("Modern Australian - Grill")
+    CAVERY      = 0.47, ("Modern Australian - Cavery")
+    SOUTH_AMERICAN = 0.48, ("South American")
+    IRISH       = 0.49, ("Irish")
+    Polynesian  = 0.50, ("Polynesian")
+
+    TAKEAWAY    = "------", ("Fast Causal / Quick Service / Takeaway")
+    BURGERS     = 0.51, ("Burgers")
+    ROAST_CHICKEN = 0.52, ("Roast / BQQ Chicken")
+    FRIED_CHICKEN = 0.53, ("Fried Chicken")
+    HOT_CHIPS   = 0.54, ("Hot Chips")
+    PIZZA       = 0.55, ("Pizza")
+    KEBAB       = 0.56, ("Kebab / Gozleme")
+    FISH_CHIPS  = 0.57, ("Fish and Chips")
+    PRETZEL     = 0.58, ("Pretzel")
+
+
+
 
     @classmethod
     def choices(cls):
