@@ -113,8 +113,8 @@ class Sub_Category_One(models.TextChoices):
 
     SUP_GROCERY = '--', ("--- Supermarket/Grocery Store ---")
     SUPERMARKET = 'A1.01', ("Supermarket")
-    DISCOUNT    = 'A2.02', ("Discount Grocery Store")
-    WHOLESALE   = 'A3.03', ("Wholesale Grocery Store")
+    DISCOUNT    = 'A1.02', ("Discount Grocery Store")
+    WHOLESALE   = 'A1.03', ("Wholesale Grocery Store")
 
     CONVENIENCE = '---', ("--- Convenience Store ---")
     PETROL      = 'A2.01', ("Petrol Station Store")
