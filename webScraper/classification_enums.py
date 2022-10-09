@@ -19,19 +19,19 @@ class Category_A(models.TextChoices):
     DEFAULT       = '-', ("------------")
 
     START_CAT_A   = '--', ("---- Food Retail ----")
-    SUPERMARKET   = 1.00, ("Supermarket/Grocery Store")
-    CONVENIENCE   = 2.00, ("Convenience Store")
-    WORLDFOOD     = 3.00, ("World/Ethnic Foods")
-    HEALTH        = 4.00, ("Health Food Store")
-    BUCTHER       = 5.00, ("Butcher/Poultry Store")
-    FISHMONGER    = 6.00, ("Fishmonger")
-    BAKERY        = 7.00, ("Bakery")
-    GREENGROCER   = 8.00, ("Fruit and Veg / Greengrocer")
-    DELI          = 9.00, ("Delicatessen")
-    PATISSERIE    = 10.00, ("Pastry/Patisserie Store")
-    CONFECTIONARY = 11.00, ("Confectionary/Chocolate/Ice-Cream")
-    OTHER         = 12.00, ("Not otherwise specified")
-    LIQUOR_SHOP   = 13.00, ("Liquor/Bottle Shop")
+    SUPERMARKET   = 'A1.00', ("Supermarket/Grocery Store")
+    CONVENIENCE   = 'A2.00', ("Convenience Store")
+    WORLDFOOD     = 'A3.00', ("World/Ethnic Foods")
+    HEALTH        = 'A4.00', ("Health Food Store")
+    BUCTHER       = 'A5.00', ("Butcher/Poultry Store")
+    FISHMONGER    = 'A6.00', ("Fishmonger")
+    BAKERY        = 'A7.00', ("Bakery")
+    GREENGROCER   = 'A8.00', ("Fruit and Veg / Greengrocer")
+    DELI          = 'A9.00', ("Delicatessen")
+    PATISSERIE    = 'A10.00', ("Pastry/Patisserie Store")
+    CONFECTIONARY = 'A11.00', ("Confectionary/Chocolate/Ice-Cream")
+    OTHER         = 'A12.0', ("Not otherwise specified")
+    LIQUOR_SHOP   = 'A13.0', ("Liquor/Bottle Shop")
     GENERAL       = 14.00, ("General Retail")
 
     START_CAT_B   = '---', ("---- Food Service ----")
@@ -55,12 +55,12 @@ class Category_A(models.TextChoices):
     MANUFACTURER     = 28.00, ("Food Manufacturer / Processor")
     PRODUCER         = 29.00, ("Producer / Packer / Distributor")
 
-    START_CAT_E    = '------', ("Institutional Food")
+    START_CAT_E    = '------', ("--- Institutional Food ---")
     HOSPITAL       = 30.00, ("Hospitals")
     RESIENTIAL     = 31.00, ("Residential Care")
     DEFENCE        = 32.00, ("Defence")
 
-    START_CAT_F    = '-------', ("Accommodation / Recreation Services")
+    START_CAT_F    = '-------', ("--- Accommodation / Recreation Services ---")
     HEALTH_LEISURE = 33.00, ("Health and Leisure Venue")
     ACCOMODATION   = 34.00, ("Accommodatin with Food")
 
@@ -109,26 +109,27 @@ class Category_F(models.TextChoices):
 
 
 class Sub_Category_One(models.TextChoices):
+    DEFAULT = '-', ("------------")
 
-    SUP_GROCERY = '-', ("--- Supermarket/Grocery Store ---")
+    SUP_GROCERY = '--', ("--- Supermarket/Grocery Store ---")
     SUPERMARKET = 0.01, ("Supermarket")
     DISCOUNT    = 0.02, ("Discount Grocery Store")
     WHOLESALE   = 0.03, ("Wholesale Grocery Store")
 
-    CONVENIENCE = '--', ("--- Convenience Store ---")
+    CONVENIENCE = '---', ("--- Convenience Store ---")
     PETROL      = 0.04, ("Petrol Station Store")
     CORNER      = 0.05, ("Milk Bar / Corner Store")
     OTHER       = 0.06, ("Other Convenience Store")
 
-    HEALTH      = '---', ("--- Health Food Store ---")
+    HEALTH      = '----', ("--- Health Food Store ---")
     WITH_H      = 0.07, ("With Shop Front")
     NO_H        = 0.08, ("No Shop Front")
 
-    LIQUOR      = '----', ("--- Liquor Merchant / Bottle Shop ---")
+    LIQUOR      = '-----', ("--- Liquor Merchant / Bottle Shop ---")
     WITH_L      = 0.09, ("With Shop Front")
     NO_L        = 0.10, ("No Shop Front")
 
-    RESTAURANT  = '-----', ("--- Restaurant ---")
+    RESTAURANT  = '------', ("--- Restaurant ---")
     MODERN      = 0.11, ("Modern Austrlia")
     AMERICAN    = 0.12, ("American")
     BRITISH     = 0.13, ("British")
@@ -170,7 +171,7 @@ class Sub_Category_One(models.TextChoices):
     IRISH       = 0.49, ("Irish")
     Polynesian  = 0.50, ("Polynesian")
 
-    TAKEAWAY    = "------", ("--- Fast Causal / Quick Service / Takeaway ---")
+    TAKEAWAY    = "-------", ("--- Fast Causal / Quick Service / Takeaway ---")
     BURGERS     = 0.51, ("Burgers")
     ROAST_CHICKEN = 0.52, ("Roast / BQQ Chicken")
     FRIED_CHICKEN = 0.53, ("Fried Chicken")
@@ -204,21 +205,38 @@ class Sub_Category_One(models.TextChoices):
     SUBWAY      = 0.81, ("Subway")
     RED_ROOSTER = 0.82, ("Red Rooster")
 
-    LIQUOR_VENUE = "-------", ("--- Licensed Liquor Venue ---")
+    LIQUOR_VENUE = "--------", ("--- Licensed Liquor Venue ---")
     SERVE       = 0.83, ("Serves Food")
     NO_SERVE    = 0.84, ("No Food Served, only bar snacks")
 
-    MANUFACTURER = "--------", ("Charitable Food Provision")
-    HIGH_RISK   = 0.86, ("Manufacturer of high-risk foods")
-    MEDIUM_RISK = 0.87, ("Manufacturer of medium-risk foods")
-    LOW_RISK    = 0.88, ("Manufacturer of low-risk foods")
-    ALCOHOL     = 0.89, ("Alcohol / Beverages")
+    MANUFACTURER = "---------", ("--- Charitable Food Provision ---")
+    HIGH_RISK   = 0.85, ("Manufacturer of high-risk foods")
+    MEDIUM_RISK = 0.86, ("Manufacturer of medium-risk foods")
+    LOW_RISK    = 0.87, ("Manufacturer of low-risk foods")
+    ALCOHOL     = 0.88, ("Alcohol / Beverages")
 
-    P_P_D = "---------", ("Producer / Packer / Distributor")
-    PACKER = 0.90, ("Packer / Storage")
-    DISTRIBUTOR = 0.91, ("Distributor")
-    PRODUCER = 0.92, ("Producer")
-    
+    P_P_D = "----------", ("--- Producer / Packer / Distributor ---")
+    PACKER      = 0.89, ("Packer / Storage")
+    DISTRIBUTOR = 0.90, ("Distributor")
+    PRODUCER    = 0.91, ("Producer")
+
+    EDUCATION   = "-----------", ("--- Education ----")
+    PRIMARY     = 0.92, ("Primary School")
+    HIGH        = 0.93, ("High School")
+    TAFE        = 0.94, ("TAFE / University")
+    KINDY       = 0.95, ("Kindergarten to Year 12")
+    OTHER_ED    = 0.96, ("Other Education")
+
+    HEALTH_VENUE        = "------------", ("--- Sports / Exercise / Play ---")
+    SPORTS              = 0.97, ("Sports / Exercise / Play")
+    MEMBER_BASED_CLUBS  = 0.98, ("Member-based clubs")
+    OTHER_CLUBS         = 0.99, ("Other clubs")
+
+    ACCOMMODATION   = "-------------", ("--- Accommodation ---")
+    SERVICE         = 1.00, ("Includes Restaurant / Cafe / Room Service")
+    FUNCTION        = 1.01, ("Function Rooms Only")
+    NO_SERVICE      = 1.02, ("No Restaurant / Cafe / Room Service")
+
     @classmethod
     def choices(cls):
         return[(item.value, item.name) for item in cls]
