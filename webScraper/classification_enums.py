@@ -1,16 +1,3 @@
-from email.errors import CloseBoundaryNotFoundDefect
-from inspect import modulesbyfile
-from locale import currency
-from msilib import PID_LASTAUTHOR
-from multiprocessing.reduction import steal_handle
-from select import KQ_NOTE_RENAME
-from ssl import ALERT_DESCRIPTION_BAD_CERTIFICATE_STATUS_RESPONSE
-from subprocess import STARTF_USESHOWWINDOW
-from tkinter import PIESLICE
-from unittest.main import MAIN_EXAMPLES
-from winreg import CreateKey
-from xml.dom import NO_MODIFICATION_ALLOWED_ERR
-from xml.dom.xmlbuilder import DOMInputSource
 from django.db import models
 
 class Classification_Appendix(models.TextChoices):
@@ -225,9 +212,13 @@ class Sub_Category_One(models.TextChoices):
     HIGH_RISK   = 0.86, ("Manufacturer of high-risk foods")
     MEDIUM_RISK = 0.87, ("Manufacturer of medium-risk foods")
     LOW_RISK    = 0.88, ("Manufacturer of low-risk foods")
-    ALCOHOL     = 0.89 ("Alcohol / Beverages")
+    ALCOHOL     = 0.89, ("Alcohol / Beverages")
 
-
+    P_P_D = "---------", ("Producer / Packer / Distributor")
+    PACKER = 0.90, ("Packer / Storage")
+    DISTRIBUTOR = 0.91, ("Distributor")
+    PRODUCER = 0.92, ("Producer")
+    
     @classmethod
     def choices(cls):
         return[(item.value, item.name) for item in cls]
