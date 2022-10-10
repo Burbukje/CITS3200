@@ -86,7 +86,7 @@ def add_statistic_table():
   
             lga_object.food_retail =class_list.count('A-Food Retail')
             lga_object.food_service=class_list.count('B-Food Service')
-            lga_object.CHARITABLE_FOOD_PROVISION=class_list.count('C-Charitable_Fiid_Provision')
+            lga_object.CHARITABLE_FOOD_PROVISION=class_list.count('C-Charitable_Food_Provision')
             lga_object.FOOD_PRODUCTION_AND_PREPARATION=class_list.count('D-Food Production and Preparation')
             lga_object.INSTITUTIONAL_FOOD=class_list.count('E-Institutional Food')
             lga_object.ACCOMMODATION_RECREATION_SERVICES=class_list.count('F-Accommodation/Recreation Services')
