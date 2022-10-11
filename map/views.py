@@ -13,8 +13,12 @@ import json
 # Create your views here.
 
 def jsondata(request):
-    data = list(Local_Government.objects.values())
-    return JsonResponse(data, safe=False)
+    data = Local_Government.objects.all()
+    with open(r'map/geoJSON/LGAs_with_classified_data.geojson', 'w') as out:
+        mast_point = serializers.serialize('json', data)
+        out.write(mast_point)
+    context = {'object': out}
+    return HttpResponse(context, request)
     #for index in range(3, len(data)):
     #   for key in data[index]:
     #       print(data[index][key])
@@ -61,7 +65,7 @@ def create_lga_map():
     return map1
 
 def create_detailed_lga_map():
-    filename = "map/geoJSON/LGA_Boundaries_Metro_Area.geojson"
+    filename = "map/geoJSON/LGAs_with_classified_data.json"
     file = open(filename)
     df = gpd.read_file(file)
     map2 = df.explore()
@@ -75,11 +79,13 @@ def create_detailed_lga_map():
 # lga-business-clasification
 #classification_matching file groups the businesses based on google_business_type in business_model
 def read_geojson():
-    geo_file = "map/geoJSON/LGA_Boundaries_Metro_Area.geojson"
+    classified_data = jsondata(HttpResponse)
+    geo_file = "map/geoJSON/LGAs_with_classified_data.json"
     with open(geo_file, "r") as f:
         lga_dict = json.load(f)
+    # lga_dict = json.load(geo_file)
 
-    classified_data = jsondata(HttpResponse)
+    
     #iterate through the list of dicts
     #in every dict, the first 3 elements will indicate id, number and name of lga
     
@@ -87,8 +93,8 @@ def read_geojson():
 
     all_lga = {}
     for geocode in lga_dict["features"]:
-        for ind in range(len(classified_data)):
-            for key in classified_data[ind]:
+        #for ind in range(len(classified_data)):
+            # for key in classified_data[ind]:
                 #something like if key == lga_name????
                 #or if classified_data["local_government_area"] == lga_name["name"]
                 #maybe lga_name = geocode["name"]["key"]
@@ -98,8 +104,8 @@ def read_geojson():
                 # if its key matches lga_name["name"]
                 #store the rest of the elements of that dict in a datastructure and append that to all_lga
                 #if not, move to the next list item
-                if ind["local_government_area"] == lga_name["name"]:
-                    lga_name = geocode["properties"]["name"]
-                    all_lga[lga_name] = geocode
+                # if ind["local_government_area"] == lga_name["name"]:
+        lga_name = geocode["properties"]["name"]
+        all_lga[lga_name] = geocode
 
     return all_lga
