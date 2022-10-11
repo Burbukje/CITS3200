@@ -4,7 +4,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 import openpyxl
 
+from django.http import JsonResponse
+from .models import Local_Government
+from django.core import serializers
+import json
+
 # Create your views here.
+
+def json(request):
+    data = list(Local_Government.objects.values())
+    return JsonResponse(data, safe=False)
 
 def login_view(request):
     if request.method == "POST":
