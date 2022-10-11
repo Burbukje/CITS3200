@@ -8,6 +8,7 @@ import xlwt
 from django.http import HttpResponse
 from webScraper.downloader import *
 from webScraper.uploader import *
+from webScraper.scraper import *
 from django.template import loader
 
 SUCCESS = 0
@@ -55,10 +56,16 @@ def downloader_view(request):
     if not request.user.is_authenticated:
         return redirect("login")
     else:
-        if request.method == "GET" and not request.GET.get("lga") == None and not request.GET.get("lga") == "":
+        if request.GET.get("submit") == "Download":
             return download_excel_data(request)
-        else:
-            return render(request, "downloader.html")
+
+        elif request.GET.get("submit") == "Scrape":
+            lga = request.GET.get("lga")
+            year = int(request.GET.get("year"))
+            scrape_lga(lga=lga, year=year)
+            
+        return render(request, "downloader.html")
+
 
 def about_view(request):
     return render(request, "about.html")
@@ -66,7 +73,7 @@ def about_view(request):
 def download_excel_data(request):
 
     lga = request.GET.get("lga")
-    year = request.GET.get("year")
+    year = int(request.GET.get("year"))
 
     # content-type of response
     response = HttpResponse(content_type='application/ms-excel')
