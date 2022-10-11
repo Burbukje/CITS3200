@@ -1,28 +1,12 @@
 from webScraper.models import Collection_Year, Contact_Details, Business, Local_Government, Classification
 import pandas as pd
 from django.db.models import Count
+import geopandas as gpd
 
 
 GB_TYPES = "webScraper/static/assets/GOOGLE API BUSSINESS TYPE NAMES.xlsx"
 
 
-
-def  db_add_possible_classification(classification_obj, matched) -> None:
-
-    classification_name = matched
-
-
-    classification_obj.possible_classifications = classification_name
-
-   #print(classification_obj)
-    classification_obj.save()
-
-
-def  db_add_possible_cats(classification, matched) -> None:
-
-    categories_name = matched
-    classification.possible_categories = categories_name
-    classification.save()
 
 
 def get_match_sheet():
@@ -31,6 +15,14 @@ def get_match_sheet():
     match_sheet['GOOGLE API ALL BUSINESS TYPE'] = match_sheet['GOOGLE API ALL BUSINESS TYPE'].str.lower()
 
     return match_sheet
+
+
+def get_lga_list():
+    lga_list = []
+    boundary_geojson = gpd.read_file('map/geoJSON/LGA_Boundaries_Metro_Area.geojson')
+    for lga in boundary_geojson['name']:
+        lga_list.append(lga)
+    return lga_list
 
 
 def classification_dictionarys(match_sheet):
@@ -112,27 +104,57 @@ def class_matching(business_type_list,match_sheet):
    
     return result
 
+def  db_add_possible_classification( classification_obj, matched) -> None:
+
+    classification_name = matched
+
+
+    classification_obj.possible_classifications = classification_name
+
+   #print(classification_obj)
+    classification_obj.save()
+
+
+def  db_add_possible_cats(classification, matched) -> None:
+
+    categories_name = matched
+    classification.possible_categories = categories_name
+    classification.save()
+
+
+
+
+###################################### Combine all function 
 
 def get_lga_business():
     # year = int(year)
     # lga = lga.upper()
 
-    year = 2022
-    lga = "ARMADALE, CITY OF"
-
-    year_obj = Collection_Year.objects.filter(year=year)[0]
-    lga_object = Local_Government.objects.filter(local_government_area=lga, year=year_obj)[0]
-    query_set = Business.objects.filter(local_government_area=lga_object)
+    years = [2022]
+   # lga_list = ['SERPENTINE-JARRAHDALE, SHIRE OF'] #["ARMADALE, CITY OF","EAST FREMANTLE, TOWN OF"] #once everything done, switch to get_lga_list()
+    lga_list =  get_lga_list()
 
 
-    for business in query_set:
-        classification_obj = Classification.objects.filter(business_id=business)
+    for year in years:
+        for lga in lga_list:
+            print(lga)
+
+            year_obj = Collection_Year.objects.filter(year=year)[0]
+            lga_object = Local_Government.objects.filter(local_government_area=lga, year=year_obj)
+
+            if lga_object:
+                print(lga_object)
+                query_set = Business.objects.filter(local_government_area=lga_object[0])
+
+
+                for business in query_set:
+                    classification_obj = Classification.objects.filter(business_id=business)
     
-        print(business.google_business_types)
-        #print(get_match_sheet())
-        #print(classification_dictionarys(get_match_sheet()))
+                    print(business.google_business_types)
+                  #print(get_match_sheet())
+                  #print(classification_dictionarys(get_match_sheet()))
     
-        matched = class_matching(business.google_business_types, get_match_sheet())
-        #print(matched)
-        db_add_possible_classification(classification_obj[0], matched['classification'][0])
-        db_add_possible_cats(classification_obj[0], matched['category_one'][0])
+                    matched = class_matching(business.google_business_types, get_match_sheet())
+                    #print(matched)
+                    db_add_possible_classification(classification_obj[0], matched['classification'][0])
+                    db_add_possible_cats(classification_obj[0], matched['category_one'][0])
