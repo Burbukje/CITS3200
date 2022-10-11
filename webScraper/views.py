@@ -11,9 +11,12 @@ import json
 
 # Create your views here.
 
-def json(request):
-    data = list(Local_Government.objects.values())
-    return JsonResponse(data, safe=False)
+# def json(request):
+#     data = list(Local_Government.objects.values())
+#     return JsonResponse(data, safe=False)
+#     #for index in range(3, len(data)):
+#     #   for key in data[index]:
+#     #       print(data[index][key])
 
 def login_view(request):
     if request.method == "POST":

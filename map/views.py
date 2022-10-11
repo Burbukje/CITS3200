@@ -4,7 +4,20 @@ import folium
 import json
 import geopandas as gpd
 
+from django.http import JsonResponse
+from webScraper.models import Local_Government
+from django.core import serializers
+import json
+
+
 # Create your views here.
+
+def jsondata(request):
+    data = list(Local_Government.objects.values())
+    return JsonResponse(data, safe=False)
+    #for index in range(3, len(data)):
+    #   for key in data[index]:
+    #       print(data[index][key])
 
 def index(request):
     # Creating starting location and zoom of displayed map
@@ -32,7 +45,6 @@ def create_lga_map():
 
     # Creating starting location and zoom of displayed map
     map1 = folium.Map(location=perth, zoom_start=12)
-    
     geo_dict = read_geojson()
 
     # GeoJson data pack LGA of Perth
@@ -41,6 +53,7 @@ def create_lga_map():
         folium.GeoJson(geo_dict[shire], 
                         name=shire,
                         style_function=lambda x:border_styles).add_to(map1)
+        
 
     # Adds layer control to Map
     folium.LayerControl().add_to(map1)
@@ -56,15 +69,20 @@ def create_detailed_lga_map():
     folium.LayerControl().add_to(map2)
     return map2
 
+# loop through the lgas
+# get the corresponding businesses 
+# apply the classification algorithm to every business
+# lga-business-clasification
+#classification_matching file groups the businesses based on google_business_type in business_model
 def read_geojson():
     geo_file = "map/geoJSON/LGA_Boundaries_Metro_Area.geojson"
-
     with open(geo_file, "r") as f:
         lga_dict = json.load(f)
         
 
     all_lga = {}
     for geocode in lga_dict["features"]:
+        #someting like if this name == the name of the lga from the model, then append that data
         lga_name = geocode["properties"]["name"]
         all_lga[lga_name] = geocode
 

@@ -24,5 +24,5 @@ urlpatterns = [
     path("login_view/", webScraper_views.login_view, name="login"),
     path("uploader/", webScraper_views.uploader, name="uploader"),
     path("logout_view/", webScraper_views.logout_view, name="logout"),
-    path("json/", webScraper_views.json, name="json")
+    path("json/", map_views.jsondata, name="jsondata")
 ]
