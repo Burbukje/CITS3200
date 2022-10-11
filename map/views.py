@@ -78,12 +78,28 @@ def read_geojson():
     geo_file = "map/geoJSON/LGA_Boundaries_Metro_Area.geojson"
     with open(geo_file, "r") as f:
         lga_dict = json.load(f)
+
+    classified_data = jsondata(HttpResponse)
+    #iterate through the list of dicts
+    #in every dict, the first 3 elements will indicate id, number and name of lga
+    
         
 
     all_lga = {}
     for geocode in lga_dict["features"]:
-        #someting like if this name == the name of the lga from the model, then append that data
-        lga_name = geocode["properties"]["name"]
-        all_lga[lga_name] = geocode
+        for ind in range(len(classified_data)):
+            for key in classified_data[ind]:
+                #something like if key == lga_name????
+                #or if classified_data["local_government_area"] == lga_name["name"]
+                #maybe lga_name = geocode["name"]["key"]
+                #print(classified_data[ind][key])
+                ##############################
+                #loop through the dictionary, starting at element 2
+                # if its key matches lga_name["name"]
+                #store the rest of the elements of that dict in a datastructure and append that to all_lga
+                #if not, move to the next list item
+                if ind["local_government_area"] == lga_name["name"]:
+                    lga_name = geocode["properties"]["name"]
+                    all_lga[lga_name] = geocode
 
     return all_lga
