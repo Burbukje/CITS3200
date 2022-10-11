@@ -55,7 +55,7 @@ def downloader_view(request):
     if not request.user.is_authenticated:
         return redirect("login")
     else:
-        if request.method == "GET" and not request.GET.get("q") == None and not request.GET.get("q") == "":
+        if request.method == "GET" and not request.GET.get("lga") == None and not request.GET.get("lga") == "":
             return download_excel_data(request)
         else:
             return render(request, "downloader.html")
@@ -64,11 +64,15 @@ def about_view(request):
     return render(request, "about.html")
 
 def download_excel_data(request):
+
+    lga = request.GET.get("lga")
+    year = request.GET.get("year")
+
     # content-type of response
     response = HttpResponse(content_type='application/ms-excel')
 
     #decide file name
-    response['Content-Disposition'] = 'attachment; filename="ThePythonDjango.xls"'
+    response['Content-Disposition'] = f'attachment; filename="{lga}.xls"'
 
     #creating workbook
     wb = xlwt.Workbook(encoding='utf-8')
@@ -118,39 +122,40 @@ def download_excel_data(request):
 
     #get your data, from database or from a text file...
     #data = get_data() #dummy method to fetch data.
-    lga = "ARMADALE, CITY OF"
-    year = 2022
+
     data = get_lga_to_excel(lga=lga, year=year)
-    for my_row in data:
-        row_num = row_num + 1
-        # LGA
-        ws.write(row_num, 0, lga, font_style)
-        # Collection year
-        ws.write(row_num, 1, year, font_style)
-        # Business Name
-        ws.write(row_num, 3, my_row.get_name(), font_style)
 
-        curr_classes = Classification.objects.filter(business_id=my_row)[0]
-        # Classification
-        ws.write(row_num, 4, curr_classes.get_class(), font_style)
-        # Categories
-        ws.write(row_num, 5, curr_classes.get_cat_one(), font_style)
+    if not data == 1:
+        for my_row in data:
+            row_num = row_num + 1
+            # LGA
+            ws.write(row_num, 0, lga, font_style)
+            # Collection year
+            ws.write(row_num, 1, year, font_style)
+            # Business Name
+            ws.write(row_num, 3, my_row.get_name(), font_style)
 
-        curr_contact = Contact_Details.objects.filter(business_id=my_row)[0]
-        # latitude
-        ws.write(row_num, 10, curr_contact.get_lat(), font_style)
-        # longitude
-        ws.write(row_num, 11, curr_contact.get_long(), font_style)
-        # Orginal add
-        ws.write(row_num, 12, curr_contact.get_parcel_add(), font_style)
-        # formatted add
-        ws.write(row_num, 13, curr_contact.get_formatted_add(), font_style)
-        # contact 1
-        ws.write(row_num, 14, curr_contact.get_phone(), font_style)
-        # website
-        ws.write(row_num, 17, curr_contact.get_website(), font_style)
-        # opening hours
-        ws.write(row_num, 20, curr_contact.get_opening(), font_style)
+            curr_classes = Classification.objects.filter(business_id=my_row)[0]
+            # Classification
+            ws.write(row_num, 4, curr_classes.get_class(), font_style)
+            # Categories
+            ws.write(row_num, 5, curr_classes.get_cat_one(), font_style)
+
+            curr_contact = Contact_Details.objects.filter(business_id=my_row)[0]
+            # latitude
+            ws.write(row_num, 10, curr_contact.get_lat(), font_style)
+            # longitude
+            ws.write(row_num, 11, curr_contact.get_long(), font_style)
+            # Orginal add
+            ws.write(row_num, 12, curr_contact.get_parcel_add(), font_style)
+            # formatted add
+            ws.write(row_num, 13, curr_contact.get_formatted_add(), font_style)
+            # contact 1
+            ws.write(row_num, 14, curr_contact.get_phone(), font_style)
+            # website
+            ws.write(row_num, 17, curr_contact.get_website(), font_style)
+            # opening hours
+            ws.write(row_num, 20, curr_contact.get_opening(), font_style)
 
     wb.save(response)
     return response
