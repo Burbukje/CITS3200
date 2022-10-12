@@ -146,13 +146,13 @@ def download_excel_data(request):
             # Collection year
             ws.write(row_num, 1, year, font_style)
             # Business Name
-            ws.write(row_num, 3, my_row.get_name(), font_style)
+            ws.write(row_num, 2, my_row.get_name(), font_style)
 
             curr_classes = Classification.objects.filter(business_id=my_row)[0]
             # Classification
-            ws.write(row_num, 4, curr_classes.get_class(), font_style)
+            ws.write(row_num, 3, curr_classes.get_class(), font_style)
             # Categories
-            ws.write(row_num, 5, curr_classes.get_cat_one(), font_style)
+            ws.write(row_num, 4, curr_classes.get_cat_one(), font_style)
 
             curr_contact = Contact_Details.objects.filter(business_id=my_row)[0]
             # latitude
