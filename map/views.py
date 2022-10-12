@@ -32,39 +32,12 @@ def index(request):
 
     return render(request, "index.html", context)
 
-# def create_lga_map():
-#     # Location of Perth
-#     perth = [-31.95249936453132, 115.86121640254342]
-
-#     # Styles for GeoJson Map
-#     border_styles = {
-#         'color': 'red',
-#         'weight': 2,
-#         'fillColor': 'blue',
-#         'fillOpacity': 0.1
-#     } 
-
-#     # Creating starting location and zoom of displayed map
-#     map1 = folium.Map(location=perth, zoom_start=12)
-#     geo_dict = read_geojson()
-
-#     # GeoJson data pack LGA of Perth
-#     for shire in geo_dict:
-#         # GeoJson data pack LGA of Perth
-#         folium.GeoJson(geo_dict[shire], 
-#                         name=shire,
-#                         style_function=lambda x:border_styles).add_to(map1)
-        
-
-#     # Adds layer control to Map
-#     folium.LayerControl().add_to(map1)
-
-#     return map1
 
 def create_detailed_lga_map():
     lgas_count = Local_Government.objects.count()
     filename = "map/geoJSON/LGA_Boundaries_Metro_Area.geojson"
     classified_data = read_classified_geojson()
+    the_final_file = open(filename)
     json_data = json.load(the_final_file)
 
     for index in range(0, lgas_count):
@@ -75,7 +48,9 @@ def create_detailed_lga_map():
                 
 
 
+
     df = pd.DataFrame.from_dict(json_data)
+
 
     map2 = df.explore()
 
@@ -85,6 +60,7 @@ def create_detailed_lga_map():
 def read_classified_geojson():
     lgas_count = Local_Government.objects.count()
     geo_file = "map/geoJSON/LGAs_with_classified_data.geojson"
+
     f = open(geo_file)
     #this is a weird format
     json_file = json.load(f)
