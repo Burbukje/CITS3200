@@ -15,7 +15,7 @@ class Collection_Year(models.Model):
         return str(self.year)
 
     def get_year(self) -> int:
-        return self.year 
+        return self.year
 
 
 class Local_Government(models.Model):
@@ -75,7 +75,7 @@ class Local_Government(models.Model):
     Accommodation_with_food= models.IntegerField(default=0)
 
     def __str__(self):
-        return self.local_government_area
+        return f'{self.get_year()}-{self.local_government_area}'
 
     def get_year(self) -> int:
         return self.year.get_year()
@@ -93,7 +93,9 @@ class Business(models.Model):
     notes = models.TextField(max_length=256, null=True)
 
     def __str__(self):
-        return self.business_name
+        lga = self.local_government_area.get_lga()
+        year = self.local_government_area.get_year()
+        return f'{year}-{self.business_name} ({lga})'
 
     def get_name(self) -> str:
         return self.business_name
@@ -114,14 +116,13 @@ class Contact_Details(models.Model):
     parcel_address = models.CharField(max_length=128, null=True, default="")
     formatted_address = models.CharField(max_length=128, null=True, default="")
     phone = models.CharField(max_length=15, null=True, default="")
-    phone_mobile = models.CharField(max_length=15, null=True, default="")
     website = models.CharField(max_length=128, null=True, default="")
-    email = models.CharField(max_length=128, null=True, default="")
     menu = models.BooleanField(default=False, null=True)
     opening_hours = models.JSONField(default=dict, null=True)
 
     def __str__(self):
-        return self.business_id.get_name()
+        year = self.business_id.local_government_area.get_year()
+        return f'{year}-{self.business_id.get_name()} (Phone: {self.get_phone()} Website: {self.get_website()})'
 
     def get_name(self) -> str:
         return str(self.business_id.get_name())
@@ -139,12 +140,13 @@ class Contact_Details(models.Model):
         return self.formatted_address
 
     def get_phone(self):
+        if self.phone == '':
+            return 'None'
         return self.phone
-
-    def get_phone_mobile(self):
-        return self.phone_mobile
     
     def get_website(self):
+        if self.website == '':
+            return 'None'
         return self.website
 
     def get_menu(self):
@@ -153,18 +155,14 @@ class Contact_Details(models.Model):
     def get_opening(self):
         return json.dumps(self.opening_hours)
 
-    def get_email(self):
-        return self.email
-
 
 class Classification(models.Model):
     business_id = models.OneToOneField(Business, null=True, on_delete=models.CASCADE)
-
     possible_classifications = models.CharField(max_length=128, null=True, default="None")
     classification = models.CharField(max_length=1, choices=Classification_Appendix.choices, null=True, default="None")
     possible_categories = models.CharField(max_length=128, null=True, default="None")
-    category_one = models.CharField(max_length=5, choices=Category_A.choices, null=True, default="None")
-    sub_cat_one = models.CharField(max_length=128, null=True, default="None")
+    category_one = models.CharField(max_length=16, choices=Category_A.choices, null=True, default="None")
+    sub_cat_one = models.CharField(max_length=16, choices = Sub_Category_One.choices, null=True, default="None")
 
     # category_two = models.DecimalField(max_digits=4, decimal_places=2, null=True)
     # sub_cat_two = models.DecimalField(max_digits=4, decimal_places=2, null=True)
@@ -173,11 +171,12 @@ class Classification(models.Model):
     # sub_cat_three = models.DecimalField(max_digits=4, decimal_places=2, null=True)
 
     def __str__(self):
-        return self.business_id.get_name()
+        year = self.business_id.local_government_area.get_year()
+        return f'{year}-{self.business_id.get_name()} (Class: {self.get_class()} Category: {self.get_cat_one()})'
 
     def get_class(self) -> str:
-        return self.possible_classifications
-
+        return self.classification
+        
     def get_cat_one(self) -> str:
         return self.possible_categories
 
@@ -199,3 +198,49 @@ class Classification(models.Model):
 
 #---------------------------------User Login------------------------------------------
 
+from datetime import date
+
+from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
+
+class DecadeBornListFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = _('Local Government Areas')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'LGA'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return (
+            ('ARMADALE', _('ARMADALE, CITY OF')),
+            ('90s', _('in the nineties')),
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value (either '80s' or '90s')
+        # to decide how to filter the queryset.
+        if self.value() == 'ARMADALE':
+            return queryset.filter(
+                local_government='ARMADALE, CITY OF'
+            )
+        if self.value() == '90s':
+            return queryset.filter(
+                birthday__gte=date(1990, 1, 1),
+                birthday__lte=date(1999, 12, 31),
+            )
+
+class PersonAdmin(admin.ModelAdmin):
+    list_filter = (DecadeBornListFilter,)

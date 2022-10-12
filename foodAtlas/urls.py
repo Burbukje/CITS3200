@@ -19,7 +19,7 @@ from map import views as map_views
 from webScraper import views as webScraper_views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name ="admin"),
     path("", map_views.index, name="index"),
     path("login_view/", webScraper_views.login_view, name="login"),
     path("uploader/", webScraper_views.uploader, name="uploader"),
