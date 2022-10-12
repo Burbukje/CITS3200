@@ -8,7 +8,7 @@ GB_TYPES = "webScraper/static/assets/GOOGLE API BUSSINESS TYPE NAMES.xlsx"
 
 
 
-
+#import classification matching spreadsheet 
 def get_match_sheet():
     match_sheet = pd.read_excel(GB_TYPES,header=0,sheet_name = 'Only_matched')
     match_sheet['GOOGLE API ALL BUSINESS TYPE'] = match_sheet['GOOGLE API ALL BUSINESS TYPE'].str.strip()
@@ -17,6 +17,7 @@ def get_match_sheet():
     return match_sheet
 
 
+#import all Local government area title as a list
 def get_lga_list():
     lga_list = []
     boundary_geojson = gpd.read_file('map/geoJSON/LGA_Boundaries_Metro_Area.geojson')
@@ -25,6 +26,8 @@ def get_lga_list():
     return lga_list
 
 
+
+#convert the classification spreadsheet to dictionary
 def classification_dictionarys(match_sheet):
     match_sheet['Weight'] = match_sheet['Weight'].astype(int)
     classification  = dict(zip(match_sheet['GOOGLE API ALL BUSINESS TYPE'], match_sheet['Classification']))
@@ -42,9 +45,10 @@ def classification_dictionarys(match_sheet):
     return classification,Category,Category_code,Sub_category,Sub_category_code
 
 
-def class_matching(business_type_list,match_sheet):
+#match the google business_type by the classification dictionary 
+def class_matching(business_type_list,classification,Category,Category_code,Sub_category,Sub_category_code):
 
-    classification,Category,Category_code,Sub_category,Sub_category_code = classification_dictionarys(match_sheet)
+    #classification,Category,Category_code,Sub_category,Sub_category_code = classification_dictionarys(match_sheet)
 
     classification_l = []
     Category_l = []
@@ -52,8 +56,6 @@ def class_matching(business_type_list,match_sheet):
     Sub_category_l = []
     Sub_category_code_l = []
     
-     #   google_types = business_obj.google_business_types
-      #  classification_obj = Classification.objects.filter(business_id=business_obj)[0]
     try:
       
         type_list = eval(business_type_list)
@@ -74,8 +76,8 @@ def class_matching(business_type_list,match_sheet):
 
 
 
-   # db_add_possible_classification(classification_obj, "THIS IS A TEST")
-#remove na
+
+    #remove na
     classification_l =[x for x in classification_l if x == x]
     Category_l = [x for x in  Category_l if x == x]
     Category_code_l = [x for x in Category_code_l if x == x]
@@ -90,13 +92,14 @@ def class_matching(business_type_list,match_sheet):
     Sub_category_l = max(Sub_category_l,key=lambda item:item[0], default=[(0,'undefined')])
     Sub_category_code_l = max(Sub_category_code_l ,key=lambda item:item[0], default=[(0,'undefined')])
 
-#remove duplicate
+    #remove duplicate
     classification_l =list(dict.fromkeys(classification_l))
     Category_l = list(dict.fromkeys(Category_l))
     Category_code_l = list(dict.fromkeys(Category_code_l))
     Sub_category_l = list(dict.fromkeys(Sub_category_l ))
     Sub_category_code_l = list(dict.fromkeys(Sub_category_code_l))
    
+    #return a result as a dictionary containing all matched calssifciation
     result = {
      'classification':   [classification_l[1], 'code'],
      'category_one':     [Category_l[1], Category_code_l[1]],
@@ -127,12 +130,23 @@ def  db_add_possible_cats(classification, matched) -> None:
 ###################################### Combine all function 
 
 def get_lga_business():
-    # year = int(year)
-    # lga = lga.upper()
 
-    years = [2022]
-   # lga_list = ['SERPENTINE-JARRAHDALE, SHIRE OF'] #["ARMADALE, CITY OF","EAST FREMANTLE, TOWN OF"] #once everything done, switch to get_lga_list()
+
+    #add the years you want to update
+    years = [2022] 
+
+
+    #update choosen LGA or ALL (all - get_lga_list())
+   # lga_list = ["ARMADALE, CITY OF","EAST FREMANTLE, TOWN OF"]
     lga_list =  get_lga_list()
+
+
+
+
+
+    match_sheet = get_match_sheet()
+    classification,Category,Category_code,Sub_category,Sub_category_code = classification_dictionarys(match_sheet) 
+
 
 
     for year in years:
@@ -141,6 +155,7 @@ def get_lga_business():
 
             year_obj = Collection_Year.objects.filter(year=year)[0]
             lga_object = Local_Government.objects.filter(local_government_area=lga, year=year_obj)
+            
 
             if lga_object:
                 print(lga_object)
@@ -151,10 +166,8 @@ def get_lga_business():
                     classification_obj = Classification.objects.filter(business_id=business)
     
                     print(business.google_business_types)
-                  #print(get_match_sheet())
-                  #print(classification_dictionarys(get_match_sheet()))
+
     
-                    matched = class_matching(business.google_business_types, get_match_sheet())
-                    #print(matched)
+                    matched = class_matching(business.google_business_types,classification,Category,Category_code,Sub_category,Sub_category_code)
                     db_add_possible_classification(classification_obj[0], matched['classification'][0])
                     db_add_possible_cats(classification_obj[0], matched['category_one'][0])
