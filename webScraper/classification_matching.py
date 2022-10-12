@@ -68,11 +68,11 @@ def class_matching(business_type_list,classification,Category,Category_code,Sub_
 
     for key in type_list:
         key =  key.strip()
-        classification_l.append(classification.get(key,(0,'undefined')))
-        Category_l.append(Category.get(key.strip(),(0,'undefined')))
-        Category_code_l.append(Category_code.get(key.strip(),(0,'undefined')))
-        Sub_category_l.append(Sub_category.get(key.strip(),(0,'undefined')))
-        Sub_category_code_l.append(Sub_category_code.get(key.strip(),(0,'undefined'))) 
+        classification_l.append(classification.get(key,(0,'')))
+        Category_l.append(Category.get(key.strip(),(0,'')))
+        Category_code_l.append(Category_code.get(key.strip(),(0,'')))
+        Sub_category_l.append(Sub_category.get(key.strip(),(0,'')))
+        Sub_category_code_l.append(Sub_category_code.get(key.strip(),(0,''))) 
 
 
 
@@ -87,11 +87,11 @@ def class_matching(business_type_list,classification,Category,Category_code,Sub_
 
 
     #get maximum
-    classification_l =max(classification_l,key=lambda item:item[0], default=[(0,'undefined')])
-    Category_l = max(Category_l,key=lambda item:item[0], default=[(0,'undefined')])
-    Category_code_l =max(Category_code_l,key=lambda item:item[0], default=[(0,'undefined')])
-    Sub_category_l = max(Sub_category_l,key=lambda item:item[0], default=[(0,'undefined')])
-    Sub_category_code_l = max(Sub_category_code_l ,key=lambda item:item[0], default=[(0,'undefined')])
+    classification_l =max(classification_l,key=lambda item:item[0], default=[(0,'')])
+    Category_l = max(Category_l,key=lambda item:item[0], default=[(0,'')])
+    Category_code_l =max(Category_code_l,key=lambda item:item[0], default=[(0,'')])
+    Sub_category_l = max(Sub_category_l,key=lambda item:item[0], default=[(0,'')])
+    Sub_category_code_l = max(Sub_category_code_l ,key=lambda item:item[0], default=[(0,'')])
 
     #remove duplicate
     classification_l =list(dict.fromkeys(classification_l))
