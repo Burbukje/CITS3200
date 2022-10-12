@@ -2,6 +2,7 @@ from webScraper.models import Collection_Year, Contact_Details, Business, Local_
 import pandas as pd
 from django.db.models import Count
 import geopandas as gpd
+from webScraper.statistic_database import *
 
 
 GB_TYPES = "webScraper/static/assets/GOOGLE API BUSSINESS TYPE NAMES.xlsx"
@@ -129,45 +130,40 @@ def  db_add_possible_cats(classification, matched) -> None:
 
 ###################################### Combine all function 
 
-def get_lga_business():
-
-
+def match_lga(lga: str, year: int):
     #add the years you want to update
-    years = [2022] 
-
-
+    years = int(year)
+    lga = lga
     #update choosen LGA or ALL (all - get_lga_list())
    # lga_list = ["ARMADALE, CITY OF","EAST FREMANTLE, TOWN OF"]
-    lga_list =  get_lga_list()
-
-
-
+    # lga_list =  get_lga_list()
 
 
     match_sheet = get_match_sheet()
     classification,Category,Category_code,Sub_category,Sub_category_code = classification_dictionarys(match_sheet) 
 
 
+    year_obj = Collection_Year.objects.filter(year=year)
 
-    for year in years:
-        for lga in lga_list:
-            print(lga)
+    lga_object = []
 
-            year_obj = Collection_Year.objects.filter(year=year)[0]
-            lga_object = Local_Government.objects.filter(local_government_area=lga, year=year_obj)
+    if len(year_obj) > 0:
+
+        lga_object = Local_Government.objects.filter(local_government_area=lga, year=year_obj[0])
+    
+    if len(lga_object) > 0:
+        print(lga_object)
+        query_set = Business.objects.filter(local_government_area=lga_object[0])
+
+
+        for business in query_set:
+            classification_obj = Classification.objects.filter(business_id=business)
+
+            g_types = business.google_business_types
             
-
-            if lga_object:
-                print(lga_object)
-                query_set = Business.objects.filter(local_government_area=lga_object[0])
-
-
-                for business in query_set:
-                    classification_obj = Classification.objects.filter(business_id=business)
+            if len(g_types) > 0:
+                matched = class_matching(g_types,classification,Category,Category_code,Sub_category,Sub_category_code)
+                db_add_possible_classification(classification_obj[0], matched['classification'][0])
+                db_add_possible_cats(classification_obj[0], matched['category_one'][0])
     
-                    print(business.google_business_types)
-
-    
-                    matched = class_matching(business.google_business_types,classification,Category,Category_code,Sub_category,Sub_category_code)
-                    db_add_possible_classification(classification_obj[0], matched['classification'][0])
-                    db_add_possible_cats(classification_obj[0], matched['category_one'][0])
+    add_statistic_table(lga, year)

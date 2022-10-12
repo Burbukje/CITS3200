@@ -10,6 +10,7 @@ from webScraper.downloader import *
 from webScraper.uploader import *
 from webScraper.scraper import *
 from django.template import loader
+from webScraper.classification_matching import *
 
 SUCCESS = 0
 FAIL = 1
@@ -63,6 +64,11 @@ def downloader_view(request):
             lga = request.GET.get("lga")
             year = int(request.GET.get("year"))
             scrape_lga(lga=lga, year=year)
+
+        elif request.GET.get("submit") == "Matching":
+            lga = request.GET.get("lga")
+            year = int(request.GET.get("year"))
+            match_lga(lga=lga, year=year)
             
         return render(request, "downloader.html")
 
