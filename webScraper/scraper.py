@@ -8,6 +8,7 @@ import time
 import csv
 import json
 from webScraper.models import Collection_Year, Contact_Details, Business, Local_Government, Classification
+from foodAtlas.settings import API_KEY
 
 # A SAFE GUARD TO PREVENT INIFINITE CALLS TO API
 API_LIMIT = 5
