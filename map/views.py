@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.shortcuts import redirect
 import folium
 import json
 import geopandas as gpd
@@ -7,6 +8,10 @@ import geopandas as gpd
 # Create your views here.
 
 def index(request):
+
+    if not request.user.is_authenticated:
+        return redirect("login")
+
     # Creating starting location and zoom of displayed map
     #map1 = create_lga_map()
     map1 = create_detailed_lga_map()

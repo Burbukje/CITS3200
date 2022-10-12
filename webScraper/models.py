@@ -116,7 +116,9 @@ class Contact_Details(models.Model):
     parcel_address = models.CharField(max_length=128, null=True, default="")
     formatted_address = models.CharField(max_length=128, null=True, default="")
     phone = models.CharField(max_length=15, null=True, default="")
+    phone_mobile = models.CharField(max_length=15, null=True, default="")
     website = models.CharField(max_length=128, null=True, default="")
+    email = models.CharField(max_length=128, null=True, default="")
     menu = models.BooleanField(default=False, null=True)
     opening_hours = models.JSONField(default=dict, null=True)
 
@@ -172,10 +174,10 @@ class Classification(models.Model):
 
     def __str__(self):
         year = self.business_id.local_government_area.get_year()
-        return f'{year}-{self.business_id.get_name()} (Class: {self.get_class()} Category: {self.get_cat_one()})'
+        return f'{year}-{self.business_id.get_name()} (Class: {self.classification} Category: {self.category_one})'
 
     def get_class(self) -> str:
-        return self.classification
+        return self.possible_classifications
         
     def get_cat_one(self) -> str:
         return self.possible_categories
