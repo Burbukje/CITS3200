@@ -10,6 +10,7 @@ from webScraper.downloader import *
 from webScraper.uploader import *
 from webScraper.scraper import *
 from django.template import loader
+from webScraper.classification_matching import *
 
 SUCCESS = 0
 FAIL = 1
@@ -63,6 +64,11 @@ def downloader_view(request):
             lga = request.GET.get("lga")
             year = int(request.GET.get("year"))
             scrape_lga(lga=lga, year=year)
+
+        elif request.GET.get("submit") == "Matching":
+            lga = request.GET.get("lga")
+            year = int(request.GET.get("year"))
+            match_lga(lga=lga, year=year)
             
         return render(request, "downloader.html")
 
@@ -140,13 +146,13 @@ def download_excel_data(request):
             # Collection year
             ws.write(row_num, 1, year, font_style)
             # Business Name
-            ws.write(row_num, 3, my_row.get_name(), font_style)
+            ws.write(row_num, 2, my_row.get_name(), font_style)
 
             curr_classes = Classification.objects.filter(business_id=my_row)[0]
             # Classification
-            ws.write(row_num, 4, curr_classes.get_class(), font_style)
+            ws.write(row_num, 3, curr_classes.get_class(), font_style)
             # Categories
-            ws.write(row_num, 5, curr_classes.get_cat_one(), font_style)
+            ws.write(row_num, 4, curr_classes.get_cat_one(), font_style)
 
             curr_contact = Contact_Details.objects.filter(business_id=my_row)[0]
             # latitude
