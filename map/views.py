@@ -44,9 +44,9 @@ def create_detailed_lga_map():
     for ind in range(0, lgas_count-1):
         #here is a key error
         if classified_data[ind]['local_government_area'] == json_data['features'][ind]['properties']['name']:
-            print(json_data['features'][ind]['properties'])
             json_data['features'][ind]['properties'] = classified_data[ind]
             json_data['features'] = json_data['features'][ind]
+            print(json_data)
             
 
     df = gpd.GeoDataFrame.from_features(json_data)
