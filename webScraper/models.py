@@ -151,6 +151,9 @@ class Contact_Details(models.Model):
             return 'None'
         return self.website
 
+    def get_email(self):
+        return self.email
+
     def get_menu(self):
         return self.menu
 

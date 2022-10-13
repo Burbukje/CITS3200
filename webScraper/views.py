@@ -165,6 +165,8 @@ def download_excel_data(request):
             ws.write(row_num, 13, curr_contact.get_formatted_add(), font_style)
             # contact 1
             ws.write(row_num, 14, curr_contact.get_phone(), font_style)
+            # Write email
+            ws.write(row_num, 16, curr_contact.get_email(), font_style)
             # website
             ws.write(row_num, 17, curr_contact.get_website(), font_style)
             # opening hours

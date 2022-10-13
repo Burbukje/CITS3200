@@ -115,8 +115,6 @@ def read_file(file: str) -> pd.DataFrame:
     # Clean headers, strip leading and trailing spaces. convert lowercase and replace spaces seperating words with a underscore 
     data.columns = data.columns.str.strip().str.lower().str.replace(" ", "_")
 
-    print(data.columns)
-
     if "business_name" in data.columns and "parcel_address" in data.columns:
         return data
     else:
