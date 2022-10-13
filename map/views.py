@@ -41,16 +41,15 @@ def create_detailed_lga_map():
     json_data = json.load(the_final_file)
     
 
-    for ind in range(0, lgas_count-1):
+    for ind in range(0, lgas_count):
         #here is a key error
-        print(type(json_data))
         for val in json_data['features']:
-            if classified_data[ind]['local_government_area'] == val['properties']['name']:
+            if 'name' in val['properties'].keys():
+                lga_name = val['properties']['name']
+            if classified_data[ind]['local_government_area'] == lga_name:
                 val['properties']= classified_data[ind]
-                print(val['properties'])
-            
-            
 
+                
     df = gpd.GeoDataFrame.from_features(json_data)
     # df = df.to_crs(epsg=4326)
     map2 = df.explore()
