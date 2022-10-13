@@ -39,20 +39,22 @@ def create_detailed_lga_map():
     classified_data = read_classified_geojson()
     the_final_file = open(filename)
     json_data = json.load(the_final_file)
+    
 
-    for index in range(0, lgas_count):
-        if classified_data[index]['local_government_area'] == json_data["features"][index]["properties"]["name"]:
-            json_data["features"][index]["properties"] = classified_data[index]
-            json_data["features"] = json_data["features"][index]
-            print(json_data["features"])
-                
+    for ind in range(0, lgas_count-1):
+        #here is a key error
+        if classified_data[ind]['local_government_area'] == json_data['features'][ind]['properties']['name']:
+            print(json_data['features'][ind]['properties'])
+            json_data['features'][ind]['properties'] = classified_data[ind]
+            json_data['features'] = json_data['features'][ind]
+            
 
-
-
-    df = pd.DataFrame.from_dict(json_data)
-
-
+    df = gpd.GeoDataFrame.from_features(json_data)
+    df = df.to_crs(epsg=4326)
     map2 = df.explore()
+    #update the data to he original file
+    with open(filename, 'w') as outfile:
+        json.dump(json_data, outfile)
 
     folium.LayerControl().add_to(map2)
     return map2
@@ -69,3 +71,8 @@ def read_classified_geojson():
         classifications = json_file['features'][index]['properties']
         all_lga[index] = classifications
     return all_lga
+
+
+def overwrite_geojson():
+    """Update the geojson file everytime there is a change made to the database"""
+    print("blah")
