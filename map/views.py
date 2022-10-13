@@ -43,18 +43,21 @@ def create_detailed_lga_map():
 
     for ind in range(0, lgas_count-1):
         #here is a key error
-        if classified_data[ind]['local_government_area'] == json_data['features'][ind]['properties']['name']:
-            json_data['features'][ind]['properties'] = classified_data[ind]
-            json_data['features'] = json_data['features'][ind]
-            print(json_data)
+        print(type(json_data))
+        for val in json_data['features']:
+            if classified_data[ind]['local_government_area'] == val['properties']['name']:
+                val['properties']= classified_data[ind]
+                print(val['properties'])
+            
             
 
     df = gpd.GeoDataFrame.from_features(json_data)
-    df = df.to_crs(epsg=4326)
+    # df = df.to_crs(epsg=4326)
     map2 = df.explore()
     #update the data to he original file
-    with open(filename, 'w') as outfile:
-        json.dump(json_data, outfile)
+    # with open(filename, 'w') as outfile:
+    #     outfile.seek(0)
+    #     json.dump(json_data, outfile)
 
     folium.LayerControl().add_to(map2)
     return map2
