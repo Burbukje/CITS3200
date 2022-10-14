@@ -15,6 +15,7 @@
     <p>Upload CSV file via the dialog or drop file into dashed region</p>
     <input type="file" id="fileElem" accept=".xlsx" name="excel_file" onchange="handleFiles(this.files)">
     <label for="lga">Local Government:</label>
+    <br>
     <select name="lga" id="lga">
       <option value="ARMADALE, CITY OF">ARMADALE, CITY OF</option>
       <option value="BASSENDEAN, TOWN OF">BASSENDEAN, TOWN OF</option>
@@ -50,6 +51,7 @@
     </select>
     <br>
     <label for="year">Collection Year:</label>
+    <br>
     <input type="number" id="collection-year" name="year" placeholder="Collection Year" min="2008" max="2099" step="1" value="2022">
     <br>
     <label class="button" for="fileElem">Select Excel file</label>
