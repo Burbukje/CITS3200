@@ -121,8 +121,7 @@ def read_classified_geojson():
     all_lga = {}
     for index in range(0, lgas_count):
         classifications = json_file['features'][index]['properties']
-        if classifications != "0" or classifications != None:
-            all_lga[index] = classifications
+        all_lga[index] = classifications
     return all_lga
 
 
