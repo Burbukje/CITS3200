@@ -134,6 +134,8 @@ def create_heat_map():
 
     food_retail_data = pd.read_csv(data_file)
 
+
+
     folium.Choropleth(
     geo_data=lga_geo,
     name="Food Retail",
@@ -144,6 +146,22 @@ def create_heat_map():
     fill_opacity=0.7,
     line_opacity=0.2,
     legend_name="Food Retail",).add_to(m)
+
+
+    data_file = "map/geoJSON/food_service.csv"
+
+    food_service_data = pd.read_csv(data_file)
+
+    folium.Choropleth(
+    geo_data=lga_geo,
+    name="Food Service",
+    data=food_service_data,
+    columns=["State", "Food Service"],
+    key_on="feature.properties.name",
+    fill_color="YlOrRd",
+    fill_opacity=0.7,
+    line_opacity=0.2,
+    legend_name="Food Service",).add_to(m)
 
     folium.LayerControl().add_to(m)
 
