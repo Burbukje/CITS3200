@@ -54,7 +54,7 @@ def create_lga_map():
     # Creating starting location and zoom of displayed map
     map1 = folium.Map(location=perth, zoom_start=12)
     
-    geo_dict = read_geojson()
+    geo_dict = read_classified_geojson()
 
     # GeoJson data pack LGA of Perth
     for shire in geo_dict:
@@ -83,23 +83,29 @@ def create_detailed_lga_map():
             if classified_data[ind]['local_government_area'] == lga_name:
                 val['properties']= classified_data[ind]
 
-    with open("map/geoJSON/jsonfile.json", 'w') as json_file:
+    with open("map/geoJSON/jsonfile.geojson", 'w') as json_file:
         json_file.seek(0)
         json.dump(json_data, json_file)
 
-    #add it to a feature collection
-    feature_collection = FeatureCollection(json_data)
+    file_geojson = "map/geoJSON/jsonfile.geojson"
+    file = open(file_geojson)
+    df = gpd.read_file(file)
+    map2 = df.explore()
+
+
+    # #add it to a feature collection
+    # feature_collection = FeatureCollection(json_data)
 
                 
-    df = gpd.GeoDataFrame.from_features(feature_collection)
+    # df = gpd.GeoDataFrame.from_features(feature_collection)
 
-    # gdf = gpd.GeoDataFrame(df).set_geometry(json_data)
-    # df = df.to_crs(epsg=4326)
-    map2 = df.explore()
-    #update the data to the original file
-    #the problem is that the json_data is a string not a file
-    #instead of creating that 
-    new_geojson = create_updated_geojson()
+    # # gdf = gpd.GeoDataFrame(df).set_geometry(json_data)
+    # # df = df.to_crs(epsg=4326)
+    # map2 = df.explore()
+    # #update the data to the original file
+    # #the problem is that the json_data is a string not a file
+    # #instead of creating that 
+    # new_geojson = create_updated_geojson()
     
 
     folium.LayerControl().add_to(map2)
