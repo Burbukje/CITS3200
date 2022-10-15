@@ -91,21 +91,6 @@ def create_detailed_lga_map():
     file = open(file_geojson)
     df = gpd.read_file(file)
     map2 = df.explore()
-
-
-    # #add it to a feature collection
-    # feature_collection = FeatureCollection(json_data)
-
-                
-    # df = gpd.GeoDataFrame.from_features(feature_collection)
-
-    # # gdf = gpd.GeoDataFrame(df).set_geometry(json_data)
-    # # df = df.to_crs(epsg=4326)
-    # map2 = df.explore()
-    # #update the data to the original file
-    # #the problem is that the json_data is a string not a file
-    # #instead of creating that 
-    # new_geojson = create_updated_geojson()
     
 
     folium.LayerControl().add_to(map2)
@@ -124,27 +109,3 @@ def read_classified_geojson():
         all_lga[index] = classifications
     return all_lga
 
-
-def create_updated_geojson():
-    """Update the geojson file everytime there is a change made to the database"""
-    input_file = json.load(open("map/geoJSON/jsonfile.json", "r", encoding="utf-8"))
-    #create the geojson format
-    # geojs={
-    #     "type": "FeatureCollection",
-    #     "features":[
-    #         {
-    #                 "type":"Feature",
-    #                 "geometry": {
-    #                 "type":"LineString",
-    #                 "coordinates":d["geojson"]["coordinates"],
-    #             },
-    #                 "properties":d,
-            
-    #             } for d in input_file
-    #         ]  
-    #     }
-    geojs = FeatureCollection(input_file)
-    output_file = open("map/geoJSON/updated_geojson.geojson", "w")
-    output_file.seek(0)
-    #add the json data
-    geojson.dump(geojs, output_file)
