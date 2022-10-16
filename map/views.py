@@ -4,6 +4,8 @@ from django.shortcuts import redirect
 import folium
 import json
 import geopandas as gpd
+import pandas as pd
+
 
 
 from django.http import JsonResponse
@@ -30,11 +32,16 @@ def index(request):
 
     # Creating starting location and zoom of displayed map
     #map1 = create_lga_map()
-    map1 = create_detailed_lga_map()
+    map = create_detailed_lga_map()
     # Format Map to display on webpage
+
+    map1 = create_heat_map()
+
     map1 = map1._repr_html_()
+    map = map._repr_html_()
     context={
-        'map1': map1
+        'map1': map1,
+        'map': map
     }
 
     return render(request, "index.html", context)
@@ -65,6 +72,9 @@ def create_lga_map():
 
     # Adds layer control to Map
     folium.LayerControl().add_to(map1)
+    
+
+    map1 = create_heat_map(map1)
 
     return map1
 
@@ -109,3 +119,53 @@ def read_classified_geojson():
         all_lga[index] = classifications
     return all_lga
 
+
+def create_heat_map():
+    # Load the geojson data
+    geo_file = "map/geoJSON/LGA_Boundaries_Metro_Area.geojson"
+    f = open(geo_file)
+    lga_geo = json.load(f)
+
+    # Location of Perth
+    perth = [-31.95249936453132, 115.86121640254342]
+
+    # Creating starting location and zoom of displayed map
+    m = folium.Map(location=perth, zoom_start=12)
+
+    # Read in the data in this case just the number of food retail in each LGA
+    data_file = "map/geoJSON/food_retail.csv"
+
+    food_retail_data = pd.read_csv(data_file)
+
+
+
+    folium.Choropleth(
+    geo_data=lga_geo,
+    name="Food Retail",
+    data=food_retail_data,
+    columns=["State", "Food Retail"],
+    key_on="feature.properties.name",
+    fill_color="YlOrRd",
+    fill_opacity=0.7,
+    line_opacity=0.2,
+    legend_name="Food Retail",).add_to(m)
+
+
+    data_file = "map/geoJSON/food_service.csv"
+
+    food_service_data = pd.read_csv(data_file)
+
+    folium.Choropleth(
+    geo_data=lga_geo,
+    name="Food Service",
+    data=food_service_data,
+    columns=["State", "Food Service"],
+    key_on="feature.properties.name",
+    fill_color="YlOrRd",
+    fill_opacity=0.7,
+    line_opacity=0.2,
+    legend_name="Food Service",).add_to(m)
+
+    folium.LayerControl().add_to(m)
+
+    return m
