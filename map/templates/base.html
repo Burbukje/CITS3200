@@ -76,7 +76,7 @@
       <li><a href="{% url 'index' %}">Home</a></li>
       <li class = "left"><a href="{% url 'logout' %}">Logout</a></li>
       <li class = "centre"><a href="{% url 'uploader' %}">Submit</a></li>
-      <li class = "right"><a class = "active" href="{% url 'downloader' %}">Download</a></li>
+      <li class = "right"><a href="{% url 'downloader' %}">Download</a></li>
       <li class = "right"><a href="/admin">Admin</a></li>
       {% else %}
       <li class = "right"><a href="{% url 'login' %}">Login</a></li>
