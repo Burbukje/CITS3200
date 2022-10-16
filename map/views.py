@@ -122,7 +122,7 @@ def read_classified_geojson():
 
 def create_heat_map():
     # Load the geojson data
-    geo_file = "map\geoJSON\LGA_Boundaries_Metro_Area.geojson"
+    geo_file = "map/geoJSON/LGA_Boundaries_Metro_Area.geojson"
     f = open(geo_file)
     lga_geo = json.load(f)
 
