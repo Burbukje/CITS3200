@@ -224,3 +224,13 @@ a {
 .login-form #pass-input {
   width: 87%;
 }
+
+.about-form {
+  background: #fff;
+  width: 650px; /* width: 525px; */
+  height: 350px;
+  margin: 65px auto;
+  display: flex;
+  border-radius: 6px;
+  box-shadow: 0 2px 25px rgba(0, 0, 0, 0.5);
+}
