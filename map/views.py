@@ -32,13 +32,16 @@ def index(request):
 
     # Creating starting location and zoom of displayed map
     #map1 = create_lga_map()
-    #map1 = create_detailed_lga_map()
+    map = create_detailed_lga_map()
     # Format Map to display on webpage
 
     map1 = create_heat_map()
+
     map1 = map1._repr_html_()
+    map = map._repr_html_()
     context={
-        'map1': map1
+        'map1': map1,
+        'map': map
     }
 
     return render(request, "index.html", context)
