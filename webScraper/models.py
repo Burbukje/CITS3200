@@ -120,7 +120,7 @@ class Contact_Details(models.Model):
     website = models.CharField(max_length=128, null=True, default="")
     email = models.CharField(max_length=128, null=True, default="")
     menu = models.BooleanField(default=False, null=True)
-    opening_hours = models.JSONField(default='[]', null=True)
+    opening_hours = models.JSONField(default=[' '], null=True)
 
     def __str__(self):
         year = self.business_id.local_government_area.get_year()
