@@ -1,11 +1,6 @@
 body {
   font-family: 'Arial', sans-serif;
-  /* background-color:rgba(15,47,134, 1); */
-  /* background-color: rgba(120,122,201, 1); */
-  background-color: rgb(15,47,134);
-  /* background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover; */
+  background-color: rgb(32, 62, 145);
 }
 
 #map {
