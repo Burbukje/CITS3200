@@ -14,7 +14,7 @@ ENV PLACES_API "<api_key>"
 WORKDIR /CITS3200
 
 # Install GDAL dependencies
-RUN apt-get install -y gdal g++ --no-install-recommends && \
+RUN apt-get install -y gdal-bin g++ --no-install-recommends && \
     apt-get clean -y
 
 # Update C env vars so compiler can find gdal
