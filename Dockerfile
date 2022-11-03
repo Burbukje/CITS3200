@@ -13,7 +13,7 @@ ENV PLACES_API "<api_key>"
 # Set work directory
 WORKDIR /CITS3200
 
-RUN pip install gdal
+RUN apt-get install gdal-bin
 
 # install dependencies
 COPY requirements.txt .
