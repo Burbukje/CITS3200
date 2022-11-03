@@ -13,7 +13,8 @@ ENV PLACES_API "<api_key>"
 # Set work directory
 WORKDIR /CITS3200
 
-RUN sudo apt-get install gdal-bin
+RUN apt-get update &&\
+    apt-get install -y binutils libproj-dev gdal-bin
 
 # install dependencies
 COPY requirements.txt .
