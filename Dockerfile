@@ -13,13 +13,7 @@ ENV PLACES_API "<api_key>"
 # Set work directory
 WORKDIR /CITS3200
 
-RUN apt-get install -y software-properties-common && apt-get update
-RUN apt-get install -y python3.7-dev
-RUN  add-apt-repository ppa:ubuntugis/ppa &&  apt-get update
-RUN apt-get install -y gdal-bin libgdal-dev
-ARG CPLUS_INCLUDE_PATH=/usr/include/gdal
-ARG C_INCLUDE_PATH=/usr/include/gdal
-RUN pip install GDAL
+RUN add-apt-repository ppa:ubuntugis/ppa && apt-get update && apt-get install -y gdal-bin python-gdal python3-gdal
 
 # install dependencies
 COPY requirements.txt .
