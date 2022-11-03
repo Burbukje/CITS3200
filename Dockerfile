@@ -13,7 +13,6 @@ ENV PLACES_API "<api_key>"
 # Set work directory
 WORKDIR /CITS3200
 
-RUN apt-get update
 RUN apt-get install -y software-properties-common && apt-get update
 RUN apt-get install -y python3.7-dev
 RUN  add-apt-repository ppa:ubuntugis/ppa &&  apt-get update
