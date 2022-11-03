@@ -10,6 +10,8 @@ ENV DEBUG 0
 # ADD GOOGLE API KEY HERE
 ENV PLACES_API "<api_key>"
 
+RUN apt-get install -y gdal-bin libgdal-dev g++
+
 # Set work directory
 WORKDIR /CITS3200
 
