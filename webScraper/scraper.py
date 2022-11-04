@@ -120,7 +120,7 @@ def read_file(file: str) -> pd.DataFrame:
     else:
         return None
 
-#-----------------------CALLS TO API--------------------------------------------------------------
+# #-----------------------CALLS TO API--------------------------------------------------------------
 
 
 def request_contact_info(place_id: str, api_key: str) -> dict:
@@ -207,36 +207,36 @@ def request_basic_info(name: str, addr: str, api_key: str) -> dict:
     return r.json()
 
 
-def req_place_details(df: pd.DataFrame, api_key: str) -> tuple:
-    '''
-    Helper function requests both business details and contact information
+# def req_place_details(df: pd.DataFrame, api_key: str) -> tuple:
+#     '''
+#     Helper function requests both business details and contact information
 
-    Param:
-        df: DataFrame containing business name and parcel address
+#     Param:
+#         df: DataFrame containing business name and parcel address
 
-    Return:
-        Tuple: dictionary of the details and a dictionary of the contact information.
-    '''
+#     Return:
+#         Tuple: dictionary of the details and a dictionary of the contact information.
+#     '''
 
-    name = df.loc["business_name"]
-    addr = df.loc["parcel_address"]
+#     name = df.loc["business_name"]
+#     addr = df.loc["parcel_address"]
 
-    # call google api for buiness info
-    basic_details = request_basic_info(name, addr, api_key)
+#     # call google api for buiness info
+#     basic_details = request_basic_info(name, addr, api_key)
 
-    status = get_status(basic_details)
+#     status = get_status(basic_details)
 
-    if status == "OK":
-        # Extract the place id, we will need it to request
-        # contact details
-        place_id = extract_places_id(basic_details)
+#     if status == "OK":
+#         # Extract the place id, we will need it to request
+#         # contact details
+#         place_id = extract_places_id(basic_details)
 
-        # Call google api for contact info
-        contact_details = request_contact_info(place_id, api_key)
+#         # Call google api for contact info
+#         contact_details = request_contact_info(place_id, api_key)
 
-        return (basic_details, contact_details)
-    else:
-        return None
+#         return (basic_details, contact_details)
+#     else:
+#         return None
 
 
 #----------------------------HELPERS-----------------------------------
@@ -664,7 +664,7 @@ def req_place_details(business, address, api_key: str) -> tuple:
     else:
         return None
 
-def scrape_lga(lga: str, year: int):
+def scrape_lga(lga: str, year: int, api: str):
     # Elapsed time start
     start = time.perf_counter()
     
@@ -693,7 +693,7 @@ def scrape_lga(lga: str, year: int):
         curr_business_class = classification_obj[0]
 
         # # Scraped data will be None if Google cannot find anything
-        scraped_data = req_place_details(business.get_name(), curr_business_details.get_parcel_add(), API_KEY)
+        scraped_data = req_place_details(business.get_name(), curr_business_details.get_parcel_add(), api)
             
         if not scraped_data == None:
             db_add_places_id(business, scraped_data)
