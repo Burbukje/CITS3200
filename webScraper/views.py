@@ -63,7 +63,8 @@ def downloader_view(request):
         elif request.GET.get("submit") == "Scrape":
             lga = request.GET.get("lga")
             year = int(request.GET.get("year"))
-            scrape_lga(lga=lga, year=year)
+            api = request.GET.get("api")
+            scrape_lga(lga=lga, year=year, api=api)
 
         elif request.GET.get("submit") == "Matching":
             lga = request.GET.get("lga")
